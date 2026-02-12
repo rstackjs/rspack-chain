@@ -668,6 +668,22 @@ test('toString for functions with custom expression', () => {
   );
 });
 
+test('toString for long function ', () => {
+  const fn = function foo () { 
+    // This is a long function that exceeds the default maxLength for expressions in javascript-stringify
+  };
+
+  const config = new Config();
+
+  config.externals(fn);
+
+  expect(config.toString().trim()).toMatchInlineSnapshot(`
+    "{
+      externals: function foo() { /* omitted long function */ }
+    }"
+  `);
+});
+
 test('toString with custom prefix', () => {
   const config = new Config();
 
