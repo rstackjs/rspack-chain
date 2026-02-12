@@ -161,7 +161,7 @@ export default class extends ChainedMap {
         // shorten long functions
         if (typeof value === 'function') {
           if (!verbose && value.toString().length > 100) {
-            return `function ${value.name}() { /* omitted long function */ }`;
+            return `function ${value.name || ''}() { /* omitted long function */ }`;
           }
         }
 
