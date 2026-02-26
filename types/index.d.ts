@@ -92,7 +92,6 @@ declare class Config extends __Config.ChainedMap<void> {
   dependencies(value: RspackConfig['dependencies']): this;
   ignoreWarnings(value: RspackConfig['ignoreWarnings']): this;
   loader(value: RspackConfig['loader']): this;
-  profile(value: RspackConfig['profile']): this;
   name(value: RspackConfig['name']): this;
   infrastructureLogging(value: RspackConfig['infrastructureLogging']): this;
   snapshot(value: RspackConfig['snapshot']): this;
@@ -180,7 +179,6 @@ declare namespace Config {
     parser: ChainedMap<this>;
     rule(name: string): Rule;
     noParse(value: RspackModule['noParse']): this;
-    unsafeCache(value: RspackModule['unsafeCache']): this;
   }
 
   type RspackOutput = Required<NonNullable<Configuration['output']>>;

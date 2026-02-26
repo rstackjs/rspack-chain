@@ -8,10 +8,7 @@ export default class extends ChainedMap {
     this.defaultRules = new ChainedMap(this);
     this.generator = new ChainedMap(this);
     this.parser = new ChainedMap(this);
-    this.extend([
-      'noParse',
-      'unsafeCache',
-    ]);
+    this.extend(['noParse']);
   }
 
   defaultRule(name) {
