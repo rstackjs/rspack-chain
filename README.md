@@ -31,10 +31,10 @@ This is easier explained through the examples following.
 
 ## Installation
 
-For Rspack v2, install `rspack-chain` v2 alpha:
+For Rspack v2, install `rspack-chain` v2 beta:
 
 ```bash
-npm add rspack-chain@alpha -D
+npm add rspack-chain@beta -D
 ```
 
 For Rspack v1, install the `rspack-chain` v1:
