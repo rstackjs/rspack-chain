@@ -379,7 +379,6 @@ config
   .dependencies(dependencies)
   .ignoreWarnings(ignoreWarnings)
   .loader(loader)
-  .profile(profile)
   .name(name)
   .infrastructureLogging(infrastructureLogging)
   .snapshot(snapshot);
@@ -964,9 +963,7 @@ config.module : ChainedMap
 ```js
 config.module : ChainedMap
 
-config.module
-  .noParse(noParse)
-  .unsafeCache(unsafeCache)
+config.module.noParse(noParse)
 ```
 
 #### Config module rules: shorthand methods
@@ -1240,7 +1237,6 @@ config.merge({
   externals,
   loader,
   mode,
-  profile,
   stats,
   target,
   watch,

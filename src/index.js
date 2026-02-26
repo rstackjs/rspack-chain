@@ -104,7 +104,6 @@ export default class extends ChainedMap {
       'dependencies',
       'ignoreWarnings',
       'loader',
-      'profile',
       'name',
       'infrastructureLogging',
       'snapshot',

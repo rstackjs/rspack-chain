@@ -39,14 +39,14 @@
   },
   "devDependencies": {
     "@rslib/core": "^0.18.2",
-    "@rspack/core": "2.0.0-canary-20260116",
+    "@rspack/core": "2.0.0-beta.3",
     "@rstest/core": "^0.6.8",
     "prettier": "^3.7.3",
     "typescript": "^5.9.3",
     "webpack": "^5.103.0"
   },
   "peerDependencies": {
-    "@rspack/core": "^1.0.0 || ^2.0.0 || ^2.0.0-0"
+    "@rspack/core": "^1.0.0 || ^2.0.0-0"
   },
   "peerDependenciesMeta": {
     "@rspack/core": {

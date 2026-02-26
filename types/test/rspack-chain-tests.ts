@@ -372,7 +372,6 @@ config
   .mode('none')
   .mode('development')
   .mode('production')
-  .profile(false)
   .stats({
     assets: false,
     publicPath: true,
