@@ -434,9 +434,6 @@ declare namespace Config {
     moduleIds(value: RspackOptimization['moduleIds']): this;
     chunkIds(value: RspackOptimization['chunkIds']): this;
     nodeEnv(value: RspackOptimization['nodeEnv']): this;
-    removeAvailableModules(
-      value: RspackOptimization['removeAvailableModules'],
-    ): this;
     removeEmptyChunks(value: RspackOptimization['removeEmptyChunks']): this;
     mergeDuplicateChunks(
       value: RspackOptimization['mergeDuplicateChunks'],

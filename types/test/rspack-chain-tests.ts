@@ -207,7 +207,6 @@ config
   .minimize(true)
   .nodeEnv(false)
   .providedExports(true)
-  .removeAvailableModules(true)
   .removeEmptyChunks(true)
   .runtimeChunk('single')
   .runtimeChunk({ name: ({}) => 'hello' })
