@@ -14,7 +14,6 @@ export default class extends ChainedMap {
       'moduleIds',
       'chunkIds',
       'nodeEnv',
-      'removeAvailableModules',
       'removeEmptyChunks',
       'mergeDuplicateChunks',
       'providedExports',

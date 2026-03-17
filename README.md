@@ -704,7 +704,6 @@ config.optimization
   .moduleIds(moduleIds)
   .chunkIds(chunkIds)
   .nodeEnv(nodeEnv)
-  .removeAvailableModules(removeAvailableModules)
   .removeEmptyChunks(removeEmptyChunks)
   .mergeDuplicateChunks(mergeDuplicateChunks)
   .providedExports(providedExports)
@@ -1302,7 +1301,6 @@ config.merge({
     noEmitOnErrors,
     occurrenceOrder,
     providedExports,
-    removeAvailableModules,
     removeEmptyChunks,
     runtimeChunk,
     sideEffects,
