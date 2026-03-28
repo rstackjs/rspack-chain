@@ -64,7 +64,7 @@ export default Orderable(
 
       // Support using the path to a plugin rather than the plugin itself,
       // allowing expensive require()s to be skipped in cases where the plugin
-      // or webpack configuration won't end up being used.
+      // or Rspack configuration won't end up being used.
       if (typeof plugin === 'string') {
         pluginPath = plugin;
         plugin = require(pluginPath);
