@@ -22,14 +22,14 @@
     "types/*.d.ts"
   ],
   "scripts": {
-    "build": "rslib build",
+    "build": "rslib",
     "bump": "npx bumpp",
-    "dev": "rslib build -w",
+    "dev": "rslib -w",
     "fix": "yarn lint:fix && yarn style:fix",
     "prepare": "pnpm build",
     "style": "prettier --check .",
     "style:fix": "prettier --write .",
-    "test": "rstest run",
+    "test": "rstest",
     "test:types": "tsc -p ./types/test/tsconfig.json"
   },
   "devDependencies": {
