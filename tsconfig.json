@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "target": "ES2023",
+    "types": ["node"],
+    "lib": ["DOM", "ESNext"],
+    "declaration": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "module": "nodenext",
+    "moduleResolution": "nodenext"
+  },
+  "include": ["src"]
+}
