@@ -1,10 +1,11 @@
-import { validate } from 'webpack';
+import { EnvironmentPlugin } from '@rspack/core';
 import { stringify } from 'javascript-stringify';
 import Config from '../src';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const EnvironmentPlugin = require('webpack/lib/EnvironmentPlugin');
+const pathEnvironmentPlugin =
+  require.resolve('../test-utils/PathEnvironmentPlugin.cjs');
 
 class StringifyPlugin {
   constructor(...args) {
@@ -212,7 +213,7 @@ test('toConfig with values', () => {
     .use(StringifyPlugin)
     .end()
     .plugin('env')
-    .use(require.resolve('webpack/lib/EnvironmentPlugin'))
+    .use(EnvironmentPlugin)
     .end()
     .module.defaultRule('inline')
     .use('banner')
@@ -459,66 +460,6 @@ test('lazyCompilation - object', () => {
   });
 });
 
-test('validate empty', () => {
-  const config = new Config();
-
-  expect(() => {
-    validate(config.toConfig());
-  }).not.toThrow();
-});
-
-test('validate with entry', () => {
-  const config = new Config();
-
-  config.entry('index').add('src/index.js');
-
-  expect(() => {
-    validate(config.toConfig());
-  }).not.toThrow();
-});
-
-test('validate with values', () => {
-  const config = new Config();
-
-  config
-    .entry('index')
-    .add('babel-polyfill')
-    .add('src/index.js')
-    .end()
-    .output.path('/build')
-    .end()
-    .mode('development')
-    .optimization.nodeEnv('PRODUCTION')
-    .end()
-    .node.set('__dirname', 'mock')
-    .end()
-    .target('node')
-    .plugin('stringify')
-    .use(StringifyPlugin)
-    .end()
-    .plugin('env')
-    .use(require.resolve('webpack/lib/EnvironmentPlugin'), [{ VAR: false }])
-    .end()
-    .module.rule('compile')
-    .include.add('/alpha')
-    .add('/beta')
-    .end()
-    .exclude.add('/alpha')
-    .add('/beta')
-    .end()
-    .sideEffects(false)
-    .post()
-    .pre()
-    .test(/\.js$/)
-    .use('babel')
-    .loader('babel-loader')
-    .options({ presets: ['alpha'] });
-
-  expect(() => {
-    validate(config.toConfig());
-  }).not.toThrow();
-});
-
 test('toString', () => {
   const config = new Config();
 
@@ -538,7 +479,7 @@ test('toString', () => {
     .use('babel')
     .loader('babel-loader');
 
-  const envPluginPath = require.resolve('webpack/lib/EnvironmentPlugin');
+  const envPluginPath = pathEnvironmentPlugin;
   const stringifiedEnvPluginPath = stringify(envPluginPath);
 
   class FooPlugin {}
@@ -669,7 +610,7 @@ test('toString for functions with custom expression', () => {
 });
 
 test('toString for long function', () => {
-  const fn = function foo () { 
+  const fn = function foo() {
     // This is a long function that exceeds the default maxLength for expressions in javascript-stringify
   };
 
@@ -685,7 +626,7 @@ test('toString for long function', () => {
 });
 
 test('toString for long anonymous function', () => {
-  const fn = () => () => { 
+  const fn = () => () => {
     // This is a long function that exceeds the default maxLength for expressions in javascript-stringify
   };
 

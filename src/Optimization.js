@@ -31,7 +31,7 @@ export default class extends ChainedMap {
   minimizer(name) {
     if (Array.isArray(name)) {
       throw new Error(
-        'optimization.minimizer() does not support being passed an array.',
+        'optimization.minimizer() no longer supports being passed an array.',
       );
     }
 

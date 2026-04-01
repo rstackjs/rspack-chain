@@ -50,9 +50,9 @@ Rspack configuration. For this guide, our example base configuration will
 be `rspack.config.js` in the root of our project directory.
 
 ```js
-// Require the rspack-chain module. This module exports a single
+// Import the rspack-chain module. This module exports a single
 // constructor function for creating a configuration API.
-const Config = require('rspack-chain');
+import Config from 'rspack-chain';
 
 // Instantiate the configuration with a new API
 const config = new Config();
@@ -101,7 +101,7 @@ config.module
 config.plugin('clean').use(CleanPlugin, [['dist'], { root: '/dir' }]);
 
 // Export the completed configuration object to be consumed by rspack
-module.exports = config.toConfig();
+export default config.toConfig();
 ```
 
 Having shared configurations is also simple. Just export the configuration
@@ -109,27 +109,28 @@ and call `.toConfig()` prior to passing to rspack.
 
 ```js
 // rspack.core.js
-const Config = require('rspack-chain');
+import Config from 'rspack-chain';
+
 const config = new Config();
 
 // Make configuration shared across targets
 // ...
 
-module.exports = config;
+export default config;
 
 // rspack.dev.js
-const config = require('./rspack.core');
+import config from './rspack.core.js';
 
 // Dev-specific configuration
 // ...
-module.exports = config.toConfig();
+export default config.toConfig();
 
 // rspack.prod.js
-const config = require('./rspack.core');
+import config from './rspack.core.js';
 
 // Production-specific configuration
 // ...
-module.exports = config.toConfig();
+export default config.toConfig();
 ```
 
 ## ChainedMap
@@ -337,7 +338,7 @@ instance, allowing you to continue to chain.
 Create a new configuration object.
 
 ```js
-const Config = require('rspack-chain');
+import Config from 'rspack-chain';
 
 const config = new Config();
 ```
@@ -728,6 +729,10 @@ config.optimization
 _NOTE: Do not use `new` to create the minimizer plugin, as this will be done for you._
 
 ```js
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
 config.optimization.minimizer(name).use(RspackPlugin, args);
 
 // Examples
@@ -736,7 +741,7 @@ config.optimization
   .minimizer('css')
   .use(OptimizeCSSAssetsPlugin, [{ cssProcessorOptions: { safe: true } }]);
 
-// Minimizer plugins can also be specified by their path, allowing the expensive require()s to be
+// Minimizer plugins can also be specified by their path, allowing the expensive module loads to be
 // skipped in cases where the plugin or Rspack configuration won't end up being used.
 config.optimization
   .minimizer('css')
@@ -795,17 +800,22 @@ config.plugin(name) : ChainedMap
 _NOTE: Do not use `new` to create the plugin, as this will be done for you._
 
 ```js
+import { createRequire } from 'node:module';
+import { HotModuleReplacementPlugin, EnvironmentPlugin } from '@rspack/core';
+
+const require = createRequire(import.meta.url);
+
 config.plugin(name).use(RspackPlugin, args);
 
 // Examples
 
-config.plugin('hot').use(rspack.HotModuleReplacementPlugin);
+config.plugin('hot').use(HotModuleReplacementPlugin);
 
-// Plugins can also be specified by their path, allowing the expensive require()s to be
+// Plugins can also be specified by their path, allowing the expensive module loads to be
 // skipped in cases where the plugin or Rspack configuration won't end up being used.
-config
-  .plugin('env')
-  .use(require.resolve('rspack/lib/EnvironmentPlugin'), [{ VAR: false }]);
+config.plugin('env').use(EnvironmentPlugin, [{ VAR: false }]);
+
+config.plugin('custom').use(require.resolve('my-plugin'), [{ answer: 42 }]);
 ```
 
 #### Config plugins: modify arguments
@@ -1473,19 +1483,18 @@ config.toString();
 ```
 
 By default the generated string cannot be used directly as real Rspack config
-if it contains objects and plugins that need to be required. In order to
+if it contains objects and plugins that need external bindings. In order to
 generate usable config, you can customize how objects and plugins are
 stringified by setting a special `__expression` property on them:
 
 ```js
-const sass = require('sass');
-sass.__expression = `require('sass')`;
+import sass from 'sass';
+import MyPlugin from 'my-plugin';
+import myFunction from 'my-function';
 
-class MyPlugin {}
-MyPlugin.__expression = `require('my-plugin')`;
-
-function myFunction() {}
-myFunction.__expression = `require('my-function')`;
+sass.__expression = 'sass';
+MyPlugin.__expression = 'MyPlugin';
+myFunction.__expression = 'myFunction';
 
 config
   .plugin('example')
@@ -1496,37 +1505,32 @@ config.toString();
 /*
 {
   plugins: [
-    new (require('my-plugin'))({
-      fn: require('my-function'),
-      implementation: require('sass')
+    new MyPlugin({
+      fn: myFunction,
+      implementation: sass
     })
   ]
 }
 */
 ```
 
-Plugins specified via their path will have their `require()` statement generated
-automatically:
+Plugins specified via their path will inline the resolved module path in the
+generated output:
 
 ```js
+import { createRequire } from 'node:module';
+
+const require = createRequire(import.meta.url);
+
 config
-  .plugin('env')
-  .use(require.resolve('webpack/lib/ProvidePlugin'), [{ jQuery: 'jquery' }]);
+  .plugin('custom')
+  .use(require.resolve('my-plugin'), [{ jQuery: 'jquery' }]);
 
 config.toString();
-
-/*
-{
-  plugins: [
-    new (require('/foo/bar/src/node_modules/webpack/lib/EnvironmentPlugin.js'))(
-      {
-        jQuery: 'jquery'
-      }
-    )
-  ]
-}
-*/
 ```
+
+The resulting string will use the absolute path returned by
+`require.resolve('my-plugin')` when constructing the plugin.
 
 You can also call `toString` as a static method on `Config` in order to
 modify the configuration object prior to stringifying.
