@@ -1,6 +1,6 @@
 import { EnvironmentPlugin } from '@rspack/core';
 import { stringify } from 'javascript-stringify';
-import { RspackChain } from '../src';
+import { RspackChain } from '../dist';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
