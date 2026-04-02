@@ -1518,24 +1518,6 @@ config.toString();
 */
 ```
 
-Plugins specified via their path will inline the resolved module path in the
-generated output:
-
-```js
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-
-config
-  .plugin('custom')
-  .use(require.resolve('my-plugin'), [{ jQuery: 'jquery' }]);
-
-config.toString();
-```
-
-The resulting string will use the absolute path returned by
-`require.resolve('my-plugin')` when constructing the plugin.
-
 You can also call `toString` as a static method on `RspackChain` in order to
 modify the configuration object prior to stringifying.
 
@@ -1557,7 +1539,7 @@ RspackChain.toString({
 });
 ```
 
-```
+```js
 {
   plugins: [
     /* config.plugin('foo') */
