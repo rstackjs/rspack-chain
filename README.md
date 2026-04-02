@@ -898,21 +898,11 @@ config.node(false)
 config.devServer : ChainedMap
 ```
 
-#### devServer allowedHosts
-
-```js
-config.devServer.allowedHosts : ChainedSet
-
-config.devServer.allowedHosts
-  .add(value)
-  .prepend(value)
-  .clear()
-```
-
 #### devServer: shorthand methods
 
 ```js
 config.devServer
+  .allowedHosts(allowedHosts)
   .app(app)
   .client(client)
   .compress(compress)

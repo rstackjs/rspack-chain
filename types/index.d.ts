@@ -236,14 +236,10 @@ export declare namespace RspackChain {
   type RspackDevServer = NonNullable<Configuration['devServer']>;
 
   type DevServerShorthandMethods<T> = {
-    [K in Exclude<keyof RspackDevServer, 'allowedHosts'>]-?: (
-      value: RspackDevServer[K],
-    ) => T;
+    [K in keyof RspackDevServer]-?: (value: RspackDevServer[K]) => T;
   };
 
-  class DevServer extends TypedChainedMap<RspackChain, RspackDevServer> {
-    allowedHosts: TypedChainedSet<this, string>;
-  }
+  class DevServer extends TypedChainedMap<RspackChain, RspackDevServer> {}
 
   interface DevServer extends DevServerShorthandMethods<DevServer> {}
 

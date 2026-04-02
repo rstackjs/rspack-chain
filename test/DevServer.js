@@ -7,9 +7,9 @@ test('is Chainable', () => {
   expect(devServer.end()).toBe(parent);
 });
 
-test('sets allowed hosts', () => {
+test('sets allowed hosts arrays', () => {
   const devServer = new DevServer();
-  const instance = devServer.allowedHosts.add('https://github.com').end();
+  const instance = devServer.allowedHosts(['https://github.com']);
 
   expect(instance).toBe(devServer);
   expect(devServer.toConfig()).toStrictEqual({
@@ -17,62 +17,26 @@ test('sets allowed hosts', () => {
   });
 });
 
-test('merges allowedHosts with non-array values', () => {
+test('sets allowed hosts scalar values', () => {
   const devServer = new DevServer();
 
-  devServer.merge({
-    allowedHosts: 'auto',
-  });
-
-  expect(devServer.toConfig()).toStrictEqual({
-    allowedHosts: 'auto',
-  });
-});
-
-test('ignores undefined allowedHosts during merge', () => {
-  const devServer = new DevServer();
-
-  devServer.allowedHosts.add('https://github.com');
-  devServer.merge({
-    allowedHosts: undefined,
-  });
-
-  expect(devServer.toConfig()).toStrictEqual({
-    allowedHosts: ['https://github.com'],
-  });
-});
-
-test('sets allowedHosts with non-array values', () => {
-  const devServer = new DevServer();
-
-  devServer.set('allowedHosts', 'all');
+  devServer.allowedHosts('all');
 
   expect(devServer.toConfig()).toStrictEqual({
     allowedHosts: 'all',
   });
 });
 
-test('clears stale allowedHosts entries when deleting scalar values', () => {
+test('merges allowedHosts values', () => {
   const devServer = new DevServer();
 
-  devServer.allowedHosts.add('https://github.com');
-  devServer.set('allowedHosts', 'all');
-  devServer.delete('allowedHosts');
-
-  expect(devServer.toConfig()).toStrictEqual({});
-});
-
-test('replaces scalar allowedHosts with array values during merge', () => {
-  const devServer = new DevServer();
-
-  devServer.allowedHosts.add('https://github.com');
-  devServer.set('allowedHosts', 'all');
+  devServer.allowedHosts('auto');
   devServer.merge({
-    allowedHosts: ['https://rspack.rs'],
+    allowedHosts: ['https://github.com'],
   });
 
   expect(devServer.toConfig()).toStrictEqual({
-    allowedHosts: ['https://rspack.rs'],
+    allowedHosts: ['https://github.com'],
   });
 });
 
@@ -90,15 +54,6 @@ test('preserves omitted keys during merge', () => {
   expect(devServer.toConfig()).toStrictEqual({
     proxy: 'https://example.com',
   });
-});
-
-test('clear removes allowedHosts values', () => {
-  const devServer = new DevServer();
-
-  devServer.allowedHosts.add('https://github.com');
-  devServer.clear();
-
-  expect(devServer.toConfig()).toStrictEqual({});
 });
 
 test('shorthand methods', () => {

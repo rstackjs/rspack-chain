@@ -265,10 +265,8 @@ config
   .delete('asObject')
   .end()
   // devServer
-  .devServer.allowedHosts.add('host.com')
-  .clear()
-  .end()
-  .set('allowedHosts', 'auto')
+  .devServer.allowedHosts(['host.com'])
+  .allowedHosts('auto')
   .merge({
     allowedHosts: ['host.com'],
     hot: 'only',
