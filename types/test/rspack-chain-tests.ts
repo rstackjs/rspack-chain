@@ -1,13 +1,13 @@
 /**
  * Notes: The order structure of the type check follows the order
- * of this document: https://github.com/neutrinojs/rspack-chain#config
+ * of this document: https://github.com/neutrinojs/rspack-chain#rspackchain
  */
 import * as rspack from '@rspack/core';
-import Config from 'rspack-chain';
+import { RspackChain } from 'rspack-chain';
 
 function expectType<T>(value: T) {}
 
-const config = new Config();
+const config = new RspackChain();
 
 config
   // entry
@@ -34,8 +34,7 @@ config
   .entryPoints.delete('main')
   .end()
   // output
-  .output
-  .bundlerInfo({
+  .output.bundlerInfo({
     force: false,
   })
   .chunkFilename('')
@@ -394,17 +393,19 @@ const entryPoints = config.entryPoints;
 expectType<typeof entryPoints>(entryPoints.clear());
 expectType<typeof entryPoints>(entryPoints.delete('key'));
 expectType<boolean>(entryPoints.has('key'));
-expectType<Config.EntryPoint>(entryPoints.get('key'));
-expectType<Config.EntryPoint>(
-  entryPoints.getOrCompute('key', () => new Config.EntryPoint()),
+expectType<RspackChain.EntryPoint>(entryPoints.get('key'));
+expectType<RspackChain.EntryPoint>(
+  entryPoints.getOrCompute('key', () => new RspackChain.EntryPoint()),
 );
-expectType<typeof entryPoints>(entryPoints.set('key', new Config.EntryPoint()));
+expectType<typeof entryPoints>(
+  entryPoints.set('key', new RspackChain.EntryPoint()),
+);
 expectType<typeof entryPoints>(
   entryPoints.merge({
-    key: new Config.EntryPoint(),
+    key: new RspackChain.EntryPoint(),
   }),
 );
-expectType<Record<string, Config.EntryPoint>>(entryPoints.entries());
+expectType<Record<string, RspackChain.EntryPoint>>(entryPoints.entries());
 expectType<typeof entryPoints>(
   entryPoints.when(
     true,

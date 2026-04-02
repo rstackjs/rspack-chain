@@ -1,12 +1,5 @@
-import {
-  Configuration,
-  Compiler,
-  RuleSetRule,
-  ResolveOptions,
-} from '@rspack/core';
-import * as https from 'https';
-
-export default Config;
+import { Configuration, Compiler, RuleSetRule } from '@rspack/core';
+import * as https from 'node:https';
 
 // The compiler type of Rspack / webpack are mismatch,
 // so we use a loose type here to allow using webpack plugins.
@@ -60,24 +53,24 @@ declare namespace __Config {
 }
 
 type RspackConfig = Required<Configuration>;
-declare class Config extends __Config.ChainedMap<void> {
-  entryPoints: Config.TypedChainedMap<
-    Config,
-    { [key: string]: Config.EntryPoint }
+export declare class RspackChain extends __Config.ChainedMap<void> {
+  entryPoints: RspackChain.TypedChainedMap<
+    RspackChain,
+    { [key: string]: RspackChain.EntryPoint }
   >;
-  output: Config.Output;
-  module: Config.Module;
-  node: Config.ChainedMap<this> & ((value: boolean) => this);
-  optimization: Config.Optimization;
-  performance: Config.Performance & ((value: boolean) => this);
-  plugins: Config.Plugins<this, PluginInstance>;
-  resolve: Config.Resolve;
-  resolveLoader: Config.ResolveLoader;
-  devServer: Config.DevServer;
+  output: RspackChain.Output;
+  module: RspackChain.Module;
+  node: RspackChain.ChainedMap<this> & ((value: boolean) => this);
+  optimization: RspackChain.Optimization;
+  performance: RspackChain.Performance & ((value: boolean) => this);
+  plugins: RspackChain.Plugins<this, PluginInstance>;
+  resolve: RspackChain.Resolve;
+  resolveLoader: RspackChain.ResolveLoader;
+  devServer: RspackChain.DevServer;
 
   context(value: RspackConfig['context']): this;
   mode(value: RspackConfig['mode']): this;
-  devtool(value: Config.DevTool): this;
+  devtool(value: RspackChain.DevTool): this;
   target(value: RspackConfig['target']): this;
   watch(value: RspackConfig['watch']): this;
   watchOptions(value: RspackConfig['watchOptions']): this;
@@ -97,8 +90,8 @@ declare class Config extends __Config.ChainedMap<void> {
   snapshot(value: RspackConfig['snapshot']): this;
   lazyCompilation(value: RspackConfig['lazyCompilation']): this;
 
-  entry(name: string): Config.EntryPoint;
-  plugin(name: string): Config.Plugin<this, PluginInstance>;
+  entry(name: string): RspackChain.EntryPoint;
+  plugin(name: string): RspackChain.Plugin<this, PluginInstance>;
 
   toConfig(): Configuration;
 
@@ -114,7 +107,7 @@ declare class Config extends __Config.ChainedMap<void> {
   ): string;
 }
 
-declare namespace Config {
+export declare namespace RspackChain {
   class Chained<Parent> extends __Config.Chained<Parent> {}
   class TypedChainedMap<Parent, OptionsType> extends __Config.TypedChainedMap<
     Parent,
@@ -169,11 +162,11 @@ declare namespace Config {
     string | string[] | Function
   >[string];
 
-  class EntryPoint extends TypedChainedSet<Config, RspackEntryObject> {}
+  class EntryPoint extends TypedChainedSet<RspackChain, RspackEntryObject> {}
 
   type RspackModule = Required<NonNullable<Configuration['module']>>;
 
-  class Module extends ChainedMap<Config> {
+  class Module extends ChainedMap<RspackChain> {
     rules: TypedChainedMap<this, { [key: string]: Rule }>;
     generator: ChainedMap<this>;
     parser: ChainedMap<this>;
@@ -183,7 +176,7 @@ declare namespace Config {
 
   type RspackOutput = Required<NonNullable<Configuration['output']>>;
 
-  class Output extends ChainedMap<Config> {
+  class Output extends ChainedMap<RspackChain> {
     assetModuleFilename(value: RspackOutput['assetModuleFilename']): this;
     bundlerInfo(value: RspackOutput['bundlerInfo']): this;
     chunkFilename(value: RspackOutput['chunkFilename']): this;
@@ -242,7 +235,7 @@ declare namespace Config {
   }
 
   // await for @types/webpack-dev-server update do v4 to remove all any
-  class DevServer extends ChainedMap<Config> {
+  class DevServer extends ChainedMap<RspackChain> {
     allowedHosts: TypedChainedSet<this, string>;
     after(value: (app: any, server: any, compiler: Compiler) => void): this;
     before(value: (app: any, server: any, compiler: Compiler) => void): this;
@@ -326,7 +319,7 @@ declare namespace Config {
     Required<NonNullable<Configuration['performance']>>,
     false
   >;
-  class Performance extends ChainedMap<Config> {
+  class Performance extends ChainedMap<RspackChain> {
     hints(value: RspackPerformance['hints']): this;
     maxEntrypointSize(value: RspackPerformance['maxEntrypointSize']): this;
     maxAssetSize(value: RspackPerformance['maxAssetSize']): this;
@@ -334,7 +327,7 @@ declare namespace Config {
   }
 
   type RspackResolve = Required<NonNullable<Configuration['resolve']>>;
-  class Resolve<T = Config> extends ChainedMap<T> {
+  class Resolve<T = RspackChain> extends ChainedMap<T> {
     alias: TypedChainedMap<this, { [key: string]: string | false | string[] }>;
     aliasFields: TypedChainedSet<this, RspackResolve['aliasFields'][number]>;
     conditionNames: TypedChainedSet<
@@ -373,7 +366,7 @@ declare namespace Config {
     tsConfig(value: RspackResolve['tsConfig']): this;
   }
 
-  class RuleResolve<T = Config> extends Resolve<T> {
+  class RuleResolve<T = RspackChain> extends Resolve<T> {
     fullySpecified(value: boolean): this;
   }
 
@@ -422,9 +415,9 @@ declare namespace Config {
     NonNullable<Configuration['optimization']>
   >;
   type SplitChunksObject = Exclude<RspackOptimization['splitChunks'], false>;
-  class Optimization extends ChainedMap<Config> {
-    minimizer(name: string): Config.Plugin<this, PluginInstance>;
-    minimizers: TypedChainedMap<this, Config.Plugin<this, PluginInstance>>;
+  class Optimization extends ChainedMap<RspackChain> {
+    minimizer(name: string): RspackChain.Plugin<this, PluginInstance>;
+    minimizers: TypedChainedMap<this, RspackChain.Plugin<this, PluginInstance>>;
     splitChunks: TypedChainedMap<this, SplitChunksObject> &
       ((value: SplitChunksObject | false) => this);
 

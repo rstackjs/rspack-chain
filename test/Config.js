@@ -1,6 +1,6 @@
 import { EnvironmentPlugin } from '@rspack/core';
 import { stringify } from 'javascript-stringify';
-import Config from '../src';
+import { RspackChain } from '../src';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -18,7 +18,7 @@ class StringifyPlugin {
 }
 
 test('is ChainedMap', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.set('a', 'alpha');
 
@@ -26,7 +26,7 @@ test('is ChainedMap', () => {
 });
 
 test('shorthand methods', () => {
-  const config = new Config();
+  const config = new RspackChain();
   const obj = {};
 
   config.shorthands.forEach((method) => {
@@ -38,7 +38,7 @@ test('shorthand methods', () => {
 });
 
 test('node is object', () => {
-  const config = new Config();
+  const config = new RspackChain();
   const instance = config.node
     .set('__dirname', 'mock')
     .set('__filename', 'mock')
@@ -52,7 +52,7 @@ test('node is object', () => {
 });
 
 test('node is value', () => {
-  const config = new Config();
+  const config = new RspackChain();
   const instance = config.node(false);
 
   expect(instance).toBe(config);
@@ -60,7 +60,7 @@ test('node is value', () => {
 });
 
 test('performance is false', () => {
-  const config = new Config();
+  const config = new RspackChain();
   const instance = config.performance(false);
 
   expect(instance).toBe(config);
@@ -68,7 +68,7 @@ test('performance is false', () => {
 });
 
 test('bail', () => {
-  const config = new Config();
+  const config = new RspackChain();
   const instance = config.bail(false);
 
   expect(instance.toConfig()).toStrictEqual({
@@ -77,7 +77,7 @@ test('bail', () => {
 });
 
 test('cache', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   const instanceBoolean = config.cache(false);
   expect(instanceBoolean.toConfig()).toStrictEqual({
@@ -102,7 +102,7 @@ test('cache', () => {
 });
 
 test('name', () => {
-  const config = new Config();
+  const config = new RspackChain();
   const instance = config.name('aaa');
   expect(instance.toConfig()).toStrictEqual({
     name: 'aaa',
@@ -110,7 +110,7 @@ test('name', () => {
 });
 
 test('entry', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.entry('index').add('babel-polyfill').add('src/index.js');
 
@@ -125,7 +125,7 @@ test('entry', () => {
 });
 
 test('entry description object', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config
     .entry('index')
@@ -168,7 +168,7 @@ test('entry description object', () => {
 });
 
 test('plugin empty', () => {
-  const config = new Config();
+  const config = new RspackChain();
   const instance = config.plugin('stringify').use(StringifyPlugin).end();
 
   expect(instance).toBe(config);
@@ -177,7 +177,7 @@ test('plugin empty', () => {
 });
 
 test('plugin with args', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.plugin('stringify').use(StringifyPlugin, ['alpha', 'beta']);
 
@@ -189,13 +189,13 @@ test('plugin with args', () => {
 });
 
 test('toConfig empty', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   expect(config.toConfig()).toStrictEqual({});
 });
 
 test('toConfig with values', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.output
     .path('build')
@@ -279,7 +279,7 @@ test('toConfig with values', () => {
 });
 
 test('merge empty', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   const obj = {
     mode: 'development',
@@ -323,7 +323,7 @@ test('merge empty', () => {
 });
 
 test('merge with values', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.output
     .path('build')
@@ -377,7 +377,7 @@ test('merge with values', () => {
 });
 
 test('merge with omit', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.output
     .path('build')
@@ -431,7 +431,7 @@ test('merge with omit', () => {
 });
 
 test('lazyCompilation - boolean', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.lazyCompilation(true);
 
@@ -441,7 +441,7 @@ test('lazyCompilation - boolean', () => {
 });
 
 test('lazyCompilation - object', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.lazyCompilation({
     imports: true,
@@ -461,7 +461,7 @@ test('lazyCompilation - object', () => {
 });
 
 test('toString', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.module.rule('alpha').oneOf('beta').use('babel').loader('babel-loader');
 
@@ -587,7 +587,7 @@ test('toString for functions with custom expression', () => {
   const fn = function foo() {};
   fn.__expression = `require('foo')`;
 
-  const config = new Config();
+  const config = new RspackChain();
 
   config.module.rule('alpha').include.add(fn);
 
@@ -614,7 +614,7 @@ test('toString for long function', () => {
     // This is a long function that exceeds the default maxLength for expressions in javascript-stringify
   };
 
-  const config = new Config();
+  const config = new RspackChain();
 
   config.externals(fn);
 
@@ -630,7 +630,7 @@ test('toString for long anonymous function', () => {
     // This is a long function that exceeds the default maxLength for expressions in javascript-stringify
   };
 
-  const config = new Config();
+  const config = new RspackChain();
 
   config.externals(fn());
 
@@ -642,7 +642,7 @@ test('toString for long anonymous function', () => {
 });
 
 test('toString with custom prefix', () => {
-  const config = new Config();
+  const config = new RspackChain();
 
   config.plugin('foo').use(class TestPlugin {});
 
@@ -658,8 +658,8 @@ test('toString with custom prefix', () => {
   );
 });
 
-test('static Config.toString', () => {
-  const config = new Config();
+test('static RspackChain.toString', () => {
+  const config = new RspackChain();
   const sass = {
     __expression: `require('sass')`,
     render() {},
@@ -668,7 +668,7 @@ test('static Config.toString', () => {
   config.plugin('foo').use(class TestPlugin {});
 
   expect(
-    Config.toString(
+    RspackChain.toString(
       Object.assign(config.toConfig(), {
         module: {
           defaultRules: [
