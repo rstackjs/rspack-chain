@@ -54,7 +54,7 @@ const toEntryObject = (entryPoints) => {
   return formattedEntry;
 };
 
-export default class extends ChainedMap {
+class RspackChain extends ChainedMap {
   constructor() {
     super();
     this.entryPoints = new ChainedMap(this);
@@ -216,3 +216,5 @@ export default class extends ChainedMap {
     return super.merge(obj, [...omit, ...omissions, 'entry', 'plugin']);
   }
 }
+
+export { RspackChain };

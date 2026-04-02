@@ -51,11 +51,11 @@ be `rspack.config.js` in the root of our project directory.
 
 ```js
 // Import the rspack-chain module. This module exports a single
-// constructor function for creating a configuration API.
-import Config from 'rspack-chain';
+// named constructor for creating a configuration API.
+import { RspackChain } from 'rspack-chain';
 
 // Instantiate the configuration with a new API
-const config = new Config();
+const config = new RspackChain();
 
 // Make configuration changes using the chain API.
 // Every API call tracks a change to the stored configuration.
@@ -109,9 +109,9 @@ and call `.toConfig()` prior to passing to rspack.
 
 ```js
 // rspack.core.js
-import Config from 'rspack-chain';
+import { RspackChain } from 'rspack-chain';
 
-const config = new Config();
+const config = new RspackChain();
 
 // Make configuration shared across targets
 // ...
@@ -333,14 +333,14 @@ devServer.set('hot', true);
 A shorthand method is chainable, so calling it will return the original
 instance, allowing you to continue to chain.
 
-### Config
+### RspackChain
 
 Create a new configuration object.
 
 ```js
-import Config from 'rspack-chain';
+import { RspackChain } from 'rspack-chain';
 
-const config = new Config();
+const config = new RspackChain();
 ```
 
 Moving to deeper points in the API will change the context of what you
@@ -355,10 +355,10 @@ low-level methods, please refer to their corresponding name in the
 [Rspack docs hierarchy](https://rspack.rs/config/).
 
 ```js
-Config: ChainedMap;
+RspackChain: ChainedMap;
 ```
 
-#### Config shorthand methods
+#### RspackChain shorthand methods
 
 ```js
 config
@@ -385,7 +385,7 @@ config
   .snapshot(snapshot);
 ```
 
-#### Config entryPoints
+#### RspackChain entryPoints
 
 ```js
 // Backed at config.entryPoints : ChainedMap
@@ -412,7 +412,7 @@ config.entryPoints
     .clear()
 ```
 
-#### Config output: shorthand methods
+#### RspackChain output: shorthand methods
 
 ```js
 config.output : ChainedMap
@@ -459,7 +459,7 @@ config.output
   .clean(clean)
 ```
 
-#### Config resolve: shorthand methods
+#### RspackChain resolve: shorthand methods
 
 ```js
 config.resolve : ChainedMap
@@ -475,7 +475,7 @@ config.resolve
   });
 ```
 
-#### Config resolve alias
+#### RspackChain resolve alias
 
 ```js
 config.resolve.alias : ChainedMap
@@ -487,7 +487,7 @@ config.resolve.alias
   .clear()
 ```
 
-#### Config resolve aliasFields
+#### RspackChain resolve aliasFields
 
 ```js
 config.resolve.aliasFields : ChainedSet
@@ -498,7 +498,7 @@ config.resolve.aliasFields
   .clear()
 ```
 
-#### Config resolve conditionNames
+#### RspackChain resolve conditionNames
 
 ```js
 config.resolve.conditionNames : ChainedSet
@@ -509,7 +509,7 @@ config.resolve.conditionNames
   .clear()
 ```
 
-#### Config resolve descriptionFields
+#### RspackChain resolve descriptionFields
 
 ```js
 config.resolve.descriptionFields : ChainedSet
@@ -520,7 +520,7 @@ config.resolve.descriptionFields
   .clear()
 ```
 
-#### Config resolve extensions
+#### RspackChain resolve extensions
 
 ```js
 config.resolve.extensions : ChainedSet
@@ -531,7 +531,7 @@ config.resolve.extensions
   .clear()
 ```
 
-#### Config resolve extensionAlias
+#### RspackChain resolve extensionAlias
 
 ```js
 config.resolve.extensionAlias : ChainedMap
@@ -541,7 +541,7 @@ config.resolve.extensionAlias
   .clear()
 ```
 
-#### Config resolve mainFields
+#### RspackChain resolve mainFields
 
 ```js
 config.resolve.mainFields : ChainedSet
@@ -552,7 +552,7 @@ config.resolve.mainFields
   .clear()
 ```
 
-#### Config resolve mainFiles
+#### RspackChain resolve mainFiles
 
 ```js
 config.resolve.mainFiles : ChainedSet
@@ -563,7 +563,7 @@ config.resolve.mainFiles
   .clear()
 ```
 
-#### Config resolve exportsFields
+#### RspackChain resolve exportsFields
 
 ```js
 config.resolve.exportsFields : ChainedSet
@@ -574,7 +574,7 @@ config.resolve.exportsFields
   .clear()
 ```
 
-#### Config resolve importsFields
+#### RspackChain resolve importsFields
 
 ```js
 config.resolve.importsFields : ChainedSet
@@ -585,7 +585,7 @@ config.resolve.importsFields
   .clear()
 ```
 
-#### Config resolve restrictions
+#### RspackChain resolve restrictions
 
 ```js
 config.resolve.restrictions : ChainedSet
@@ -596,7 +596,7 @@ config.resolve.restrictions
   .clear()
 ```
 
-#### Config resolve roots
+#### RspackChain resolve roots
 
 ```js
 config.resolve.roots : ChainedSet
@@ -607,7 +607,7 @@ config.resolve.roots
   .clear()
 ```
 
-#### Config resolve modules
+#### RspackChain resolve modules
 
 ```js
 config.resolve.modules : ChainedSet
@@ -618,7 +618,7 @@ config.resolve.modules
   .clear()
 ```
 
-#### Config resolve fallback
+#### RspackChain resolve fallback
 
 ```js
 config.resolve.fallback : ChainedMap
@@ -630,7 +630,7 @@ config.resolve.fallback
   .clear()
 ```
 
-#### Config resolve byDependency
+#### RspackChain resolve byDependency
 
 ```js
 config.resolve.byDependency : ChainedMap
@@ -642,12 +642,12 @@ config.resolve.byDependency
   .clear()
 ```
 
-#### Config resolveLoader
+#### RspackChain resolveLoader
 
 The API for `config.resolveLoader` is identical to `config.resolve` with
 the following additions:
 
-#### Config resolveLoader modules
+#### RspackChain resolveLoader modules
 
 ```js
 config.resolveLoader.modules : ChainedSet
@@ -658,7 +658,7 @@ config.resolveLoader.modules
   .clear()
 ```
 
-#### Config resolveLoader moduleExtensions
+#### RspackChain resolveLoader moduleExtensions
 
 ```js
 config.resolveLoader.moduleExtensions : ChainedSet
@@ -669,7 +669,7 @@ config.resolveLoader.moduleExtensions
   .clear()
 ```
 
-#### Config resolveLoader packageMains
+#### RspackChain resolveLoader packageMains
 
 ```js
 config.resolveLoader.packageMains : ChainedSet
@@ -680,7 +680,7 @@ config.resolveLoader.packageMains
   .clear()
 ```
 
-#### Config performance: shorthand methods
+#### RspackChain performance: shorthand methods
 
 ```js
 config.performance : ChainedValueMap
@@ -716,7 +716,7 @@ config.optimization
   .realContentHash(realContentHash)
 ```
 
-#### Config optimization minimizers
+#### RspackChain optimization minimizers
 
 ```js
 // Backed at config.optimization.minimizers
@@ -724,7 +724,7 @@ config.optimization
   .minimizer(name) : ChainedMap
 ```
 
-#### Config optimization minimizers: adding
+#### RspackChain optimization minimizers: adding
 
 _NOTE: Do not use `new` to create the minimizer plugin, as this will be done for you._
 
@@ -750,7 +750,7 @@ config.optimization
   ]);
 ```
 
-#### Config optimization minimizers: modify arguments
+#### RspackChain optimization minimizers: modify arguments
 
 ```js
 config.optimization.minimizer(name).tap((args) => newArgs);
@@ -761,19 +761,19 @@ config.optimization
   .tap((args) => [...args, { cssProcessorOptions: { safe: false } }]);
 ```
 
-#### Config optimization minimizers: modify instantiation
+#### RspackChain optimization minimizers: modify instantiation
 
 ```js
 config.optimization.minimizer(name).init((Plugin, args) => new Plugin(...args));
 ```
 
-#### Config optimization minimizers: removing
+#### RspackChain optimization minimizers: removing
 
 ```js
 config.optimization.minimizers.delete(name);
 ```
 
-#### Config optimization splitChunks
+#### RspackChain optimization splitChunks
 
 ```js
 config.optimization.splitChunks : ChainedValueMap
@@ -788,14 +788,14 @@ config.optimization
   .clear()
 ```
 
-#### Config plugins
+#### RspackChain plugins
 
 ```js
 // Backed at config.plugins
 config.plugin(name) : ChainedMap
 ```
 
-#### Config plugins: adding
+#### RspackChain plugins: adding
 
 _NOTE: Do not use `new` to create the plugin, as this will be done for you._
 
@@ -818,7 +818,7 @@ config.plugin('env').use(EnvironmentPlugin, [{ VAR: false }]);
 config.plugin('custom').use(require.resolve('my-plugin'), [{ answer: 42 }]);
 ```
 
-#### Config plugins: modify arguments
+#### RspackChain plugins: modify arguments
 
 ```js
 config.plugin(name).tap((args) => newArgs);
@@ -827,19 +827,19 @@ config.plugin(name).tap((args) => newArgs);
 config.plugin('env').tap((args) => [...args, 'SECRET_KEY']);
 ```
 
-#### Config plugins: modify instantiation
+#### RspackChain plugins: modify instantiation
 
 ```js
 config.plugin(name).init((Plugin, args) => new Plugin(...args));
 ```
 
-#### Config plugins: removing
+#### RspackChain plugins: removing
 
 ```js
 config.plugins.delete(name);
 ```
 
-#### Config plugins: ordering before
+#### RspackChain plugins: ordering before
 
 Specify that the current `plugin` context should operate before another named
 `plugin`. You cannot use both `.before()` and `.after()` on the same plugin.
@@ -858,7 +858,7 @@ config
   .before('html-template');
 ```
 
-#### Config plugins: ordering after
+#### RspackChain plugins: ordering after
 
 Specify that the current `plugin` context should operate after another named
 `plugin`. You cannot use both `.before()` and `.after()` on the same plugin.
@@ -877,7 +877,7 @@ config
   .use(ScriptExtRspackPlugin);
 ```
 
-#### Config node
+#### RspackChain node
 
 ```js
 config.node : ChainedValueMap
@@ -888,13 +888,13 @@ config.node(false)
   .set('__filename', 'mock');
 ```
 
-#### Config devServer
+#### RspackChain devServer
 
 ```js
 config.devServer : ChainedMap
 ```
 
-#### Config devServer allowedHosts
+#### RspackChain devServer allowedHosts
 
 ```js
 config.devServer.allowedHosts : ChainedSet
@@ -905,7 +905,7 @@ config.devServer.allowedHosts
   .clear()
 ```
 
-#### Config devServer: shorthand methods
+#### RspackChain devServer: shorthand methods
 
 ```js
 config.devServer
@@ -961,13 +961,13 @@ config.devServer
   .writeToDisk(writeToDisk);
 ```
 
-#### Config module
+#### RspackChain module
 
 ```js
 config.module : ChainedMap
 ```
 
-#### Config module: shorthand methods
+#### RspackChain module: shorthand methods
 
 ```js
 config.module : ChainedMap
@@ -975,7 +975,7 @@ config.module : ChainedMap
 config.module.noParse(noParse)
 ```
 
-#### Config module rules: shorthand methods
+#### RspackChain module rules: shorthand methods
 
 ```js
 config.module.rules : ChainedMap
@@ -988,7 +988,7 @@ config.module
     .enforce(preOrPost)
 ```
 
-#### Config module rules uses (loaders): creating
+#### RspackChain module rules uses (loaders): creating
 
 ```js
 config.module.rules{}.uses : ChainedMap
@@ -1008,7 +1008,7 @@ config.module
       .options({ presets: ['@babel/preset-env'] });
 ```
 
-#### Config module rules uses (loaders): modifying options
+#### RspackChain module rules uses (loaders): modifying options
 
 ```js
 config.module
@@ -1028,7 +1028,7 @@ config.module
   );
 ```
 
-#### Config module rules nested rules:
+#### RspackChain module rules nested rules:
 
 ```js
 config.module.rules{}.rules : ChainedMap<Rule>
@@ -1051,7 +1051,7 @@ config.module
         .loader('postcss-loader')
 ```
 
-#### Config module rules nested rules: ordering before
+#### RspackChain module rules nested rules: ordering before
 
 Specify that the current `rule` context should operate before another named
 `rule`. You cannot use both `.before()` and `.after()` on the same `rule`.
@@ -1084,7 +1084,7 @@ config.module
         .loader('css-loader')
 ```
 
-#### Config module rules nested rules: ordering after
+#### RspackChain module rules nested rules: ordering after
 
 Specify that the current `rule` context should operate after another named
 `rule`. You cannot use both `.before()` and `.after()` on the same `rule`.
@@ -1117,7 +1117,7 @@ config.module
         .loader('css-loader')
 ```
 
-#### Config module rules oneOfs (conditional rules):
+#### RspackChain module rules oneOfs (conditional rules):
 
 ```js
 config.module.rules{}.oneOfs : ChainedMap<Rule>
@@ -1142,7 +1142,7 @@ config.module
         .loader('file-loader')
 ```
 
-#### Config module rules oneOfs (conditional rules): ordering before
+#### RspackChain module rules oneOfs (conditional rules): ordering before
 
 Specify that the current `oneOf` context should operate before another named
 `oneOf`. You cannot use both `.before()` and `.after()` on the same `oneOf`.
@@ -1167,7 +1167,7 @@ config.module
   .loader('sass-vars-to-js-loader');
 ```
 
-#### Config module rules oneOfs (conditional rules): ordering after
+#### RspackChain module rules oneOfs (conditional rules): ordering after
 
 Specify that the current `oneOf` context should operate after another named
 `oneOf`. You cannot use both `.before()` and `.after()` on the same `oneOf`.
@@ -1198,12 +1198,12 @@ config.module
   .loader('sass-vars-to-js-loader');
 ```
 
-#### Config module rules resolve
+#### RspackChain module rules resolve
 
 Specify a resolve configuration to be merged over the default `config.resolve`
 for modules that match the rule.
 
-See "Config resolve" sections above for full syntax.
+See "RspackChain resolve" sections above for full syntax.
 
 ```js
 config.module.rule(name).resolve;
@@ -1218,7 +1218,7 @@ config.module
 
 ---
 
-### Merging Config
+### Merging RspackChain
 
 rspack-chain supports merging in an object to the configuration instance which
 matches a layout similar to how the rspack-chain schema is laid out.
@@ -1532,11 +1532,11 @@ config.toString();
 The resulting string will use the absolute path returned by
 `require.resolve('my-plugin')` when constructing the plugin.
 
-You can also call `toString` as a static method on `Config` in order to
+You can also call `toString` as a static method on `RspackChain` in order to
 modify the configuration object prior to stringifying.
 
 ```js
-Config.toString({
+RspackChain.toString({
   ...config.toConfig(),
   module: {
     defaultRules: [
