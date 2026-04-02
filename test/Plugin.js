@@ -2,7 +2,8 @@ import Plugin from '../src/Plugin';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const EnvironmentPlugin = require('webpack/lib/EnvironmentPlugin');
+const pathEnvironmentPlugin =
+  require.resolve('../test-utils/PathEnvironmentPlugin.cjs');
 
 class StringifyPlugin {
   constructor(...args) {
@@ -131,15 +132,13 @@ test('toConfig with object literal plugin', () => {
 
 test('toConfig with plugin as path', () => {
   const plugin = new Plugin(null, 'gamma');
-  const envPluginPath = require.resolve('webpack/lib/EnvironmentPlugin');
-
-  plugin.use(envPluginPath);
+  plugin.use(pathEnvironmentPlugin);
 
   const initialized = plugin.toConfig();
 
-  expect(initialized instanceof EnvironmentPlugin).toBe(true);
-  expect(initialized.__pluginConstructorName).toBe('EnvironmentPlugin');
-  expect(initialized.__pluginPath).toBe(envPluginPath);
+  expect(initialized.constructor.name).toBe('PathEnvironmentPlugin');
+  expect(initialized.__pluginConstructorName).toBe('PathEnvironmentPlugin');
+  expect(initialized.__pluginPath).toBe(pathEnvironmentPlugin);
 });
 
 test('toConfig without having called use()', () => {

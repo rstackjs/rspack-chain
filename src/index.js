@@ -57,47 +57,28 @@ const toEntryObject = (entryPoints) => {
 export default class extends ChainedMap {
   constructor() {
     super();
-    // https://webpack.js.org/configuration/entry-context/
     this.entryPoints = new ChainedMap(this);
-    // https://webpack.js.org/configuration/output/
     this.output = new Output(this);
-    // https://webpack.js.org/configuration/module/
     this.module = new Module(this);
-    // https://webpack.js.org/configuration/resolve
     this.resolve = new Resolve(this);
-    // https://webpack.js.org/configuration/resolve/#resolveloader
     this.resolveLoader = new ResolveLoader(this);
-    // https://webpack.js.org/configuration/optimization/
     this.optimization = new Optimization(this);
-    // https://webpack.js.org/configuration/plugins/
     this.plugins = new ChainedMap(this);
-    // https://webpack.js.org/configuration/dev-server/
     this.devServer = new DevServer(this);
-    // https://webpack.js.org/configuration/performance/
     this.performance = new Performance(this);
-    // https://webpack.js.org/configuration/node/
     this.node = new ChainedValueMap(this);
     this.extend([
-      // https://webpack.js.org/configuration/entry-context/
       'context',
-      // https://webpack.js.org/configuration/mode/
       'mode',
-      // https://webpack.js.org/configuration/devtool/
       'devtool',
-      // https://webpack.js.org/configuration/target/
       'target',
-      // https://webpack.js.org/configuration/watch/
       'watch',
       'watchOptions',
-      // https://webpack.js.org/configuration/externals/
       'externals',
       'externalsType',
       'externalsPresets',
-      // https://webpack.js.org/configuration/stats/
       'stats',
-      // https://webpack.js.org/configuration/experiments
       'experiments',
-      // https://webpack.js.org/configuration/other-options
       'amd',
       'bail',
       'cache',
