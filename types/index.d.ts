@@ -233,7 +233,7 @@ export declare namespace RspackChain {
     clean(value: RspackOutput['clean']): this;
   }
 
-  type RspackDevServer = NonNullable<Configuration['devServer']>;
+  type RspackDevServer = Required<NonNullable<Configuration['devServer']>>;
 
   type DevServerShorthandMethods<T> = {
     [K in keyof RspackDevServer]-?: (value: RspackDevServer[K]) => T;
