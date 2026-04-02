@@ -31,6 +31,34 @@ export default class extends ChainedMap {
     ]);
   }
 
+  clear() {
+    this.allowedHosts.clear();
+    return super.clear();
+  }
+
+  delete(key) {
+    if (key === 'allowedHosts') {
+      this.allowedHosts.clear();
+    }
+
+    return super.delete(key);
+  }
+
+  set(key, value) {
+    if (key !== 'allowedHosts') {
+      return super.set(key, value);
+    }
+
+    this.allowedHosts.clear();
+
+    if (Array.isArray(value)) {
+      this.allowedHosts.merge(value);
+      return super.delete(key);
+    }
+
+    return super.set(key, value);
+  }
+
   toConfig() {
     return this.clean({
       allowedHosts: this.allowedHosts.values(),
@@ -42,15 +70,11 @@ export default class extends ChainedMap {
     if (!omit.includes('allowedHosts') && 'allowedHosts' in obj) {
       const { allowedHosts } = obj;
 
-      if (Array.isArray(allowedHosts)) {
-        this.delete('allowedHosts');
-        this.allowedHosts.merge(allowedHosts);
-      } else {
-        this.allowedHosts.clear();
+      if (allowedHosts !== undefined) {
         this.set('allowedHosts', allowedHosts);
       }
     }
 
-    return super.merge(obj, ['allowedHosts']);
+    return super.merge(obj, [...omit, 'allowedHosts']);
   }
 }
