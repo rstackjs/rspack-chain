@@ -265,73 +265,81 @@ config
   .delete('asObject')
   .end()
   // devServer
-  .devServer.allowedHosts.add('host.com')
-  .clear()
-  .end()
-  .after(() => {})
-  .before(() => {})
-  .bonjour(true)
-  .clientLogLevel('error')
+  .devServer.allowedHosts(['host.com'])
+  .allowedHosts('auto')
+  .merge({
+    allowedHosts: ['host.com'],
+    hot: 'only',
+  })
+  .app(async () => {
+    throw new Error('not used in type tests');
+  })
+  .client({
+    logging: 'warn',
+    overlay: {
+      warnings: true,
+      errors: true,
+      runtimeErrors: false,
+    },
+    progress: true,
+    reconnect: 3,
+    webSocketTransport: 'ws',
+    webSocketURL: {
+      protocol: 'ws',
+      port: 8080,
+    },
+  })
   .compress(false)
-  .contentBase('/')
-  .contentBase(['foo', 'bar'])
-  .contentBasePublicPath('asd')
-  .disableHostCheck(true)
-  .filename('hello')
+  .devMiddleware({
+    index: 'index.html',
+    mimeTypes: {
+      'text/html': 'text/html',
+    },
+    stats: 'errors-warnings',
+    writeToDisk: true,
+  })
   .headers({
     'Content-Type': 'text/css',
   })
+  .headers((req, res, context) => ({
+    'X-Test': 'true',
+  }))
   .historyApiFallback(true)
   .host('localhost')
   .hot(true)
-  .hotOnly(true)
-  .http2(true)
-  .https(true)
-  .index('test.html')
-  .injectClient(false)
-  .injectHot(() => false)
-  .inline(true)
-  .lazy(true)
-  .mimeTypes({ 'text/html': ['phtml'] })
-  .noInfo(true)
+  .ipc(true)
+  .liveReload(true)
   .open(true)
-  .openPage('/foo')
-  .openPage(['/foo', '/bar'])
-  .overlay(true)
-  .overlay({
-    warnings: true,
-    errors: true,
-  })
-  .pfx('/path/to/file.pfx')
-  .pfxPassphrase('passphrase')
   .port(8080)
-  .progress(true)
-  .proxy({})
-  .public('foo')
-
-  .publicPath('bar')
-  .quiet(false)
-  .setup((app) => {})
-  .socket('socket')
-  .sockHost('localhost')
-  .sockPath('/sockpath/')
-  .sockPort(8080)
-  .staticOptions({})
-  .stats({
-    reasons: true,
-    errors: true,
-    warnings: false,
+  .proxy([
+    {
+      context: ['/api'],
+      target: 'http://localhost:3000',
+    },
+  ])
+  .server({
+    type: 'https',
+    options: {},
   })
-  .transportMode('sockjs')
-  .transportMode({
-    client: {},
-    server: 'ws',
+  .setupExitSignals(true)
+  .setupMiddlewares((middlewares) => middlewares)
+  .static({
+    directory: '/tmp/public',
+    publicPath: ['/assets'],
+    watch: {
+      poll: 1000,
+    },
   })
-  .stdin(true)
-  .useLocalIp(true)
-  .watchContentBase(true)
-  .watchOptions({})
-  .writeToDisk(true)
+  .watchFiles([
+    'src/**/*',
+    {
+      paths: ['templates/**/*'],
+      options: {
+        poll: 1000,
+      },
+    },
+  ])
+  .webSocketServer('ws')
   .end()
   // performance
   .performance(false)

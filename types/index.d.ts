@@ -1,5 +1,4 @@
-import { Configuration, Compiler, RuleSetRule } from '@rspack/core';
-import * as https from 'node:https';
+import { Configuration, RuleSetRule } from '@rspack/core';
 
 // The compiler type of Rspack / webpack are mismatch,
 // so we use a loose type here to allow using webpack plugins.
@@ -234,86 +233,15 @@ export declare namespace RspackChain {
     clean(value: RspackOutput['clean']): this;
   }
 
-  // await for @types/webpack-dev-server update do v4 to remove all any
-  class DevServer extends ChainedMap<RspackChain> {
-    allowedHosts: TypedChainedSet<this, string>;
-    after(value: (app: any, server: any, compiler: Compiler) => void): this;
-    before(value: (app: any, server: any, compiler: Compiler) => void): this;
-    bonjour(value: boolean): this;
-    clientLogLevel(
-      value:
-        | 'silent'
-        | 'trace'
-        | 'debug'
-        | 'info'
-        | 'warn'
-        | 'error'
-        | 'none'
-        | 'warning',
-    ): this;
-    compress(value: boolean): this;
-    contentBase(value: boolean | string | string[]): this;
-    contentBasePublicPath(value: string): this;
-    disableHostCheck(value: boolean): this;
-    filename(value: string): this;
-    headers(value: { [header: string]: string }): this;
-    historyApiFallback(value: boolean | any): this;
-    host(value: string): this;
-    hot(value: boolean): this;
-    hotOnly(value: boolean): this;
-    http2(value: boolean): this;
-    https(value: boolean | https.ServerOptions): this;
-    index(value: string): this;
-    injectClient(value: boolean | ((compiler: Compiler) => boolean)): this;
-    injectHot(value: boolean | ((compiler: Compiler) => boolean)): this;
-    inline(value: boolean): this;
-    lazy(value: boolean): this;
-    liveReload(value: boolean): this;
-    mimeTypes(value: Object): this;
-    noInfo(value: boolean): this;
-    onListening(value: (server: any) => void): this;
-    open(value: boolean): this;
-    openPage(value: string | string[]): this;
-    overlay(value: boolean | { warnings?: boolean; errors?: boolean }): this;
-    pfx(value: string): this;
-    pfxPassphrase(value: string): this;
-    port(value: number): this;
-    progress(value: boolean): this;
-    proxy(value: any): this;
-    public(value: string): this;
-    publicPath(publicPath: string): this;
-    quiet(value: boolean): this;
-    serveIndex(value: boolean): this;
-    setup(value: (expressApp: any) => void): this;
-    socket(value: string): this;
-    sockHost(value: string): this;
-    sockPath(value: string): this;
-    sockPort(value: number): this;
-    staticOptions(value: any): this;
-    stats(value: Configuration['stats']): this;
-    stdin(value: boolean): this;
-    transportMode(
-      value:
-        | 'sockjs'
-        | 'ws'
-        | {
-            server: 'ws';
-            client: object;
-          }
-        | {
-            client: 'sockjs';
-            server: object;
-          }
-        | {
-            client: object;
-            server: object;
-          },
-    ): this;
-    useLocalIp(value: boolean): this;
-    watchContentBase(value: boolean): this;
-    watchOptions(value: Configuration['watchOptions']): this;
-    writeToDisk(value: boolean): this;
-  }
+  type RspackDevServer = Required<NonNullable<Configuration['devServer']>>;
+
+  type DevServerShorthandMethods<T> = {
+    [K in keyof RspackDevServer]-?: (value: RspackDevServer[K]) => T;
+  };
+
+  class DevServer extends TypedChainedMap<RspackChain, RspackDevServer> {}
+
+  interface DevServer extends DevServerShorthandMethods<DevServer> {}
 
   type RspackPerformance = Exclude<
     Required<NonNullable<Configuration['performance']>>,

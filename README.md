@@ -898,71 +898,31 @@ config.node(false)
 config.devServer : ChainedMap
 ```
 
-#### devServer allowedHosts
-
-```js
-config.devServer.allowedHosts : ChainedSet
-
-config.devServer.allowedHosts
-  .add(value)
-  .prepend(value)
-  .clear()
-```
-
 #### devServer: shorthand methods
 
 ```js
 config.devServer
-  .after(after)
-  .before(before)
-  .bonjour(bonjour)
-  .clientLogLevel(clientLogLevel)
+  .allowedHosts(allowedHosts)
+  .app(app)
+  .client(client)
   .compress(compress)
-  .contentBase(contentBase)
-  .contentBasePublicPath(contentBasePublicPath)
-  .disableHostCheck(disableHostCheck)
-  .filename(filename)
+  .devMiddleware(devMiddleware)
   .headers(headers)
   .historyApiFallback(historyApiFallback)
   .host(host)
   .hot(hot)
-  .hotOnly(hotOnly)
-  .http2(http2)
-  .https(https)
-  .index(index)
-  .injectClient(injectClient)
-  .injectHot(injectHot)
-  .inline(inline)
-  .lazy(lazy)
   .liveReload(liveReload)
-  .mimeTypes(mimeTypes)
-  .noInfo(noInfo)
+  .ipc(ipc)
   .onListening(onListening)
   .open(open)
-  .openPage(openPage)
-  .overlay(overlay)
-  .pfx(pfx)
-  .pfxPassphrase(pfxPassphrase)
   .port(port)
-  .progress(progress)
   .proxy(proxy)
-  .public(public)
-  .publicPath(publicPath)
-  .quiet(quiet)
-  .serveIndex(serveIndex)
-  .setup(setup)
-  .socket(socket)
-  .sockHost(sockHost)
-  .sockPath(sockPath)
-  .sockPort(sockPort)
-  .staticOptions(staticOptions)
-  .stats(stats)
-  .stdin(stdin)
-  .transportMode(transportMode)
-  .useLocalIp(useLocalIp)
-  .watchContentBase(watchContentBase)
-  .watchOptions(watchOptions)
-  .writeToDisk(writeToDisk);
+  .server(server)
+  .setupExitSignals(setupExitSignals)
+  .setupMiddlewares(setupMiddlewares)
+  .static(static)
+  .watchFiles(watchFiles)
+  .webSocketServer(webSocketServer);
 ```
 
 #### module
@@ -1271,26 +1231,27 @@ config.merge({
   devServer: {
     [key]: value,
 
-    clientLogLevel,
+    allowedHosts,
+    app,
+    client,
     compress,
-    contentBase,
-    filename,
+    devMiddleware,
     headers,
     historyApiFallback,
     host,
     hot,
-    hotOnly,
-    https,
-    inline,
-    lazy,
-    noInfo,
-    overlay,
+    ipc,
+    liveReload,
+    onListening,
+    open,
     port,
     proxy,
-    quiet,
-    setup,
-    stats,
-    watchContentBase,
+    server,
+    setupExitSignals,
+    setupMiddlewares,
+    static,
+    watchFiles,
+    webSocketServer,
   },
 
   node: {

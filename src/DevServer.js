@@ -1,78 +1,35 @@
 import ChainedMap from './ChainedMap.js';
-import ChainedSet from './ChainedSet.js';
 
 export default class extends ChainedMap {
   constructor(parent) {
     super(parent);
 
-    this.allowedHosts = new ChainedSet(this);
-
     this.extend([
-      'after',
-      'before',
-      'bonjour',
-      'clientLogLevel',
+      'allowedHosts',
+      'app',
+      'client',
       'compress',
-      'contentBase',
-      'contentBasePublicPath',
-      'disableHostCheck',
-      'filename',
+      'devMiddleware',
       'headers',
-      'historyApiFallback',
       'host',
+      'historyApiFallback',
       'hot',
-      'hotOnly',
-      'http2',
-      'https',
-      'index',
-      'injectClient',
-      'injectHot',
-      'inline',
-      'lazy',
+      'ipc',
       'liveReload',
-      'mimeTypes',
-      'noInfo',
       'onListening',
       'open',
-      'openPage',
-      'overlay',
-      'pfx',
-      'pfxPassphrase',
       'port',
       'proxy',
-      'progress',
-      'public',
-      'publicPath',
-      'quiet',
-      'serveIndex',
-      'setup',
-      'socket',
-      'sockHost',
-      'sockPath',
-      'sockPort',
-      'staticOptions',
-      'stats',
-      'stdin',
-      'transportMode',
-      'useLocalIp',
-      'watchContentBase',
-      'watchOptions',
-      'writeToDisk',
+      'server',
+      'setupExitSignals',
+      'setupMiddlewares',
+      'static',
+      'watchFiles',
+      'webSocketServer',
     ]);
   }
 
   toConfig() {
-    return this.clean({
-      allowedHosts: this.allowedHosts.values(),
-      ...(this.entries() || {}),
-    });
-  }
-
-  merge(obj, omit = []) {
-    if (!omit.includes('allowedHosts') && 'allowedHosts' in obj) {
-      this.allowedHosts.merge(obj.allowedHosts);
-    }
-
-    return super.merge(obj, ['allowedHosts']);
+    return this.clean(this.entries() || {});
   }
 }

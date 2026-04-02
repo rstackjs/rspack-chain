@@ -7,13 +7,52 @@ test('is Chainable', () => {
   expect(devServer.end()).toBe(parent);
 });
 
-test('sets allowed hosts', () => {
+test('sets allowed hosts arrays', () => {
   const devServer = new DevServer();
-  const instance = devServer.allowedHosts.add('https://github.com').end();
+  const instance = devServer.allowedHosts(['https://github.com']);
 
   expect(instance).toBe(devServer);
   expect(devServer.toConfig()).toStrictEqual({
     allowedHosts: ['https://github.com'],
+  });
+});
+
+test('sets allowed hosts scalar values', () => {
+  const devServer = new DevServer();
+
+  devServer.allowedHosts('all');
+
+  expect(devServer.toConfig()).toStrictEqual({
+    allowedHosts: 'all',
+  });
+});
+
+test('merges allowedHosts values', () => {
+  const devServer = new DevServer();
+
+  devServer.allowedHosts('auto');
+  devServer.merge({
+    allowedHosts: ['https://github.com'],
+  });
+
+  expect(devServer.toConfig()).toStrictEqual({
+    allowedHosts: ['https://github.com'],
+  });
+});
+
+test('preserves omitted keys during merge', () => {
+  const devServer = new DevServer();
+
+  devServer.proxy('https://example.com');
+  devServer.merge(
+    {
+      proxy: 'https://rspack.rs',
+    },
+    ['proxy'],
+  );
+
+  expect(devServer.toConfig()).toStrictEqual({
+    proxy: 'https://example.com',
   });
 });
 
