@@ -17,6 +17,28 @@ test('sets allowed hosts', () => {
   });
 });
 
+test('merges allowedHosts with non-array values', () => {
+  const devServer = new DevServer();
+
+  devServer.merge({
+    allowedHosts: 'auto',
+  });
+
+  expect(devServer.toConfig()).toStrictEqual({
+    allowedHosts: 'auto',
+  });
+});
+
+test('sets allowedHosts with non-array values', () => {
+  const devServer = new DevServer();
+
+  devServer.set('allowedHosts', 'all');
+
+  expect(devServer.toConfig()).toStrictEqual({
+    allowedHosts: 'all',
+  });
+});
+
 test('shorthand methods', () => {
   const devServer = new DevServer();
   const obj = {};

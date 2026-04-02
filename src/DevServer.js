@@ -8,56 +8,26 @@ export default class extends ChainedMap {
     this.allowedHosts = new ChainedSet(this);
 
     this.extend([
-      'after',
-      'before',
-      'bonjour',
-      'clientLogLevel',
+      'app',
+      'client',
       'compress',
-      'contentBase',
-      'contentBasePublicPath',
-      'disableHostCheck',
-      'filename',
+      'devMiddleware',
       'headers',
-      'historyApiFallback',
       'host',
+      'historyApiFallback',
       'hot',
-      'hotOnly',
-      'http2',
-      'https',
-      'index',
-      'injectClient',
-      'injectHot',
-      'inline',
-      'lazy',
+      'ipc',
       'liveReload',
-      'mimeTypes',
-      'noInfo',
       'onListening',
       'open',
-      'openPage',
-      'overlay',
-      'pfx',
-      'pfxPassphrase',
       'port',
       'proxy',
-      'progress',
-      'public',
-      'publicPath',
-      'quiet',
-      'serveIndex',
-      'setup',
-      'socket',
-      'sockHost',
-      'sockPath',
-      'sockPort',
-      'staticOptions',
-      'stats',
-      'stdin',
-      'transportMode',
-      'useLocalIp',
-      'watchContentBase',
-      'watchOptions',
-      'writeToDisk',
+      'server',
+      'setupExitSignals',
+      'setupMiddlewares',
+      'static',
+      'watchFiles',
+      'webSocketServer',
     ]);
   }
 
@@ -70,7 +40,15 @@ export default class extends ChainedMap {
 
   merge(obj, omit = []) {
     if (!omit.includes('allowedHosts') && 'allowedHosts' in obj) {
-      this.allowedHosts.merge(obj.allowedHosts);
+      const { allowedHosts } = obj;
+
+      if (Array.isArray(allowedHosts)) {
+        this.delete('allowedHosts');
+        this.allowedHosts.merge(allowedHosts);
+      } else {
+        this.allowedHosts.clear();
+        this.set('allowedHosts', allowedHosts);
+      }
     }
 
     return super.merge(obj, ['allowedHosts']);
