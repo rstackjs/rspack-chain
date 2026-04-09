@@ -33,9 +33,9 @@
     "test:types": "tsc -p ./types/test/tsconfig.json"
   },
   "devDependencies": {
-    "@rslib/core": "0.19.6",
-    "@rspack/core": "2.0.0-rc.0",
-    "@rstest/core": "^0.9.5",
+    "@rslib/core": "0.21.0",
+    "@rspack/core": "2.0.0-rc.1",
+    "@rstest/core": "^0.9.6",
     "deepmerge": "^4.3.1",
     "javascript-stringify": "^2.1.0",
     "prettier": "^3.8.1",
