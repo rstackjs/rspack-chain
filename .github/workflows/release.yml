@@ -27,12 +27,8 @@ jobs:
         with:
           node-version: 24.14.1
 
-      # Update npm to the latest version to enable OIDC
-      # Use corepack to install pnpm
       - name: Setup Package Managers
         run: |
-          npm install -g npm@latest
-          npm --version
           npm install -g corepack@latest --force
           corepack enable
 
@@ -41,9 +37,6 @@ jobs:
 
       - name: Publish
         uses: JS-DevTools/npm-publish@0fd2f4369c5d6bcfcde6091a7c527d810b9b5c3f # v4
-        with:
-          token: empty
-          tag: 'rc'
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1
