@@ -33,13 +33,13 @@
     "test:types": "tsc -p ./types/test/tsconfig.json"
   },
   "devDependencies": {
-    "@rslib/core": "0.21.0",
-    "@rspack/core": "2.0.0-rc.1",
-    "@rstest/core": "^0.9.7",
+    "@rslib/core": "0.21.2",
+    "@rspack/core": "2.0.0-rc.3",
+    "@rstest/core": "^0.9.8",
     "deepmerge": "^4.3.1",
     "javascript-stringify": "^2.1.0",
-    "prettier": "^3.8.2",
-    "typescript": "^6.0.2"
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3"
   },
   "peerDependencies": {
     "@rspack/core": "^2.0.0-0"
