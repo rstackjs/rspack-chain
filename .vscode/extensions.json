@@ -1,0 +1,6 @@
+{
+  "recommendations": [
+    "rstack.rslint",
+    "esbenp.prettier-vscode"
+  ]
+}

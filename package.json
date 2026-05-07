@@ -25,15 +25,18 @@
     "build": "rslib",
     "bump": "npx bumpp",
     "dev": "rslib -w",
-    "fix": "yarn lint:fix && yarn style:fix",
+    "fix": "pnpm run lint:write && pnpm run style:fix",
     "prepare": "pnpm build",
     "style": "prettier --check .",
     "style:fix": "prettier --write .",
     "test": "rstest",
-    "test:types": "tsc -p ./types/test/tsconfig.json"
+    "test:types": "tsc -p ./types/test/tsconfig.json",
+    "lint": "rslint",
+    "lint:write": "rslint --fix"
   },
   "devDependencies": {
     "@rslib/core": "0.21.3",
+    "@rslint/core": "^0.5.1",
     "@rspack/core": "2.0.1",
     "@rstest/core": "^0.9.10",
     "deepmerge": "^4.3.1",
