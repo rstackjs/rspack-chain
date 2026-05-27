@@ -1,18 +1,16 @@
-# This action will publish the package to npm and create a GitHub release.
-# Ref: https://docs.npmjs.com/trusted-publishers/
 name: Release
 
 on:
   # Run `npm run bump` to bump the version and create a git tag.
   push:
     tags:
-      - "v*"
+      - 'v*'
 
   workflow_dispatch:
 
 permissions:
-  contents: write
-  id-token: write
+  contents: read
+  id-token: write # Required for OIDC
 
 jobs:
   publish:
@@ -27,18 +25,13 @@ jobs:
         with:
           node-version: 24.15.0
 
-      - name: Setup Package Managers
+      - name: Setup Pnpm
         run: |
           npm install -g corepack@latest --force
           corepack enable
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm i
 
       - name: Publish
-        uses: JS-DevTools/npm-publish@0fd2f4369c5d6bcfcde6091a7c527d810b9b5c3f # v4
-
-      - name: Create GitHub Release
-        uses: ncipollo/release-action@339a81892b84b4eeb0f6e744e4574d79d0d9b8dd # v1
-        with:
-          generateReleaseNotes: "true"
+        run: pnpm stage publish --no-git-checks
