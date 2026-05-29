@@ -26,7 +26,6 @@
     "bump": "npx bumpp",
     "dev": "rslib -w",
     "fix": "pnpm run lint:write && pnpm run style:fix",
-    "prepare": "pnpm build",
     "style": "prettier --check .",
     "style:fix": "prettier --write .",
     "test": "rstest",
