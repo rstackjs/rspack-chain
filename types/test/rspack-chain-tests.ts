@@ -86,6 +86,7 @@ config
   .descriptionData({
     type: 'module',
   })
+  .phase('source')
   .issuer('asd')
   .issuerLayer('asd')
   .sideEffects(true)

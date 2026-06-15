@@ -133,6 +133,7 @@ test('toConfig with values', () => {
     .descriptionData({
       type: 'module',
     })
+    .phase('source')
     .use('babel')
     .loader('babel-loader')
     .options({ presets: ['alpha'] })
@@ -153,6 +154,7 @@ test('toConfig with values', () => {
     descriptionData: {
       type: 'module',
     },
+    phase: 'source',
     enforce: 'pre',
     include: ['alpha', 'beta'],
     exclude: ['alpha', 'beta'],
