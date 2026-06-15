@@ -90,6 +90,7 @@ config
   .descriptionData({
     type: 'module',
   })
+  .extractSourceMap(true)
   .phase('source')
   .issuer('asd')
   .issuerLayer('asd')
