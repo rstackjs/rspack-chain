@@ -217,6 +217,7 @@ export declare namespace RspackChain {
     hotUpdateMainFilename(value: RspackOutput['hotUpdateMainFilename']): this;
     library(value: RspackOutput['library']): this;
     importFunctionName(value: RspackOutput['importFunctionName']): this;
+    importMetaName(value: RspackOutput['importMetaName']): this;
     path(value: RspackOutput['path']): this;
     pathinfo(value: RspackOutput['pathinfo']): this;
     publicPath(value: RspackOutput['publicPath']): this;

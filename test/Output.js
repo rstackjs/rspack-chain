@@ -46,6 +46,15 @@ test('cssChunkFilename', () => {
   });
 });
 
+test('importMetaName', () => {
+  const output = new Output();
+
+  expect(output.importMetaName('import.meta')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    importMetaName: 'import.meta',
+  });
+});
+
 test('trustedTypes', () => {
   const output = new Output();
 
