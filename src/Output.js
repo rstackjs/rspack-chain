@@ -14,6 +14,7 @@ export default class extends ChainedMap {
       'chunkFormat',
       'enabledChunkLoadingTypes',
       'crossOriginLoading',
+      'cssFilename',
       'devtoolFallbackModuleFilenameTemplate',
       'devtoolModuleFilenameTemplate',
       'devtoolNamespace',

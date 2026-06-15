@@ -27,3 +27,12 @@ test('asyncChunks', () => {
     asyncChunks: false,
   });
 });
+
+test('cssFilename', () => {
+  const output = new Output();
+
+  expect(output.cssFilename('css/[name].css')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    cssFilename: 'css/[name].css',
+  });
+});

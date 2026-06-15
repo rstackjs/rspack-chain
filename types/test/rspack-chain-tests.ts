@@ -42,6 +42,7 @@ config
   .chunkLoadTimeout(1000)
   .chunkLoadingGlobal('xasd')
   .crossOriginLoading('anonymous')
+  .cssFilename('css/[name].css')
   .devtoolFallbackModuleFilenameTemplate('')
   .devtoolNamespace('')
   .devtoolModuleFilenameTemplate('')
