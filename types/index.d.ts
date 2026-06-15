@@ -193,6 +193,7 @@ export declare namespace RspackChain {
     chunkLoading(value: RspackOutput['chunkLoading']): this;
     chunkFormat(value: RspackOutput['chunkFormat']): this;
     crossOriginLoading(value: RspackOutput['crossOriginLoading']): this;
+    cssChunkFilename(value: RspackOutput['cssChunkFilename']): this;
     cssFilename(value: RspackOutput['cssFilename']): this;
     devtoolFallbackModuleFilenameTemplate(
       value: RspackOutput['devtoolFallbackModuleFilenameTemplate'],
