@@ -100,6 +100,7 @@ config
   })
   .use('babel')
   .tap((config) => [])
+  .ident('babel-loader-ident')
   .loader('babel-loader')
   .options({})
   .parallel(true)

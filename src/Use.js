@@ -7,7 +7,7 @@ export default Orderable(
     constructor(parent, name) {
       super(parent);
       this.name = name;
-      this.extend(['loader', 'options', 'parallel']);
+      this.extend(['ident', 'loader', 'options', 'parallel']);
     }
 
     tap(f) {

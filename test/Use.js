@@ -64,3 +64,14 @@ test('toConfig with parallel options', () => {
     parallel: { maxWorkers: 2 },
   });
 });
+
+test('toConfig with ident', () => {
+  const use = new Use();
+
+  use.loader('babel-loader').ident('babel-loader-ident');
+
+  expect(use.toConfig()).toStrictEqual({
+    loader: 'babel-loader',
+    ident: 'babel-loader-ident',
+  });
+});
