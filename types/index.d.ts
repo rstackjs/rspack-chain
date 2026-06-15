@@ -323,6 +323,7 @@ export declare namespace RspackChain {
     resolve: RuleResolve<Rule<T>>;
 
     dependency(value: RspackRuleSet['dependency']): this;
+    descriptionData(value: RspackRuleSet['descriptionData']): this;
     enforce(value: RspackRuleSet['enforce']): this;
     issuer(value: RspackRuleSet['issuer']): this;
     issuerLayer(value: RspackRuleSet['issuerLayer']): this;

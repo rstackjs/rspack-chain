@@ -82,6 +82,9 @@ config
   })
   .enforce('pre')
   .dependency('asd')
+  .descriptionData({
+    type: 'module',
+  })
   .issuer('asd')
   .issuerLayer('asd')
   .sideEffects(true)
