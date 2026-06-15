@@ -18,3 +18,12 @@ test('shorthand methods', () => {
 
   expect(output.entries()).toStrictEqual(obj);
 });
+
+test('asyncChunks', () => {
+  const output = new Output();
+
+  expect(output.asyncChunks(false)).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    asyncChunks: false,
+  });
+});

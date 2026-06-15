@@ -34,7 +34,8 @@ config
   .entryPoints.delete('main')
   .end()
   // output
-  .output.bundlerInfo({
+  .output.asyncChunks(true)
+  .bundlerInfo({
     force: false,
   })
   .chunkFilename('')
