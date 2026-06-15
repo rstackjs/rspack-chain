@@ -33,6 +33,7 @@ const Rule = Orderable(
       this.resolve.extend(['fullySpecified']);
       this.extend([
         'dependency',
+        'descriptionData',
         'enforce',
         'issuer',
         'issuerLayer',

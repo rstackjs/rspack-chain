@@ -130,6 +130,9 @@ test('toConfig with values', () => {
     .post()
     .pre()
     .test(/\.js$/)
+    .descriptionData({
+      type: 'module',
+    })
     .use('babel')
     .loader('babel-loader')
     .options({ presets: ['alpha'] })
@@ -147,6 +150,9 @@ test('toConfig with values', () => {
 
   expect(rule.toConfig()).toStrictEqual({
     test: /\.js$/,
+    descriptionData: {
+      type: 'module',
+    },
     enforce: 'pre',
     include: ['alpha', 'beta'],
     exclude: ['alpha', 'beta'],
