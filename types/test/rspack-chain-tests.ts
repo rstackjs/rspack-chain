@@ -163,6 +163,7 @@ config
     references: 'auto',
   })
   .fullySpecified(false)
+  .pnp(true)
   .modules.add('index.js')
   .end()
   .aliasFields.add('foo')
