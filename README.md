@@ -730,7 +730,9 @@ config.optimization
   .sideEffects(sideEffects)
   .mangleExports(mangleExports)
   .innerGraph(innerGraph)
+  .inlineExports(inlineExports)
   .realContentHash(realContentHash)
+  .avoidEntryIife(avoidEntryIife)
 ```
 
 #### optimization minimizers
@@ -1308,6 +1310,59 @@ config.merge({
     },
   },
 
+  output: {
+    [key]: value,
+
+    assetModuleFilename,
+    asyncChunks,
+    bundlerInfo,
+    chunkFilename,
+    chunkLoadTimeout,
+    chunkLoading,
+    chunkLoadingGlobal,
+    chunkFormat,
+    clean,
+    compareBeforeEmit,
+    crossOriginLoading,
+    cssChunkFilename,
+    cssFilename,
+    devtoolFallbackModuleFilenameTemplate,
+    devtoolModuleFilenameTemplate,
+    devtoolNamespace,
+    enabledChunkLoadingTypes,
+    enabledLibraryTypes,
+    enabledWasmLoadingTypes,
+    environment,
+    filename,
+    globalObject,
+    hashDigest,
+    hashDigestLength,
+    hashFunction,
+    hashSalt,
+    hotUpdateChunkFilename,
+    hotUpdateGlobal,
+    hotUpdateMainFilename,
+    iife,
+    importFunctionName,
+    importMetaName,
+    library,
+    module,
+    path,
+    pathinfo,
+    publicPath,
+    scriptType,
+    sourceMapFilename,
+    strictModuleErrorHandling,
+    strictModuleExceptionHandling,
+    trustedTypes,
+    uniqueName,
+    wasmLoading,
+    webassemblyModuleFilename,
+    workerChunkLoading,
+    workerPublicPath,
+    workerWasmLoading,
+  },
+
   devServer: {
     [key]: value,
 
@@ -1339,9 +1394,14 @@ config.merge({
   },
 
   optimization: {
-    concatenateModules,
-    mergeDuplicateChunks,
+    avoidEntryIife,
+    chunkIds,
+    emitOnErrors,
+    innerGraph,
+    inlineExports,
+    mangleExports,
     minimize,
+    mergeDuplicateChunks,
     minimizer: {
       [name]: {
         plugin: RspackPlugin,
@@ -1350,16 +1410,13 @@ config.merge({
         after,
       },
     },
-    namedChunks,
-    namedModules,
+    moduleIds,
     nodeEnv,
-    noEmitOnErrors,
-    occurrenceOrder,
     providedExports,
+    realContentHash,
     removeEmptyChunks,
     runtimeChunk,
     sideEffects,
-    splitChunks,
     usedExports,
   },
 
@@ -1445,14 +1502,9 @@ config.merge({
   module: {
     [key]: value,
 
+    noParse,
     defaultRule: {
       [name]: Rule,
-    },
-    generator: {
-      [key]: value,
-    },
-    parser: {
-      [key]: value,
     },
     rule: {
       [name]: {
