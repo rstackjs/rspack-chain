@@ -64,6 +64,15 @@ test('trustedTypes', () => {
   });
 });
 
+test('workerPublicPath', () => {
+  const output = new Output();
+
+  expect(output.workerPublicPath('/workers/')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    workerPublicPath: '/workers/',
+  });
+});
+
 test('workerWasmLoading', () => {
   const output = new Output();
 

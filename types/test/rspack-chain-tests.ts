@@ -63,6 +63,7 @@ config
   .sourceMapFilename('index.js.map')
   .strictModuleExceptionHandling(true)
   .trustedTypes('rspack')
+  .workerPublicPath('/workers/')
   .workerWasmLoading('fetch')
   .iife(true)
   .webassemblyModuleFilename('[id].[hash].wasm')
