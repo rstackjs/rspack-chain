@@ -53,3 +53,14 @@ test('toConfig', () => {
   expect(config.__ruleTypes).toStrictEqual(['rule']);
   expect(config.__useName).toBe('beta');
 });
+
+test('toConfig with parallel options', () => {
+  const use = new Use();
+
+  use.loader('babel-loader').parallel({ maxWorkers: 2 });
+
+  expect(use.toConfig()).toStrictEqual({
+    loader: 'babel-loader',
+    parallel: { maxWorkers: 2 },
+  });
+});

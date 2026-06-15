@@ -1,4 +1,8 @@
-import { Configuration, RuleSetRule } from '@rspack/core';
+import type {
+  Configuration,
+  RuleSetLoaderWithOptions,
+  RuleSetRule,
+} from '@rspack/core';
 
 // The compiler type of Rspack / webpack are mismatch,
 // so we use a loose type here to allow using webpack plugins.
@@ -386,10 +390,14 @@ export declare namespace RspackChain {
     [name: string]: any;
   }
 
+  type LoaderParallelOptions = NonNullable<
+    RuleSetLoaderWithOptions['parallel']
+  >;
+
   class Use<Parent = Rule> extends ChainedMap<Parent> implements Orderable {
     loader(value: string): this;
     options(value: LoaderOptions): this;
-    parallel(value: boolean): this;
+    parallel(value: LoaderParallelOptions): this;
 
     tap(f: (options: LoaderOptions) => LoaderOptions): this;
 

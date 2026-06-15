@@ -99,6 +99,7 @@ config
   .loader('babel-loader')
   .options({})
   .parallel(true)
+  .parallel({ maxWorkers: 2 })
   .end()
   .use('eslint')
   .loader('eslint-loader')
