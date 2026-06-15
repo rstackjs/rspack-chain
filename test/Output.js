@@ -37,6 +37,15 @@ test('cssFilename', () => {
   });
 });
 
+test('cssChunkFilename', () => {
+  const output = new Output();
+
+  expect(output.cssChunkFilename('css/[id].css')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    cssChunkFilename: 'css/[id].css',
+  });
+});
+
 test('workerWasmLoading', () => {
   const output = new Output();
 
