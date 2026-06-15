@@ -60,6 +60,7 @@ config
   .publicPath('/')
   .sourceMapFilename('index.js.map')
   .strictModuleExceptionHandling(true)
+  .workerPublicPath('/workers/')
   .iife(true)
   .webassemblyModuleFilename('[id].[hash].wasm')
   .clean({
