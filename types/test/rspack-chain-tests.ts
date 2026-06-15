@@ -156,6 +156,10 @@ config
   .test(/\.mjs$/)
   .type('javascript/auto')
   .end()
+  .rule('loader-rule')
+  .test(/\.jsx$/)
+  .loader('babel-loader')
+  .end()
   .end()
   // resolve
   .resolve.alias.set('foo', 'bar')

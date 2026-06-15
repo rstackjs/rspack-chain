@@ -37,6 +37,7 @@ const Rule = Orderable(
         'issuer',
         'issuerLayer',
         'layer',
+        'loader',
         'mimetype',
         'phase',
         'parser',

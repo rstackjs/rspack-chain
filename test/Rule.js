@@ -198,6 +198,17 @@ test('toConfig with test function', () => {
   expect(rule.toConfig()).toStrictEqual({ test });
 });
 
+test('toConfig with rule-level loader', () => {
+  const rule = new Rule();
+
+  rule.test(/\.js$/).loader('babel-loader');
+
+  expect(rule.toConfig()).toStrictEqual({
+    test: /\.js$/,
+    loader: 'babel-loader',
+  });
+});
+
 test('merge empty', () => {
   const rule = new Rule();
   const obj = {

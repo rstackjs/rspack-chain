@@ -332,6 +332,7 @@ export declare namespace RspackChain {
     issuer(value: RspackRuleSet['issuer']): this;
     issuerLayer(value: RspackRuleSet['issuerLayer']): this;
     layer(value: RspackRuleSet['layer']): this;
+    loader(value: NonNullable<RspackRuleSet['loader']>): this;
     mimetype(value: RspackRuleSet['mimetype']): this;
     phase(value: RspackRuleSet['phase']): this;
     parser(value: RspackRuleSet['parser']): this;
