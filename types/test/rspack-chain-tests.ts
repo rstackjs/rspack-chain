@@ -42,6 +42,7 @@ config
   .chunkLoadTimeout(1000)
   .chunkLoadingGlobal('xasd')
   .crossOriginLoading('anonymous')
+  .cssChunkFilename('css/[id].css')
   .cssFilename('css/[name].css')
   .devtoolFallbackModuleFilenameTemplate('')
   .devtoolNamespace('')
@@ -55,12 +56,15 @@ config
   .hotUpdateChunkFilename('update')
   .hotUpdateMainFilename('main')
   .library('var')
+  .importMetaName('import.meta')
   .path('/')
   .pathinfo(true)
   .publicPath('/')
   .sourceMapFilename('index.js.map')
   .strictModuleExceptionHandling(true)
+  .trustedTypes('rspack')
   .workerPublicPath('/workers/')
+  .workerWasmLoading('fetch')
   .iife(true)
   .webassemblyModuleFilename('[id].[hash].wasm')
   .clean({
@@ -91,7 +95,9 @@ config
   .descriptionData({
     type: 'module',
   })
+  .extractSourceMap(true)
   .phase('source')
+  .scheme('data')
   .issuer('asd')
   .issuerLayer('asd')
   .sideEffects(true)
