@@ -61,6 +61,7 @@ config
   .publicPath('/')
   .sourceMapFilename('index.js.map')
   .strictModuleExceptionHandling(true)
+  .workerWasmLoading('fetch')
   .iife(true)
   .webassemblyModuleFilename('[id].[hash].wasm')
   .clean({
@@ -91,7 +92,9 @@ config
   .descriptionData({
     type: 'module',
   })
+  .extractSourceMap(true)
   .phase('source')
+  .scheme('data')
   .issuer('asd')
   .issuerLayer('asd')
   .sideEffects(true)

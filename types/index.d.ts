@@ -229,6 +229,7 @@ export declare namespace RspackChain {
       value: RspackOutput['strictModuleExceptionHandling'],
     ): this;
     workerChunkLoading(value: RspackOutput['workerChunkLoading']): this;
+    workerWasmLoading(value: RspackOutput['workerWasmLoading']): this;
     enabledLibraryTypes(value: RspackOutput['enabledLibraryTypes']): this;
     environment(value: RspackOutput['environment']): this;
     compareBeforeEmit(value: RspackOutput['compareBeforeEmit']): this;
@@ -330,6 +331,7 @@ export declare namespace RspackChain {
     dependency(value: RspackRuleSet['dependency']): this;
     descriptionData(value: RspackRuleSet['descriptionData']): this;
     enforce(value: RspackRuleSet['enforce']): this;
+    extractSourceMap(value: RspackRuleSet['extractSourceMap']): this;
     issuer(value: RspackRuleSet['issuer']): this;
     issuerLayer(value: RspackRuleSet['issuerLayer']): this;
     layer(value: RspackRuleSet['layer']): this;
@@ -340,6 +342,7 @@ export declare namespace RspackChain {
     resource(value: RspackRuleSet['resource']): this;
     resourceFragment(value: RspackRuleSet['resourceFragment']): this;
     resourceQuery(value: RspackRuleSet['resourceQuery']): this;
+    scheme(value: RspackRuleSet['scheme']): this;
     sideEffects(value: RspackRuleSet['sideEffects']): this;
     with(value: RspackRuleSet['with']): this;
     test(value: RspackRuleSet['test']): this;
