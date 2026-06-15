@@ -67,6 +67,9 @@ config
   .end()
   // module
   .module.noParse(/.min.js$/)
+  .defaultRule('json')
+  .type('json')
+  .end()
   .generator.set('asset', {
     publicPath: 'assets/',
   })
