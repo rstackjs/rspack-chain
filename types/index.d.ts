@@ -397,6 +397,7 @@ export declare namespace RspackChain {
   >;
 
   class Use<Parent = Rule> extends ChainedMap<Parent> implements Orderable {
+    ident(value: NonNullable<RuleSetLoaderWithOptions['ident']>): this;
     loader(value: string): this;
     options(value: LoaderOptions): this;
     parallel(value: LoaderParallelOptions): this;
