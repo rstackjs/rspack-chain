@@ -35,8 +35,8 @@ test('toConfig empty', () => {
 test('toConfig with values', () => {
   const resolve = new Resolve();
 
-  resolve
-    .modules.add('src')
+  resolve.modules
+    .add('src')
     .end()
     .extensions.add('.js')
     .end()
@@ -147,6 +147,15 @@ test('tsConfig string', () => {
   resolve.tsConfig('./tsconfig.json').end();
   expect(resolve.toConfig()).toStrictEqual({
     tsConfig: './tsconfig.json',
+  });
+});
+
+test('fullySpecified', () => {
+  const resolve = new Resolve();
+
+  expect(resolve.fullySpecified(true)).toBe(resolve);
+  expect(resolve.toConfig()).toStrictEqual({
+    fullySpecified: true,
   });
 });
 
