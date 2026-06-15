@@ -182,6 +182,7 @@ export declare namespace RspackChain {
 
   class Output extends ChainedMap<RspackChain> {
     assetModuleFilename(value: RspackOutput['assetModuleFilename']): this;
+    asyncChunks(value: RspackOutput['asyncChunks']): this;
     bundlerInfo(value: RspackOutput['bundlerInfo']): this;
     chunkFilename(value: RspackOutput['chunkFilename']): this;
     chunkLoadTimeout(value: RspackOutput['chunkLoadTimeout']): this;

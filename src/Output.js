@@ -5,6 +5,7 @@ export default class extends ChainedMap {
     super(parent);
     this.extend([
       'assetModuleFilename',
+      'asyncChunks',
       'bundlerInfo',
       'chunkFilename',
       'chunkLoadTimeout',
