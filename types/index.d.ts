@@ -172,9 +172,11 @@ export declare namespace RspackChain {
   type RspackModule = Required<NonNullable<Configuration['module']>>;
 
   class Module extends ChainedMap<RspackChain> {
+    defaultRules: TypedChainedMap<this, { [key: string]: Rule }>;
     rules: TypedChainedMap<this, { [key: string]: Rule }>;
     generator: ChainedMap<this>;
     parser: ChainedMap<this>;
+    defaultRule(name: string): Rule;
     rule(name: string): Rule;
     noParse(value: RspackModule['noParse']): this;
   }
