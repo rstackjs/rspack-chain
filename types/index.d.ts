@@ -299,6 +299,7 @@ export declare namespace RspackChain {
     byDependency: TypedChainedMap<this, RspackResolve['byDependency']>;
     enforceExtension(value: RspackResolve['enforceExtension']): this;
     fullySpecified(value: RspackResolve['fullySpecified']): this;
+    pnp(value: RspackResolve['pnp']): this;
     symlinks(value: RspackResolve['symlinks']): this;
     preferRelative(value: RspackResolve['preferRelative']): this;
     preferAbsolute(value: RspackResolve['preferAbsolute']): this;

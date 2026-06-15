@@ -159,6 +159,15 @@ test('fullySpecified', () => {
   });
 });
 
+test('pnp', () => {
+  const resolve = new Resolve();
+
+  expect(resolve.pnp(true)).toBe(resolve);
+  expect(resolve.toConfig()).toStrictEqual({
+    pnp: true,
+  });
+});
+
 test('tsConfig object', () => {
   const resolve = new Resolve();
   resolve.tsConfig({

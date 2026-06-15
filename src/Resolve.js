@@ -30,6 +30,7 @@ export default class extends ChainedMap {
     this.extend([
       'enforceExtension',
       'fullySpecified',
+      'pnp',
       'symlinks',
       'preferRelative',
       'preferAbsolute',
