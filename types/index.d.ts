@@ -243,6 +243,7 @@ export declare namespace RspackChain {
 
   class DevServer extends TypedChainedMap<RspackChain, RspackDevServer> {}
 
+  // rslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface DevServer extends DevServerShorthandMethods<DevServer> {}
 
   type RspackPerformance = Exclude<
