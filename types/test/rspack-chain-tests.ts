@@ -390,6 +390,9 @@ config
     publicPath: true,
     modules: false,
   })
+  .incremental({
+    silent: true,
+  })
   .target('web')
   .watch(true)
   .watchOptions({})
