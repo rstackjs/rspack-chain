@@ -38,6 +38,7 @@ export default class extends ChainedMap {
       'strictModuleErrorHandling',
       'strictModuleExceptionHandling',
       'workerChunkLoading',
+      'workerWasmLoading',
       'enabledLibraryTypes',
       'environment',
       'compareBeforeEmit',

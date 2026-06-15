@@ -228,6 +228,7 @@ export declare namespace RspackChain {
       value: RspackOutput['strictModuleExceptionHandling'],
     ): this;
     workerChunkLoading(value: RspackOutput['workerChunkLoading']): this;
+    workerWasmLoading(value: RspackOutput['workerWasmLoading']): this;
     enabledLibraryTypes(value: RspackOutput['enabledLibraryTypes']): this;
     environment(value: RspackOutput['environment']): this;
     compareBeforeEmit(value: RspackOutput['compareBeforeEmit']): this;

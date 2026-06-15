@@ -60,6 +60,7 @@ config
   .publicPath('/')
   .sourceMapFilename('index.js.map')
   .strictModuleExceptionHandling(true)
+  .workerWasmLoading('fetch')
   .iife(true)
   .webassemblyModuleFilename('[id].[hash].wasm')
   .clean({

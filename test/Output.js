@@ -36,3 +36,12 @@ test('cssFilename', () => {
     cssFilename: 'css/[name].css',
   });
 });
+
+test('workerWasmLoading', () => {
+  const output = new Output();
+
+  expect(output.workerWasmLoading('fetch')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    workerWasmLoading: 'fetch',
+  });
+});
