@@ -133,7 +133,9 @@ test('toConfig with values', () => {
     .descriptionData({
       type: 'module',
     })
+    .extractSourceMap(true)
     .phase('source')
+    .scheme('data')
     .use('babel')
     .loader('babel-loader')
     .options({ presets: ['alpha'] })
@@ -154,7 +156,9 @@ test('toConfig with values', () => {
     descriptionData: {
       type: 'module',
     },
+    extractSourceMap: true,
     phase: 'source',
+    scheme: 'data',
     enforce: 'pre',
     include: ['alpha', 'beta'],
     exclude: ['alpha', 'beta'],
