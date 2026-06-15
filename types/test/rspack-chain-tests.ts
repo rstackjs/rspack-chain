@@ -60,6 +60,7 @@ config
   .publicPath('/')
   .sourceMapFilename('index.js.map')
   .strictModuleExceptionHandling(true)
+  .trustedTypes('rspack')
   .iife(true)
   .webassemblyModuleFilename('[id].[hash].wasm')
   .clean({

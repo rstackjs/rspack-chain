@@ -36,3 +36,12 @@ test('cssFilename', () => {
     cssFilename: 'css/[name].css',
   });
 });
+
+test('trustedTypes', () => {
+  const output = new Output();
+
+  expect(output.trustedTypes('rspack')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    trustedTypes: 'rspack',
+  });
+});

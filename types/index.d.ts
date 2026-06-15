@@ -227,6 +227,7 @@ export declare namespace RspackChain {
     strictModuleExceptionHandling(
       value: RspackOutput['strictModuleExceptionHandling'],
     ): this;
+    trustedTypes(value: RspackOutput['trustedTypes']): this;
     workerChunkLoading(value: RspackOutput['workerChunkLoading']): this;
     enabledLibraryTypes(value: RspackOutput['enabledLibraryTypes']): this;
     environment(value: RspackOutput['environment']): this;
