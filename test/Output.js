@@ -37,11 +37,38 @@ test('cssFilename', () => {
   });
 });
 
+test('cssChunkFilename', () => {
+  const output = new Output();
+
+  expect(output.cssChunkFilename('css/[id].css')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    cssChunkFilename: 'css/[id].css',
+  });
+});
+
 test('importMetaName', () => {
   const output = new Output();
 
   expect(output.importMetaName('import.meta')).toBe(output);
   expect(output.entries()).toStrictEqual({
     importMetaName: 'import.meta',
+  });
+});
+
+test('trustedTypes', () => {
+  const output = new Output();
+
+  expect(output.trustedTypes('rspack')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    trustedTypes: 'rspack',
+  });
+});
+
+test('workerWasmLoading', () => {
+  const output = new Output();
+
+  expect(output.workerWasmLoading('fetch')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    workerWasmLoading: 'fetch',
   });
 });
