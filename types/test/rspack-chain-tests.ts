@@ -364,6 +364,7 @@ config
   .cache({
     type: 'persistent',
   })
+  .extends('./rspack.base.js')
   .devtool('hidden-source-map')
   .devtool(false)
   .context('')

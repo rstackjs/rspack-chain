@@ -86,6 +86,7 @@ export declare class RspackChain extends __Config.ChainedMap<void> {
   bail(value: RspackConfig['bail']): this;
   cache(value: RspackConfig['cache']): this;
   dependencies(value: RspackConfig['dependencies']): this;
+  extends(value: RspackConfig['extends']): this;
   ignoreWarnings(value: RspackConfig['ignoreWarnings']): this;
   loader(value: RspackConfig['loader']): this;
   name(value: RspackConfig['name']): this;

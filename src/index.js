@@ -83,6 +83,7 @@ class RspackChain extends ChainedMap {
       'bail',
       'cache',
       'dependencies',
+      'extends',
       'ignoreWarnings',
       'loader',
       'name',
