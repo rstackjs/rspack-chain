@@ -340,6 +340,7 @@ export declare namespace RspackChain {
     resource(value: RspackRuleSet['resource']): this;
     resourceFragment(value: RspackRuleSet['resourceFragment']): this;
     resourceQuery(value: RspackRuleSet['resourceQuery']): this;
+    scheme(value: RspackRuleSet['scheme']): this;
     sideEffects(value: RspackRuleSet['sideEffects']): this;
     with(value: RspackRuleSet['with']): this;
     test(value: RspackRuleSet['test']): this;

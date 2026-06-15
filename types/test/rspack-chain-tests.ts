@@ -92,6 +92,7 @@ config
   })
   .extractSourceMap(true)
   .phase('source')
+  .scheme('data')
   .issuer('asd')
   .issuerLayer('asd')
   .sideEffects(true)
