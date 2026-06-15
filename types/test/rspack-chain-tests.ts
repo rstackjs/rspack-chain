@@ -156,6 +156,10 @@ config
   .test(/\.mjs$/)
   .type('javascript/auto')
   .end()
+  .rule('options-rule')
+  .test(/\.jsx$/)
+  .options({})
+  .end()
   .end()
   // resolve
   .resolve.alias.set('foo', 'bar')

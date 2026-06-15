@@ -198,6 +198,17 @@ test('toConfig with test function', () => {
   expect(rule.toConfig()).toStrictEqual({ test });
 });
 
+test('toConfig with rule-level options', () => {
+  const rule = new Rule();
+
+  rule.test(/\.js$/).options({ presets: ['alpha'] });
+
+  expect(rule.toConfig()).toStrictEqual({
+    test: /\.js$/,
+    options: { presets: ['alpha'] },
+  });
+});
+
 test('merge empty', () => {
   const rule = new Rule();
   const obj = {
