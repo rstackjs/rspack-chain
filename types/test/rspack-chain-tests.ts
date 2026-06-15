@@ -91,6 +91,7 @@ config
     type: 'module',
   })
   .phase('source')
+  .scheme('data')
   .issuer('asd')
   .issuerLayer('asd')
   .sideEffects(true)

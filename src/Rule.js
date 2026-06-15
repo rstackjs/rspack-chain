@@ -44,6 +44,7 @@ const Rule = Orderable(
         'resource',
         'resourceFragment',
         'resourceQuery',
+        'scheme',
         'sideEffects',
         'with',
         'test',
