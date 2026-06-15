@@ -46,6 +46,15 @@ test('cssChunkFilename', () => {
   });
 });
 
+test('trustedTypes', () => {
+  const output = new Output();
+
+  expect(output.trustedTypes('rspack')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    trustedTypes: 'rspack',
+  });
+});
+
 test('workerWasmLoading', () => {
   const output = new Output();
 
