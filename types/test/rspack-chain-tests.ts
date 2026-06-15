@@ -55,6 +55,7 @@ config
   .hotUpdateChunkFilename('update')
   .hotUpdateMainFilename('main')
   .library('var')
+  .importMetaName('import.meta')
   .path('/')
   .pathinfo(true)
   .publicPath('/')

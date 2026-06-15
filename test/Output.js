@@ -36,3 +36,12 @@ test('cssFilename', () => {
     cssFilename: 'css/[name].css',
   });
 });
+
+test('importMetaName', () => {
+  const output = new Output();
+
+  expect(output.importMetaName('import.meta')).toBe(output);
+  expect(output.entries()).toStrictEqual({
+    importMetaName: 'import.meta',
+  });
+});

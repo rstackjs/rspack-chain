@@ -30,6 +30,7 @@ export default class extends ChainedMap {
       'hotUpdateMainFilename',
       'library',
       'importFunctionName',
+      'importMetaName',
       'path',
       'pathinfo',
       'publicPath',
