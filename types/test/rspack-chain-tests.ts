@@ -158,6 +158,7 @@ config
     configFile: './tsconfig.json',
     references: 'auto',
   })
+  .fullySpecified(false)
   .modules.add('index.js')
   .end()
   .aliasFields.add('foo')

@@ -294,16 +294,14 @@ export declare namespace RspackChain {
     >;
     byDependency: TypedChainedMap<this, RspackResolve['byDependency']>;
     enforceExtension(value: RspackResolve['enforceExtension']): this;
+    fullySpecified(value: RspackResolve['fullySpecified']): this;
     symlinks(value: RspackResolve['symlinks']): this;
     preferRelative(value: RspackResolve['preferRelative']): this;
     preferAbsolute(value: RspackResolve['preferAbsolute']): this;
 
     tsConfig(value: RspackResolve['tsConfig']): this;
   }
-
-  class RuleResolve<T = RspackChain> extends Resolve<T> {
-    fullySpecified(value: boolean): this;
-  }
+  class RuleResolve<T = RspackChain> extends Resolve<T> {}
 
   class ResolveLoader extends Resolve {
     modules: ChainedSet<this>;
