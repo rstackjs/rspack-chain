@@ -377,16 +377,18 @@ config
   .externalsPresets(externalsPresets)
   .stats(stats)
   .experiments(experiments)
-  .lazyCompilation(lazyCompilation)
   .amd(amd)
   .bail(bail)
   .cache(cache)
   .dependencies(dependencies)
+  .extends(extends)
   .ignoreWarnings(ignoreWarnings)
   .loader(loader)
   .name(name)
   .infrastructureLogging(infrastructureLogging)
-  .snapshot(snapshot);
+  .snapshot(snapshot)
+  .lazyCompilation(lazyCompilation)
+  .incremental(incremental);
 ```
 
 #### entryPoints
@@ -422,6 +424,9 @@ config.entryPoints
 config.output : ChainedMap
 
 config.output
+  .assetModuleFilename(assetModuleFilename)
+  .asyncChunks(asyncChunks)
+  .bundlerInfo(bundlerInfo)
   .chunkFilename(chunkFilename)
   .chunkLoadTimeout(chunkLoadTimeout)
   .chunkLoadingGlobal(chunkLoadingGlobal)
@@ -429,11 +434,12 @@ config.output
   .chunkFormat(chunkFormat)
   .enabledChunkLoadingTypes(enabledChunkLoadingTypes)
   .crossOriginLoading(crossOriginLoading)
+  .cssChunkFilename(cssChunkFilename)
+  .cssFilename(cssFilename)
   .devtoolFallbackModuleFilenameTemplate(devtoolFallbackModuleFilenameTemplate)
   .devtoolModuleFilenameTemplate(devtoolModuleFilenameTemplate)
   .devtoolNamespace(devtoolNamespace)
   .filename(filename)
-  .assetModuleFilename(assetModuleFilename)
   .globalObject(globalObject)
   .uniqueName(uniqueName)
   .hashDigest(hashDigest)
@@ -441,10 +447,11 @@ config.output
   .hashFunction(hashFunction)
   .hashSalt(hashSalt)
   .hotUpdateChunkFilename(hotUpdateChunkFilename)
-  .hotUpdateFunction(hotUpdateFunction)
+  .hotUpdateGlobal(hotUpdateGlobal)
   .hotUpdateMainFilename(hotUpdateMainFilename)
   .library(library)
   .importFunctionName(importFunctionName)
+  .importMetaName(importMetaName)
   .path(path)
   .pathinfo(pathinfo)
   .publicPath(publicPath)
@@ -452,15 +459,19 @@ config.output
   .sourceMapFilename(sourceMapFilename)
   .strictModuleErrorHandling(strictModuleErrorHandling)
   .strictModuleExceptionHandling(strictModuleExceptionHandling)
+  .trustedTypes(trustedTypes)
   .workerChunkLoading(workerChunkLoading)
+  .workerPublicPath(workerPublicPath)
+  .workerWasmLoading(workerWasmLoading)
   .enabledLibraryTypes(enabledLibraryTypes)
   .environment(environment)
   .compareBeforeEmit(compareBeforeEmit)
   .wasmLoading(wasmLoading)
+  .webassemblyModuleFilename(webassemblyModuleFilename)
   .enabledWasmLoadingTypes(enabledWasmLoadingTypes)
   .iife(iife)
   .module(module)
-  .clean(clean)
+  .clean(clean);
 ```
 
 #### resolve: shorthand methods
@@ -470,6 +481,8 @@ config.resolve : ChainedMap
 
 config.resolve
   .enforceExtension(enforceExtension)
+  .fullySpecified(fullySpecified)
+  .pnp(pnp)
   .symlinks(symlinks)
   .preferRelative(preferRelative)
   .preferAbsolute(preferAbsolute)
@@ -513,12 +526,12 @@ config.resolve.conditionNames
   .clear()
 ```
 
-#### resolve descriptionFields
+#### resolve descriptionFiles
 
 ```js
-config.resolve.descriptionFields : ChainedSet
+config.resolve.descriptionFiles : ChainedSet
 
-config.resolve.descriptionFields
+config.resolve.descriptionFiles
   .add(value)
   .prepend(value)
   .clear()
@@ -717,7 +730,9 @@ config.optimization
   .sideEffects(sideEffects)
   .mangleExports(mangleExports)
   .innerGraph(innerGraph)
+  .inlineExports(inlineExports)
   .realContentHash(realContentHash)
+  .avoidEntryIife(avoidEntryIife)
 ```
 
 #### optimization minimizers
@@ -939,6 +954,38 @@ config.module : ChainedMap
 config.module.noParse(noParse)
 ```
 
+#### module default rules
+
+```js
+config.module.defaultRules : ChainedMap
+
+config.module
+  .defaultRule(name)
+    .type(type)
+```
+
+#### module generator
+
+```js
+config.module.generator : ChainedMap
+
+config.module.generator
+  .set(type, value)
+  .delete(type)
+  .clear()
+```
+
+#### module parser
+
+```js
+config.module.parser : ChainedMap
+
+config.module.parser
+  .set(type, value)
+  .delete(type)
+  .clear()
+```
+
 #### module rules: shorthand methods
 
 ```js
@@ -946,10 +993,27 @@ config.module.rules : ChainedMap
 
 config.module
   .rule(name)
+    .dependency(dependency)
+    .descriptionData(descriptionData)
+    .enforce(enforce)
+    .extractSourceMap(extractSourceMap)
+    .issuer(issuer)
+    .issuerLayer(issuerLayer)
+    .layer(layer)
+    .mimetype(mimetype)
+    .phase(phase)
+    .parser(parser)
+    .generator(generator)
+    .resource(resource)
+    .resourceFragment(resourceFragment)
+    .resourceQuery(resourceQuery)
+    .scheme(scheme)
+    .sideEffects(sideEffects)
+    .with(with)
     .test(test)
+    .type(type)
     .pre()
     .post()
-    .enforce(preOrPost)
 ```
 
 #### module rules uses (loaders): creating
@@ -962,6 +1026,8 @@ config.module
     .use(name)
       .loader(loader)
       .options(options)
+      .ident(ident)
+      .parallel(parallel)
 
 // Example
 
@@ -970,6 +1036,11 @@ config.module
     .use('babel')
       .loader('babel-loader')
       .options({ presets: ['@babel/preset-env'] });
+
+config.module
+  .rule('compile')
+    .use('babel')
+      .parallel({ maxWorkers: 2 });
 ```
 
 #### module rules uses (loaders): modifying options
@@ -1206,10 +1277,21 @@ config.merge({
   bail,
   cache,
   context,
+  dependencies,
   devtool,
   externals,
+  externalsPresets,
+  externalsType,
+  extends,
+  experiments,
+  ignoreWarnings,
+  incremental,
+  infrastructureLogging,
+  lazyCompilation,
   loader,
   mode,
+  name,
+  snapshot,
   stats,
   target,
   watch,
@@ -1226,6 +1308,59 @@ config.merge({
       before,
       after,
     },
+  },
+
+  output: {
+    [key]: value,
+
+    assetModuleFilename,
+    asyncChunks,
+    bundlerInfo,
+    chunkFilename,
+    chunkLoadTimeout,
+    chunkLoading,
+    chunkLoadingGlobal,
+    chunkFormat,
+    clean,
+    compareBeforeEmit,
+    crossOriginLoading,
+    cssChunkFilename,
+    cssFilename,
+    devtoolFallbackModuleFilenameTemplate,
+    devtoolModuleFilenameTemplate,
+    devtoolNamespace,
+    enabledChunkLoadingTypes,
+    enabledLibraryTypes,
+    enabledWasmLoadingTypes,
+    environment,
+    filename,
+    globalObject,
+    hashDigest,
+    hashDigestLength,
+    hashFunction,
+    hashSalt,
+    hotUpdateChunkFilename,
+    hotUpdateGlobal,
+    hotUpdateMainFilename,
+    iife,
+    importFunctionName,
+    importMetaName,
+    library,
+    module,
+    path,
+    pathinfo,
+    publicPath,
+    scriptType,
+    sourceMapFilename,
+    strictModuleErrorHandling,
+    strictModuleExceptionHandling,
+    trustedTypes,
+    uniqueName,
+    wasmLoading,
+    webassemblyModuleFilename,
+    workerChunkLoading,
+    workerPublicPath,
+    workerWasmLoading,
   },
 
   devServer: {
@@ -1259,9 +1394,14 @@ config.merge({
   },
 
   optimization: {
-    concatenateModules,
-    mergeDuplicateChunks,
+    avoidEntryIife,
+    chunkIds,
+    emitOnErrors,
+    innerGraph,
+    inlineExports,
+    mangleExports,
     minimize,
+    mergeDuplicateChunks,
     minimizer: {
       [name]: {
         plugin: RspackPlugin,
@@ -1270,16 +1410,13 @@ config.merge({
         after,
       },
     },
-    namedChunks,
-    namedModules,
+    moduleIds,
     nodeEnv,
-    noEmitOnErrors,
-    occurrenceOrder,
     providedExports,
+    realContentHash,
     removeEmptyChunks,
     runtimeChunk,
     sideEffects,
-    splitChunks,
     usedExports,
   },
 
@@ -1299,20 +1436,31 @@ config.merge({
       [key]: value,
     },
     aliasFields: [...values],
-    descriptionFields: [...values],
+    byDependency: {
+      [key]: value,
+    },
+    descriptionFiles: [...values],
+    enforceExtension,
+    exportsFields: [...values],
+    extensionAlias: {
+      [key]: value,
+    },
     extensions: [...values],
+    fallback: {
+      [key]: value,
+    },
+    fullySpecified,
+    importsFields: [...values],
     mainFields: [...values],
     mainFiles: [...values],
     modules: [...values],
-
-    plugin: {
-      [name]: {
-        plugin: RspackPlugin,
-        args: [...args],
-        before,
-        after,
-      },
-    },
+    pnp,
+    preferAbsolute,
+    preferRelative,
+    restrictions: [...values],
+    roots: [...values],
+    symlinks,
+    tsConfig,
   },
 
   resolveLoader: {
@@ -1322,40 +1470,63 @@ config.merge({
       [key]: value,
     },
     aliasFields: [...values],
-    descriptionFields: [...values],
+    byDependency: {
+      [key]: value,
+    },
+    descriptionFiles: [...values],
+    enforceExtension,
+    exportsFields: [...values],
+    extensionAlias: {
+      [key]: value,
+    },
     extensions: [...values],
+    fallback: {
+      [key]: value,
+    },
+    fullySpecified,
+    importsFields: [...values],
     mainFields: [...values],
     mainFiles: [...values],
     modules: [...values],
     moduleExtensions: [...values],
     packageMains: [...values],
-
-    plugin: {
-      [name]: {
-        plugin: RspackPlugin,
-        args: [...args],
-        before,
-        after,
-      },
-    },
+    pnp,
+    preferAbsolute,
+    preferRelative,
+    restrictions: [...values],
+    roots: [...values],
+    symlinks,
+    tsConfig,
   },
 
   module: {
     [key]: value,
 
+    noParse,
+    defaultRule: {
+      [name]: Rule,
+    },
     rule: {
       [name]: {
         [key]: value,
 
         dependency,
+        descriptionData,
         enforce,
+        extractSourceMap,
+        generator,
         issuer,
         issuerLayer,
+        layer,
         mimetype,
         parser,
+        phase,
         resource,
         resourceFragment,
         resourceQuery,
+        scheme,
+        sideEffects,
+        type,
         with,
         test,
 
@@ -1372,8 +1543,10 @@ config.merge({
 
         use: {
           [name]: {
+            ident,
             loader: LoaderString,
             options: LoaderOptions,
+            parallel,
             before,
             after,
           },
