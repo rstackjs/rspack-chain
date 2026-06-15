@@ -329,6 +329,7 @@ export declare namespace RspackChain {
     dependency(value: RspackRuleSet['dependency']): this;
     descriptionData(value: RspackRuleSet['descriptionData']): this;
     enforce(value: RspackRuleSet['enforce']): this;
+    extractSourceMap(value: RspackRuleSet['extractSourceMap']): this;
     issuer(value: RspackRuleSet['issuer']): this;
     issuerLayer(value: RspackRuleSet['issuerLayer']): this;
     layer(value: RspackRuleSet['layer']): this;

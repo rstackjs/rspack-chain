@@ -34,6 +34,7 @@ const Rule = Orderable(
         'dependency',
         'descriptionData',
         'enforce',
+        'extractSourceMap',
         'issuer',
         'issuerLayer',
         'layer',
