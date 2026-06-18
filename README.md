@@ -386,7 +386,6 @@ config
   .loader(loader)
   .name(name)
   .infrastructureLogging(infrastructureLogging)
-  .snapshot(snapshot)
   .lazyCompilation(lazyCompilation)
   .incremental(incremental);
 ```
@@ -1291,7 +1290,6 @@ config.merge({
   loader,
   mode,
   name,
-  snapshot,
   stats,
   target,
   watch,

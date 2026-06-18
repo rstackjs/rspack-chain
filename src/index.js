@@ -88,7 +88,6 @@ class RspackChain extends ChainedMap {
       'loader',
       'name',
       'infrastructureLogging',
-      'snapshot',
       'lazyCompilation',
       'incremental',
     ]);
