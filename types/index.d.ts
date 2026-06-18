@@ -91,7 +91,6 @@ export declare class RspackChain extends __Config.ChainedMap<void> {
   loader(value: RspackConfig['loader']): this;
   name(value: RspackConfig['name']): this;
   infrastructureLogging(value: RspackConfig['infrastructureLogging']): this;
-  snapshot(value: RspackConfig['snapshot']): this;
   lazyCompilation(value: RspackConfig['lazyCompilation']): this;
   incremental(value: RspackConfig['incremental']): this;
 
