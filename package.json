@@ -34,13 +34,13 @@
     "lint:write": "rslint --fix"
   },
   "devDependencies": {
-    "@rslib/core": "0.23.1",
-    "@rslint/core": "^0.6.4",
-    "@rspack/core": "2.1.2",
-    "@rstest/core": "^0.10.6",
+    "@rslib/core": "0.23.2",
+    "@rslint/core": "^0.7.0",
+    "@rspack/core": "2.1.4",
+    "@rstest/core": "^0.11.2",
     "deepmerge": "^4.3.1",
     "javascript-stringify": "^2.1.0",
-    "prettier": "^3.9.4",
+    "prettier": "^3.9.5",
     "typescript": "^7.0.2"
   },
   "peerDependencies": {
@@ -51,5 +51,5 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@11.9.0"
+  "packageManager": "pnpm@11.13.1"
 }
