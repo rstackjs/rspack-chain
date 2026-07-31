@@ -272,8 +272,9 @@ export declare namespace RspackChain {
   }
 
   type RspackResolve = Required<NonNullable<Configuration['resolve']>>;
+  type RspackResolveAlias = Exclude<RspackResolve['alias'], false>;
   class Resolve<T = RspackChain> extends ChainedMap<T> {
-    alias: TypedChainedMap<this, { [key: string]: string | false | string[] }>;
+    alias: TypedChainedMap<this, RspackResolveAlias>;
     aliasFields: TypedChainedSet<this, RspackResolve['aliasFields'][number]>;
     conditionNames: TypedChainedSet<
       this,
@@ -298,10 +299,7 @@ export declare namespace RspackChain {
     restrictions: TypedChainedSet<this, RspackResolve['restrictions'][number]>;
     roots: TypedChainedSet<this, RspackResolve['roots'][number]>;
     modules: TypedChainedSet<this, RspackResolve['modules'][number]>;
-    fallback: TypedChainedMap<
-      this,
-      { [key: string]: string | false | string[] }
-    >;
+    fallback: TypedChainedMap<this, RspackResolveAlias>;
     byDependency: TypedChainedMap<this, RspackResolve['byDependency']>;
     enforceExtension(value: RspackResolve['enforceExtension']): this;
     fullySpecified(value: RspackResolve['fullySpecified']): this;
