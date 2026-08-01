@@ -63,9 +63,9 @@ export declare class RspackChain extends __Config.ChainedMap<void> {
   >;
   output: RspackChain.Output;
   module: RspackChain.Module;
-  node: RspackChain.ChainedMap<this> & ((value: boolean) => this);
+  node: RspackChain.ChainedMap<this> & ((value: false) => this);
   optimization: RspackChain.Optimization;
-  performance: RspackChain.Performance & ((value: boolean) => this);
+  performance: RspackChain.Performance & ((value: false) => this);
   plugins: RspackChain.Plugins<this, PluginInstance>;
   resolve: RspackChain.Resolve;
   resolveLoader: RspackChain.ResolveLoader;
