@@ -31,6 +31,11 @@ const toEntryObject = (entryPoints) => {
         continue;
       }
 
+      if (Array.isArray(item)) {
+        entryImport.push(...item);
+        continue;
+      }
+
       if (item.import) {
         entryImport.push(...castArray(item.import));
       }
