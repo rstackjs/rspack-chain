@@ -124,6 +124,28 @@ test('entry', () => {
   });
 });
 
+test('entry array', () => {
+  const config = new RspackChain();
+
+  config.entry('array').add(['src/a.js', 'src/b.js']);
+  config
+    .entry('mixed')
+    .add(['src/a.js', 'src/b.js'])
+    .add('src/c.js')
+    .add({
+      import: ['src/d.js', 'src/e.js'],
+      dependOn: 'shared',
+    });
+
+  expect(config.toConfig().entry).toStrictEqual({
+    array: ['src/a.js', 'src/b.js'],
+    mixed: {
+      import: ['src/a.js', 'src/b.js', 'src/c.js', 'src/d.js', 'src/e.js'],
+      dependOn: 'shared',
+    },
+  });
+});
+
 test('entry description object', () => {
   const config = new RspackChain();
 
