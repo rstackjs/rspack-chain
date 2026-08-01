@@ -287,6 +287,7 @@ config
   .delete('asObject')
   .end()
   // devServer
+  .devServer(false)
   .devServer.allowedHosts(['host.com'])
   .allowedHosts('auto')
   .merge({

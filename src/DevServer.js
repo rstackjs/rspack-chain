@@ -1,6 +1,6 @@
-import ChainedMap from './ChainedMap.js';
+import ChainedValueMap from './ChainedValueMap.js';
 
-export default class extends ChainedMap {
+export default class extends ChainedValueMap {
   constructor(parent) {
     super(parent);
 
@@ -30,6 +30,8 @@ export default class extends ChainedMap {
   }
 
   toConfig() {
-    return this.clean(this.entries() || {});
+    const config = this.entries();
+
+    return config === false ? false : this.clean(config || {});
   }
 }

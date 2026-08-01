@@ -67,6 +67,14 @@ test('performance is false', () => {
   expect(config.performance.entries()).toStrictEqual(false);
 });
 
+test('devServer is false', () => {
+  const config = new RspackChain();
+  const instance = config.devServer(false);
+
+  expect(instance).toBe(config);
+  expect(config.toConfig()).toStrictEqual({ devServer: false });
+});
+
 test('bail', () => {
   const config = new RspackChain();
   const instance = config.bail(false);
