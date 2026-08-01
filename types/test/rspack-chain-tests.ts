@@ -168,6 +168,7 @@ config
   .resolve.alias.set('foo', 'bar')
   .set('foo', false)
   .set('foo', ['asd'])
+  .set('foo', ['asd', false])
   .end()
   .tsConfig('./tsconfig.json')
   .delete('tsConfig')
@@ -200,7 +201,7 @@ config
   .end()
   .roots.add('asdasd')
   .end()
-  .fallback.set('asd', ['asdasd'])
+  .fallback.set('asd', ['asdasd', false])
   .end()
   .byDependency.set('esm', {
     mainFields: ['browser', 'module'],
