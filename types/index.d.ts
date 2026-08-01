@@ -69,7 +69,7 @@ export declare class RspackChain extends __Config.ChainedMap<void> {
   plugins: RspackChain.Plugins<this, PluginInstance>;
   resolve: RspackChain.Resolve;
   resolveLoader: RspackChain.ResolveLoader;
-  devServer: RspackChain.DevServer;
+  devServer: RspackChain.DevServer & ((value: false) => this);
 
   context(value: RspackConfig['context']): this;
   mode(value: RspackConfig['mode']): this;
