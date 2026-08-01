@@ -398,9 +398,7 @@ export declare namespace RspackChain {
     [name: string]: any;
   }
 
-  interface LoaderOptions {
-    [name: string]: any;
-  }
+  type LoaderOptions = NonNullable<RuleSetLoaderWithOptions['options']>;
 
   type LoaderParallelOptions = NonNullable<
     RuleSetLoaderWithOptions['parallel']

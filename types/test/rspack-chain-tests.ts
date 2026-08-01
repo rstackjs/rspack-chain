@@ -115,6 +115,7 @@ config
   .ident('babel-loader-ident')
   .loader('babel-loader')
   .options({})
+  .options('cacheDirectory=true')
   .parallel(true)
   .parallel({ maxWorkers: 2 })
   .end()
