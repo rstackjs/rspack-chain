@@ -31,10 +31,10 @@ This is easier explained through the examples following.
 
 ## Installation
 
-For Rspack v2, install `rspack-chain` v2 beta:
+For Rspack v2, install `rspack-chain` v2:
 
 ```bash
-npm add rspack-chain@beta -D
+npm add rspack-chain -D
 ```
 
 For Rspack v1, install the `rspack-chain` v1:
@@ -909,7 +909,7 @@ config.node(false)
 #### devServer
 
 ```js
-config.devServer : ChainedMap
+config.devServer : ChainedValueMap
 ```
 
 #### devServer: shorthand methods
