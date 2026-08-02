@@ -25,13 +25,19 @@ export default function createMap(superClass) {
       return this;
     }
 
+    /**
+     * Builds an object representation of the store and resolves the key order
+     * from `__before` and `__after` hints attached by Orderable.
+     */
     order() {
-      const entries = [...this.store].reduce((acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-      }, {});
+      const entries = {};
+
+      for (const [key, value] of this.store) {
+        entries[key] = value;
+      }
+
       const names = Object.keys(entries);
-      const order = [...names];
+      const order = names.slice();
 
       names.forEach((name) => {
         if (!entries[name]) {
@@ -52,20 +58,39 @@ export default function createMap(superClass) {
       return { entries, order };
     }
 
+    /**
+     * Converts the store to a plain object. Ordering hints do not affect the
+     * key-value mapping, so they do not need to be resolved here.
+     */
     entries() {
-      const { entries, order } = this.order();
-
-      if (order.length) {
-        return entries;
+      if (!this.store.size) {
+        return undefined;
       }
 
-      return undefined;
+      const entries = {};
+      for (const [key, value] of this.store) {
+        entries[key] = value;
+      }
+      return entries;
     }
 
+    /**
+     * Returns values in insertion order, resolving explicit ordering only when
+     * a value contains an `__before` or `__after` hint.
+     */
     values() {
-      const { entries, order } = this.order();
+      const values = [];
 
-      return order.map((name) => entries[name]);
+      for (const value of this.store.values()) {
+        if (value?.__before || value?.__after) {
+          const { entries, order } = this.order();
+          return order.map((name) => entries[name]);
+        }
+
+        values.push(value);
+      }
+
+      return values;
     }
 
     get(key) {
