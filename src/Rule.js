@@ -10,6 +10,10 @@ function toArray(arr) {
 
 const Rule = Orderable(
   class extends ChainedMap {
+    // Most rules do not configure rule-level resolution. Keep this tree lazy
+    // to avoid allocating Resolve's child maps and sets for every nested rule.
+    #resolve;
+
     constructor(parent, name, ruleType = 'rule') {
       super(parent);
       this.ruleName = name;
@@ -29,7 +33,6 @@ const Rule = Orderable(
       this.exclude = new ChainedSet(this);
       this.rules = new ChainedMap(this);
       this.oneOfs = new ChainedMap(this);
-      this.resolve = new Resolve(this);
       this.extend([
         'dependency',
         'descriptionData',
@@ -51,6 +54,15 @@ const Rule = Orderable(
         'test',
         'type',
       ]);
+    }
+
+    get resolve() {
+      this.#resolve ??= new Resolve(this);
+      return this.#resolve;
+    }
+
+    set resolve(value) {
+      this.#resolve = value;
     }
 
     use(name) {
@@ -84,7 +96,9 @@ const Rule = Orderable(
           rules: this.rules.values().map((rule) => rule.toConfig()),
           oneOf: this.oneOfs.values().map((oneOf) => oneOf.toConfig()),
           use: this.uses.values().map((use) => use.toConfig()),
-          resolve: this.resolve.toConfig(),
+          // Do not access the getter here, or serializing an unused rule would
+          // instantiate the empty Resolve tree that lazy creation avoids.
+          resolve: this.#resolve?.toConfig(),
         }),
       );
 
