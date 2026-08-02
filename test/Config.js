@@ -1,11 +1,5 @@
 import { EnvironmentPlugin } from '@rspack/core';
-import { stringify } from 'javascript-stringify';
 import { RspackChain } from '../dist';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const pathEnvironmentPlugin =
-  require.resolve('../test-utils/PathEnvironmentPlugin.cjs');
 
 class StringifyPlugin {
   constructor(...args) {
@@ -509,15 +503,12 @@ test('toString', () => {
     .use('babel')
     .loader('babel-loader');
 
-  const envPluginPath = pathEnvironmentPlugin;
-  const stringifiedEnvPluginPath = stringify(envPluginPath);
-
   class FooPlugin {}
   FooPlugin.__expression = `require('foo-plugin')`;
 
   config
     .plugin('env')
-    .use(envPluginPath, [{ VAR: false }])
+    .use(EnvironmentPlugin, [{ VAR: false }])
     .end()
     .plugin('gamma')
     .use(FooPlugin)
@@ -586,7 +577,7 @@ test('toString', () => {
   },
   plugins: [
     /* config.plugin('env') */
-    new (require(${stringifiedEnvPluginPath}))(
+    new EnvironmentPlugin(
       {
         VAR: false
       }
