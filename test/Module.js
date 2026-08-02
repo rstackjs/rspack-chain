@@ -48,3 +48,12 @@ test('toConfig with values', () => {
     noParse: /.min.js/,
   });
 });
+
+test('merge with omitting keys', () => {
+  const module = new Module();
+
+  module.noParse(/original/);
+  module.merge({ noParse: /new-value/ }, ['noParse']);
+
+  expect(module.toConfig()).toStrictEqual({ noParse: /original/ });
+});

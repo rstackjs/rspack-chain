@@ -46,6 +46,6 @@ export default class extends ChainedMap {
       );
     }
 
-    return super.merge(obj, ['rule', 'defaultRule']);
+    return super.merge(obj, [...omit, 'rule', 'defaultRule']);
   }
 }
