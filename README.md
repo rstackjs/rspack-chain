@@ -747,10 +747,6 @@ config.optimization
 _NOTE: Do not use `new` to create the minimizer plugin, as this will be done for you._
 
 ```js
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-
 config.optimization.minimizer(name).use(RspackPlugin, args);
 
 // Examples
@@ -758,14 +754,6 @@ config.optimization.minimizer(name).use(RspackPlugin, args);
 config.optimization
   .minimizer('css')
   .use(OptimizeCSSAssetsPlugin, [{ cssProcessorOptions: { safe: true } }]);
-
-// Minimizer plugins can also be specified by their path, allowing the expensive module loads to be
-// skipped in cases where the plugin or Rspack configuration won't end up being used.
-config.optimization
-  .minimizer('css')
-  .use(require.resolve('optimize-css-assets-webpack-plugin'), [
-    { cssProcessorOptions: { safe: true } },
-  ]);
 ```
 
 #### optimization minimizers: modify arguments
@@ -818,10 +806,7 @@ config.plugin(name) : ChainedMap
 _NOTE: Do not use `new` to create the plugin, as this will be done for you._
 
 ```js
-import { createRequire } from 'node:module';
 import { HotModuleReplacementPlugin, EnvironmentPlugin } from '@rspack/core';
-
-const require = createRequire(import.meta.url);
 
 config.plugin(name).use(RspackPlugin, args);
 
@@ -829,11 +814,7 @@ config.plugin(name).use(RspackPlugin, args);
 
 config.plugin('hot').use(HotModuleReplacementPlugin);
 
-// Plugins can also be specified by their path, allowing the expensive module loads to be
-// skipped in cases where the plugin or Rspack configuration won't end up being used.
 config.plugin('env').use(EnvironmentPlugin, [{ VAR: false }]);
-
-config.plugin('custom').use(require.resolve('my-plugin'), [{ answer: 42 }]);
 ```
 
 #### plugins: modify arguments

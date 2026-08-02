@@ -144,7 +144,7 @@ export declare namespace RspackChain {
           : any[],
       ) => PluginType,
     ): this;
-    use<P extends string | PluginType | PluginClass<PluginType>>(
+    use<P extends PluginType | PluginClass<PluginType>>(
       plugin: P,
       args?: P extends PluginClass<PluginType>
         ? ConstructorParameters<P>

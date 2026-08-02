@@ -32,6 +32,11 @@ export default Orderable(
     }
 
     set(key, value) {
+      if (key === 'plugin' && typeof value === 'string') {
+        throw new TypeError(
+          'Plugin paths are not supported. Import the plugin and pass it to .use() instead.',
+        );
+      }
       if (key === 'args' && !Array.isArray(value)) {
         throw new Error('args must be an array of arguments');
       }
@@ -52,22 +57,13 @@ export default Orderable(
 
     toConfig() {
       const init = this.get('init');
-      let plugin = this.get('plugin');
+      const plugin = this.get('plugin');
       const args = this.get('args');
-      let pluginPath = null;
 
       if (plugin === undefined) {
         throw new Error(
           `Invalid ${this.type} configuration: ${this.type}('${this.name}').use(<Plugin>) was not called to specify the plugin`,
         );
-      }
-
-      // Support using the path to a plugin rather than the plugin itself,
-      // allowing expensive require()s to be skipped in cases where the plugin
-      // or Rspack configuration won't end up being used.
-      if (typeof plugin === 'string') {
-        pluginPath = plugin;
-        plugin = require(pluginPath);
       }
 
       const constructorName = plugin.__expression
@@ -81,7 +77,6 @@ export default Orderable(
         __pluginType: { value: this.type },
         __pluginArgs: { value: args },
         __pluginConstructorName: { value: constructorName },
-        __pluginPath: { value: pluginPath },
       });
 
       return config;

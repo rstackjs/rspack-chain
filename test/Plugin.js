@@ -1,9 +1,4 @@
 import Plugin from '../src/Plugin';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-const pathEnvironmentPlugin =
-  require.resolve('../test-utils/PathEnvironmentPlugin.cjs');
 
 class StringifyPlugin {
   constructor(...args) {
@@ -29,6 +24,14 @@ test('use', () => {
   expect(instance).toBe(plugin);
   expect(plugin.get('plugin')).toBe(StringifyPlugin);
   expect(plugin.get('args')).toStrictEqual(['alpha', 'beta']);
+});
+
+test('use rejects plugin paths', () => {
+  const plugin = new Plugin();
+
+  expect(() => plugin.use('plugin-path')).toThrow(
+    'Plugin paths are not supported. Import the plugin and pass it to .use() instead.',
+  );
 });
 
 test('tap', () => {
@@ -128,17 +131,6 @@ test('toConfig with object literal plugin', () => {
   const initialized = plugin.toConfig();
 
   expect(initialized).toBe(TestPlugin);
-});
-
-test('toConfig with plugin as path', () => {
-  const plugin = new Plugin(null, 'gamma');
-  plugin.use(pathEnvironmentPlugin);
-
-  const initialized = plugin.toConfig();
-
-  expect(initialized.constructor.name).toBe('PathEnvironmentPlugin');
-  expect(initialized.__pluginConstructorName).toBe('PathEnvironmentPlugin');
-  expect(initialized.__pluginPath).toBe(pathEnvironmentPlugin);
 });
 
 test('toConfig without having called use()', () => {

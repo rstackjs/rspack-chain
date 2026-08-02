@@ -272,10 +272,6 @@ config
   .after('bar')
   .end()
 
-  .plugin('asString')
-  .use('package-name-or-path')
-  .end()
-
   .plugin('asObject')
   .use({ apply: (compiler: rspack.Compiler) => {} })
   .end()
@@ -283,7 +279,6 @@ config
   .plugins.delete('foo')
   .delete('bar')
   .delete('baz')
-  .delete('asString')
   .delete('asObject')
   .end()
   // devServer
@@ -421,6 +416,9 @@ config
   // end
   .merge({})
   .toConfig();
+
+// @ts-expect-error plugin paths are not supported
+config.plugin('asString').use('package-name-or-path');
 
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;

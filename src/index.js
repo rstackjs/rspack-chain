@@ -105,11 +105,7 @@ class RspackChain extends ChainedMap {
         // improve plugin output
         if (value && value.__pluginName) {
           const prefix = `/* ${configPrefix}.${value.__pluginType}('${value.__pluginName}') */\n`;
-          const constructorExpression = value.__pluginPath
-            ? // The path is stringified to ensure special characters are escaped
-              // (such as the backslashes in Windows-style paths).
-              `(require(${stringify(value.__pluginPath)}))`
-            : value.__pluginConstructorName;
+          const constructorExpression = value.__pluginConstructorName;
 
           if (constructorExpression) {
             // get correct indentation for args by stringifying the args array and
