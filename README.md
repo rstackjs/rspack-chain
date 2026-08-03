@@ -1043,6 +1043,22 @@ config.module
   );
 ```
 
+TypeScript users can specify the loader options type on `use` to make
+`options` and `tap` type-safe:
+
+```ts
+config.module
+  .rule('javascript')
+  .use<SwcLoaderOptions>('swc')
+  .loader('builtin:swc-loader')
+  .tap((options) => ({
+    ...options,
+    jsc: {
+      ...options.jsc,
+    },
+  }));
+```
+
 #### module rules nested rules
 
 ```js
