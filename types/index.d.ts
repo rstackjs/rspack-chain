@@ -348,7 +348,9 @@ export declare namespace RspackChain {
     test(value: RspackRuleSet['test']): this;
     type(value: RspackRuleSet['type']): this;
 
-    use(name: string): Use<this>;
+    use<Options extends LoaderOptions = LoaderOptions>(
+      name: string,
+    ): Use<this, Options>;
     rule(name: string): Rule<Rule>;
     oneOf(name: string): Rule<Rule>;
     pre(): this;
@@ -404,13 +406,16 @@ export declare namespace RspackChain {
     RuleSetLoaderWithOptions['parallel']
   >;
 
-  class Use<Parent = Rule> extends ChainedMap<Parent> implements Orderable {
+  class Use<Parent = Rule, Options extends LoaderOptions = LoaderOptions>
+    extends ChainedMap<Parent>
+    implements Orderable
+  {
     ident(value: NonNullable<RuleSetLoaderWithOptions['ident']>): this;
     loader(value: string): this;
-    options(value: LoaderOptions): this;
+    options(value: Options): this;
     parallel(value: LoaderParallelOptions): this;
 
-    tap(f: (options: LoaderOptions) => LoaderOptions): this;
+    tap(f: (options: Options) => Options): this;
 
     // Orderable
     before(name: string): this;
