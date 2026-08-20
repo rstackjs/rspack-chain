@@ -21,6 +21,7 @@ const Rule = Orderable(
       this.ruleType = ruleType;
       this.ruleTypes = [];
 
+      // rslint-disable-next-line @typescript-eslint/no-this-alias
       let rule = this;
       while (rule instanceof Rule) {
         this.names.unshift(rule.ruleName);

@@ -24,12 +24,6 @@ export default defineConfig([
     },
   },
   {
-    files: ['src/Rule.js'],
-    rules: {
-      '@typescript-eslint/no-this-alias': 'off',
-    },
-  },
-  {
     files: ['types/**/*.d.ts'],
     rules: {
       '@typescript-eslint/no-unsafe-declaration-merging': 'off',
