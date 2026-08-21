@@ -23,10 +23,4 @@ export default defineConfig([
       },
     },
   },
-  {
-    files: ['types/**/*.d.ts'],
-    rules: {
-      '@typescript-eslint/no-unsafe-declaration-merging': 'off',
-    },
-  },
 ]);

@@ -255,9 +255,10 @@ export declare namespace RspackChain {
     [K in keyof RspackDevServer]-?: (value: RspackDevServer[K]) => T;
   };
 
+  // rslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
   class DevServer extends TypedChainedMap<RspackChain, RspackDevServer> {}
 
-  // rslint-disable-next-line @typescript-eslint/no-empty-object-type
+  // rslint-disable-next-line @typescript-eslint/no-empty-object-type, @typescript-eslint/no-unsafe-declaration-merging
   interface DevServer extends DevServerShorthandMethods<DevServer> {}
 
   type RspackPerformance = Exclude<
