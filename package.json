@@ -35,9 +35,9 @@
   },
   "devDependencies": {
     "@rslib/core": "0.23.2",
-    "@rslint/core": "^0.8.2",
-    "@rspack/core": "2.1.10",
-    "@rstest/core": "^0.11.9",
+    "@rslint/core": "^0.9.0",
+    "@rspack/core": "2.2.1",
+    "@rstest/core": "^0.11.11",
     "deepmerge": "^4.3.1",
     "javascript-stringify": "^2.1.0",
     "prettier": "^3.9.6",
@@ -51,5 +51,5 @@
       "optional": true
     }
   },
-  "packageManager": "pnpm@11.22.0"
+  "packageManager": "pnpm@11.24.0"
 }
