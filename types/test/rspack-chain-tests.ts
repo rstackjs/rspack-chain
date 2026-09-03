@@ -9,6 +9,25 @@ function expectType<T>(value: T) {}
 
 const config = new RspackChain();
 
+config.module
+  .rule('javascript')
+  .use<rspack.SwcLoaderOptions>('swc')
+  .loader('builtin:swc-loader')
+  .options({ detectSyntax: 'auto' })
+  .tap((options) => {
+    expectType<rspack.SwcLoaderOptions>(options);
+    return options;
+  });
+
+config.module
+  .rule('query')
+  .use<string>('query')
+  .options('cacheDirectory=true')
+  .tap((options) => {
+    expectType<string>(options);
+    return options;
+  });
+
 config
   // entry
   .entry('main')
