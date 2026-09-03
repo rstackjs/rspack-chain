@@ -29,5 +29,5 @@ jobs:
         with:
           run_install: true
 
-      - name: Run Lint
-        run: pnpm run lint
+      - name: Run Check
+        run: node --run check
