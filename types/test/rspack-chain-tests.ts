@@ -462,6 +462,45 @@ config.merge({
 });
 cssRule.merge({ use: { swc: { loader: 'builtin:swc-loader' } } });
 
+// All write paths must agree with the types returned by get().
+config.set('mode', 'development').merge({ mode: 'production' });
+swcUse.set('loader', undefined);
+const mode = config.getOrCompute('mode', () => 'development');
+expectTypeEqual<typeof mode, rspack.Configuration['mode']>();
+// @ts-expect-error mode cannot contain a number
+config.set('mode', 123);
+// @ts-expect-error merging cannot bypass the known key type
+config.merge({ mode: 123 });
+// @ts-expect-error computed values must match the known key type
+config.getOrCompute('mode', () => 123);
+// @ts-expect-error output keys are checked too
+config.output.set('filename', 123);
+// @ts-expect-error rule keys are checked too
+cssRule.merge({ resourceQuery: 123 });
+// @ts-expect-error loader values must be strings
+swcUse.getOrCompute('loader', () => 123);
+
+// Partial nested rules retain the chain merge format and validate known keys.
+config.merge({
+  entry: { main: ['./src/index.js'] },
+  output: { filename: '[name].js', customMetadata: true },
+  module: {
+    rule: {
+      css: {
+        oneOf: { inline: { use: { css: { options: { modules: true } } } } },
+      },
+    },
+  },
+  optimization: { minimizer: { custom: { plugin: rspack.DefinePlugin } } },
+});
+// @ts-expect-error nested loader writes cannot bypass validation
+config.merge({ module: { rule: { css: { use: { css: { loader: 123 } } } } } });
+// @ts-expect-error merging through module must validate child rules too
+config.module.merge({ rule: { css: { type: 123 } } });
+config.set('customMetadata', 123).merge({ customMetadata: false }, ['mode']);
+const customValue = config.getOrCompute('customMetadata', () => 123);
+expectTypeEqual<typeof customValue, any>();
+
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;
 
