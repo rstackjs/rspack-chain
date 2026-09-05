@@ -7,6 +7,16 @@ import { RspackChain } from 'rspack-chain';
 
 function expectType<T>(value: T) {}
 
+// Unlike assignability checks, this also rejects an unexpected `any`.
+type Equal<A, B> =
+  (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+    ? true
+    : false;
+
+function expectTypeEqual<A, B>(
+  ..._args: Equal<A, B> extends true ? [] : [never]
+) {}
+
 const config = new RspackChain();
 
 config
@@ -419,6 +429,38 @@ config
 
 // @ts-expect-error plugin paths are not supported
 config.plugin('asString').use('package-name-or-path');
+
+// Known keys return precise types, including undefined for unset values.
+const experiments = config.get('experiments');
+expectTypeEqual<typeof experiments, rspack.Configuration['experiments']>();
+
+const library = config.output.get('library');
+expectTypeEqual<
+  typeof library,
+  NonNullable<rspack.Configuration['output']>['library']
+>();
+
+const cssRule = config.module.rule('css');
+const resourceQuery = cssRule.get('resourceQuery');
+expectTypeEqual<typeof resourceQuery, rspack.RuleSetRule['resourceQuery']>();
+
+const swcUse = cssRule.use('swc');
+const loader = swcUse.get('loader');
+expectTypeEqual<typeof loader, string | undefined>();
+
+const loaderOptions = swcUse.get('options');
+expectTypeEqual<
+  typeof loaderOptions,
+  rspack.RuleSetLoaderWithOptions['options']
+>();
+
+// Custom keys and chain-specific merge structures remain compatible.
+const metadata = config.set('customMetadata', true).get('customMetadata');
+expectTypeEqual<typeof metadata, any>();
+config.merge({
+  plugin: { example: { plugin: rspack.DefinePlugin, args: [{}] } },
+});
+cssRule.merge({ use: { swc: { loader: 'builtin:swc-loader' } } });
 
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;
