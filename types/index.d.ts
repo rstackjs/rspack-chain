@@ -36,7 +36,15 @@ declare namespace __Config {
     ): this;
   }
 
-  class ChainedMap<Parent> extends TypedChainedMap<Parent, any> {}
+  class ChainedMap<Parent, OptionsType = any> extends TypedChainedMap<
+    Parent,
+    any
+  > {
+    // Keep custom keys and chain-specific set/merge inputs compatible.
+    get<Key extends PropertyKey>(
+      key: Key,
+    ): Key extends keyof OptionsType ? OptionsType[Key] | undefined : any;
+  }
   class TypedChainedSet<Parent, Value> extends Chained<Parent> {
     add(value: Value): this;
     prepend(value: Value): this;
@@ -56,7 +64,10 @@ declare namespace __Config {
 }
 
 type RspackConfig = Required<Configuration>;
-export declare class RspackChain extends __Config.ChainedMap<void> {
+export declare class RspackChain extends __Config.ChainedMap<
+  void,
+  Configuration
+> {
   entryPoints: RspackChain.TypedChainedMap<
     RspackChain,
     { [key: string]: RspackChain.EntryPoint }
@@ -117,7 +128,10 @@ export declare namespace RspackChain {
     Parent,
     OptionsType
   > {}
-  class ChainedMap<Parent> extends __Config.TypedChainedMap<Parent, any> {}
+  class ChainedMap<Parent, OptionsType = any> extends __Config.ChainedMap<
+    Parent,
+    OptionsType
+  > {}
   class TypedChainedSet<Parent, Value> extends __Config.TypedChainedSet<
     Parent,
     Value
@@ -182,7 +196,10 @@ export declare namespace RspackChain {
 
   type RspackOutput = Required<NonNullable<Configuration['output']>>;
 
-  class Output extends ChainedMap<RspackChain> {
+  class Output extends ChainedMap<
+    RspackChain,
+    NonNullable<Configuration['output']>
+  > {
     assetModuleFilename(value: RspackOutput['assetModuleFilename']): this;
     asyncChunks(value: RspackOutput['asyncChunks']): this;
     bundlerInfo(value: RspackOutput['bundlerInfo']): this;
@@ -321,7 +338,10 @@ export declare namespace RspackChain {
 
   type RspackRuleSet = Required<RuleSetRule>;
 
-  class Rule<T = Module> extends ChainedMap<T> implements Orderable {
+  class Rule<T = Module>
+    extends ChainedMap<T, RuleSetRule>
+    implements Orderable
+  {
     uses: TypedChainedMap<this, { [key: string]: Use }>;
     include: TypedChainedSet<this, RspackRuleSet['include']>;
     exclude: TypedChainedSet<this, RspackRuleSet['exclude']>;
@@ -405,7 +425,10 @@ export declare namespace RspackChain {
     RuleSetLoaderWithOptions['parallel']
   >;
 
-  class Use<Parent = Rule> extends ChainedMap<Parent> implements Orderable {
+  class Use<Parent = Rule>
+    extends ChainedMap<Parent, RuleSetLoaderWithOptions>
+    implements Orderable
+  {
     ident(value: NonNullable<RuleSetLoaderWithOptions['ident']>): this;
     loader(value: string): this;
     options(value: LoaderOptions): this;
