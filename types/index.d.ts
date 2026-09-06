@@ -12,7 +12,19 @@ interface PluginInstance {
 }
 
 declare namespace __Config {
-  type MergeInput<OptionsType> = Partial<OptionsType> & Record<string, any>;
+  // Allow loose object patches while preserving arrays and atomic values.
+  type MergeValue<Value> = Value extends
+    Function | readonly unknown[] | RegExp | Date
+    ? Value
+    : Value extends object
+      ? Value | Record<string, unknown>
+      : Value;
+
+  type MergeInput<OptionsType> = {
+    [Key in keyof OptionsType]?: MergeValue<OptionsType[Key]>;
+  } & Record<string, any>;
+
+  type NamedPatches = Record<string, Record<string, any>>;
 
   class Chained<Parent> {
     batch(handler: (chained: this) => void): this;
@@ -41,7 +53,7 @@ declare namespace __Config {
   class ChainedMap<
     Parent,
     OptionsType = any,
-    MergeOptions = OptionsType,
+    MergeOverrides = unknown,
   > extends TypedChainedMap<Parent, any> {
     // Known keys share their read/write types; custom keys remain unrestricted.
     get<Key extends PropertyKey>(
@@ -57,7 +69,11 @@ declare namespace __Config {
         ? () => OptionsType[Key] | undefined
         : () => any,
     ): Key extends keyof OptionsType ? OptionsType[Key] | undefined : any;
-    merge(obj: MergeInput<MergeOptions>, omit?: string[]): this;
+    // Apply chain-specific container types without loosening their shape.
+    merge(
+      obj: MergeInput<Omit<OptionsType, keyof MergeOverrides>> & MergeOverrides,
+      omit?: string[],
+    ): this;
   }
   class TypedChainedSet<Parent, Value> extends Chained<Parent> {
     add(value: Value): this;
@@ -81,7 +97,12 @@ type RspackConfig = Required<Configuration>;
 export declare class RspackChain extends __Config.ChainedMap<
   void,
   Configuration,
-  RspackChain.ConfigMergeOptions
+  {
+    entry?: Record<
+      string,
+      RspackChain.RspackEntryObject | RspackChain.RspackEntryObject[]
+    >;
+  }
 > {
   entryPoints: RspackChain.TypedChainedMap<
     RspackChain,
@@ -146,8 +167,8 @@ export declare namespace RspackChain {
   class ChainedMap<
     Parent,
     OptionsType = any,
-    MergeOptions = OptionsType,
-  > extends __Config.ChainedMap<Parent, OptionsType, MergeOptions> {}
+    MergeOverrides = unknown,
+  > extends __Config.ChainedMap<Parent, OptionsType, MergeOverrides> {}
   class TypedChainedSet<Parent, Value> extends __Config.TypedChainedSet<
     Parent,
     Value
@@ -200,33 +221,11 @@ export declare namespace RspackChain {
 
   type RspackModule = Required<NonNullable<Configuration['module']>>;
 
-  // merge() accepts named child maps rather than the arrays in Rspack configs.
-  type RuleMergeOptions = Omit<RuleSetRule, 'use' | 'rules' | 'oneOf'> & {
-    use?: Record<string, __Config.MergeInput<RuleSetLoaderWithOptions>>;
-    rules?: Record<string, __Config.MergeInput<RuleMergeOptions>>;
-    oneOf?: Record<string, __Config.MergeInput<RuleMergeOptions>>;
-  };
-
-  type ModuleMergeOptions = NonNullable<Configuration['module']> & {
-    rule?: Record<string, __Config.MergeInput<RuleMergeOptions>>;
-    defaultRule?: Record<string, __Config.MergeInput<RuleMergeOptions>>;
-  };
-
-  type ConfigMergeOptions = Omit<
-    Configuration,
-    'entry' | 'module' | 'optimization' | 'output'
-  > & {
-    entry?: Record<string, RspackEntryObject | RspackEntryObject[]>;
-    module?: __Config.MergeInput<ModuleMergeOptions>;
-    output?: __Config.MergeInput<NonNullable<Configuration['output']>>;
-    optimization?: __Config.MergeInput<
-      Omit<NonNullable<Configuration['optimization']>, 'minimizer'> & {
-        minimizer?: Record<string, any>;
-      }
-    >;
-  };
-
-  class Module extends ChainedMap<RspackChain, any, ModuleMergeOptions> {
+  class Module extends ChainedMap<
+    RspackChain,
+    NonNullable<Configuration['module']>,
+    { rule?: __Config.NamedPatches; defaultRule?: __Config.NamedPatches }
+  > {
     defaultRules: TypedChainedMap<this, { [key: string]: Rule }>;
     rules: TypedChainedMap<this, { [key: string]: Rule }>;
     generator: ChainedMap<this>;
@@ -381,7 +380,15 @@ export declare namespace RspackChain {
   type RspackRuleSet = Required<RuleSetRule>;
 
   class Rule<T = Module>
-    extends ChainedMap<T, RuleSetRule, RuleMergeOptions>
+    extends ChainedMap<
+      T,
+      RuleSetRule,
+      {
+        use?: __Config.NamedPatches;
+        rules?: __Config.NamedPatches;
+        oneOf?: __Config.NamedPatches;
+      }
+    >
     implements Orderable
   {
     uses: TypedChainedMap<this, { [key: string]: Use }>;

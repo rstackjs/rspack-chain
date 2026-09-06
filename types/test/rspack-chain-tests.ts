@@ -513,7 +513,7 @@ config.merge({
 });
 cssRule.merge({ use: { swc: { loader: 'builtin:swc-loader' } } });
 
-// All write paths must agree with the types returned by get().
+// Direct writes and top-level merge fields validate known key types.
 config.set('mode', 'development').merge({ mode: 'production' });
 swcUse.set('loader', undefined);
 const mode = config.getOrCompute('mode', () => 'development');
@@ -531,10 +531,10 @@ cssRule.merge({ resourceQuery: 123 });
 // @ts-expect-error loader values must be strings
 swcUse.getOrCompute('loader', () => 123);
 
-// Partial nested rules retain the chain merge format and validate known keys.
+// Nested merge objects stay loose to support partial patches and named maps.
 config.merge({
   entry: { main: ['./src/index.js'] },
-  output: { filename: '[name].js', customMetadata: true },
+  output: { library: { name: 'foo' }, customMetadata: true },
   module: {
     rule: {
       css: {
@@ -544,13 +544,37 @@ config.merge({
   },
   optimization: { minimizer: { custom: { plugin: rspack.DefinePlugin } } },
 });
-// @ts-expect-error nested loader writes cannot bypass validation
-config.merge({ module: { rule: { css: { use: { css: { loader: 123 } } } } } });
-// @ts-expect-error merging through module must validate child rules too
-config.module.merge({ rule: { css: { type: 123 } } });
 config.set('customMetadata', 123).merge({ customMetadata: false }, ['mode']);
 const customValue = config.getOrCompute('customMetadata', () => 123);
 expectTypeEqual<typeof customValue, any>();
+
+// Partial object patches and named rule maps remain valid.
+config.output.merge({ library: { name: 'bar' } });
+cssRule.merge({ rules: { nested: {} }, oneOf: { inline: {} } });
+config.module.merge({ noParse: /vendor/, rule: { css: {} }, defaultRule: {} });
+config.output.merge({ enabledChunkLoadingTypes: ['jsonp'] });
+// @ts-expect-error known module fields must retain their types
+config.module.merge({ noParse: 123 });
+// @ts-expect-error ordinary array fields cannot be replaced with objects
+config.output.merge({ enabledChunkLoadingTypes: {} });
+// @ts-expect-error array elements must remain complete plugin instances
+config.merge({ plugins: [{}] });
+// @ts-expect-error filename callbacks must still return strings
+config.output.merge({ filename: () => 123 });
+
+// Chain merge containers require named maps with valid entry or object values.
+// @ts-expect-error entry shorthands are not supported by merge
+config.merge({ entry: './src/index.js' });
+// @ts-expect-error entry functions are not evaluated by merge
+config.merge({ entry: () => './src/index.js' });
+// @ts-expect-error use shorthands are not supported by merge
+cssRule.merge({ use: 'style-loader' });
+// @ts-expect-error use arrays containing strings are not supported by merge
+cssRule.merge({ use: ['style-loader'] });
+// @ts-expect-error rule patches must be objects
+config.module.merge({ rule: { css: 123 } });
+// @ts-expect-error default rule patches must be objects
+config.module.merge({ defaultRule: { css: 123 } });
 
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;
