@@ -481,7 +481,7 @@ export declare namespace RspackChain {
     options(value: Options): this;
     parallel(value: LoaderParallelOptions): this;
 
-    tap(f: (options: Options) => Options): this;
+    tap(f: (options: Options | undefined) => Options | undefined): this;
 
     // Orderable
     before(name: string): this;
