@@ -1044,22 +1044,25 @@ config.module
 ```
 
 TypeScript users can specify the loader options type on `use` to make
-`options` and `tap` type-safe. The `tap` callback receives `undefined` when
-options have not been set or have been cleared. Use a default parameter to
-handle this case:
+`options` and `tap` type-safe:
 
 ```ts
 config.module
   .rule('javascript')
   .use<SwcLoaderOptions>('swc')
   .loader('builtin:swc-loader')
-  .tap((options = {}) => ({
+  .options({})
+  .tap((options) => ({
     ...options,
     jsc: {
       ...options.jsc,
     },
   }));
 ```
+
+The `tap` callback receives `undefined` when options have not been set or have
+been cleared. Initialize options with `.options(...)` before accessing their
+properties, as shown above, or handle `undefined` in the callback.
 
 #### module rules nested rules
 
