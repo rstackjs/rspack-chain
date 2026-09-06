@@ -576,6 +576,18 @@ config.module.merge({ rule: { css: 123 } });
 // @ts-expect-error default rule patches must be objects
 config.module.merge({ defaultRule: { css: 123 } });
 
+// Required override fields remain optional in merge patches.
+declare const map: RspackChain.ChainedMap<void, unknown, { value: string }>;
+map.merge({});
+// @ts-expect-error override values retain their declared types
+map.merge({ value: 123 });
+// @ts-expect-error arrays are not named object patches
+cssRule.merge({ use: { css: [] } });
+// @ts-expect-error functions are not named object patches
+cssRule.merge({ use: { css: () => {} } });
+// @ts-expect-error RegExp instances are not named object patches
+config.module.merge({ rule: { css: /css/ } });
+
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;
 
