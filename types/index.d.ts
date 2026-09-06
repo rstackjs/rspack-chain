@@ -12,15 +12,18 @@ interface PluginInstance {
 }
 
 declare namespace __Config {
-  // Allow loose object patches and named child maps without recursive validation.
-  type MergeValue<Value> = Value extends Function | RegExp | Date
+  // Allow loose object patches while preserving arrays and atomic values.
+  type MergeValue<Value> = Value extends
+    Function | readonly unknown[] | RegExp | Date
     ? Value
     : Value extends object
       ? Value | Record<string, unknown>
       : Value;
 
-  type MergeInput<OptionsType> = {
-    [Key in keyof OptionsType]?: MergeValue<OptionsType[Key]>;
+  type MergeInput<OptionsType, NamedKeys extends keyof OptionsType = never> = {
+    [Key in keyof OptionsType]?: Key extends NamedKeys
+      ? OptionsType[Key] | Record<string, unknown>
+      : MergeValue<OptionsType[Key]>;
   } & Record<string, any>;
 
   class Chained<Parent> {
@@ -206,7 +209,10 @@ export declare namespace RspackChain {
 
   type RspackModule = Required<NonNullable<Configuration['module']>>;
 
-  class Module extends ChainedMap<RspackChain> {
+  class Module extends ChainedMap<
+    RspackChain,
+    NonNullable<Configuration['module']>
+  > {
     defaultRules: TypedChainedMap<this, { [key: string]: Rule }>;
     rules: TypedChainedMap<this, { [key: string]: Rule }>;
     generator: ChainedMap<this>;
@@ -364,6 +370,12 @@ export declare namespace RspackChain {
     extends ChainedMap<T, RuleSetRule>
     implements Orderable
   {
+    // These child collections also accept named maps instead of arrays.
+    merge(
+      obj: __Config.MergeInput<RuleSetRule, 'use' | 'rules' | 'oneOf'>,
+      omit?: string[],
+    ): this;
+
     uses: TypedChainedMap<this, { [key: string]: Use }>;
     include: TypedChainedSet<this, RspackRuleSet['include']>;
     exclude: TypedChainedSet<this, RspackRuleSet['exclude']>;

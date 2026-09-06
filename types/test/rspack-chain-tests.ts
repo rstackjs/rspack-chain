@@ -551,6 +551,12 @@ expectTypeEqual<typeof customValue, any>();
 // Partial object patches and named rule maps remain valid.
 config.output.merge({ library: { name: 'bar' } });
 cssRule.merge({ rules: { nested: {} }, oneOf: { inline: {} } });
+config.module.merge({ noParse: /vendor/, rule: { css: {} }, defaultRule: {} });
+config.output.merge({ enabledChunkLoadingTypes: ['jsonp'] });
+// @ts-expect-error known module fields must retain their types
+config.module.merge({ noParse: 123 });
+// @ts-expect-error ordinary array fields cannot be replaced with objects
+config.output.merge({ enabledChunkLoadingTypes: {} });
 // @ts-expect-error array elements must remain complete plugin instances
 config.merge({ plugins: [{}] });
 // @ts-expect-error filename callbacks must still return strings
