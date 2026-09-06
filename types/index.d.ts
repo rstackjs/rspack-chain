@@ -24,7 +24,7 @@ declare namespace __Config {
     [Key in keyof OptionsType]?: MergeValue<OptionsType[Key]>;
   } & Record<string, any>;
 
-  type NamedPatches = Record<string, Record<string, any>>;
+  type NamedPatches = Record<string, Record<string, unknown>>;
 
   class Chained<Parent> {
     batch(handler: (chained: this) => void): this;
@@ -71,7 +71,8 @@ declare namespace __Config {
     ): Key extends keyof OptionsType ? OptionsType[Key] | undefined : any;
     // Apply chain-specific container types without loosening their shape.
     merge(
-      obj: MergeInput<Omit<OptionsType, keyof MergeOverrides>> & MergeOverrides,
+      obj: MergeInput<Omit<OptionsType, keyof MergeOverrides>> &
+        Partial<MergeOverrides>,
       omit?: string[],
     ): this;
   }
