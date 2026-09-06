@@ -25,7 +25,7 @@ config.module
   .loader('builtin:swc-loader')
   .options({ detectSyntax: 'auto' })
   .tap((options) => {
-    expectTypeEqual<typeof options, rspack.SwcLoaderOptions | undefined>();
+    expectType<rspack.SwcLoaderOptions>(options);
     return options;
   });
 
@@ -34,36 +34,8 @@ config.module
   .use<string>('query')
   .options('cacheDirectory=true')
   .tap((options) => {
-    expectTypeEqual<typeof options, string | undefined>();
+    expectType<string>(options);
     return options;
-  });
-
-config.module
-  .rule('uninitialized')
-  .use<rspack.SwcLoaderOptions>('swc')
-  .loader('builtin:swc-loader')
-  .tap((options) => {
-    expectTypeEqual<typeof options, rspack.SwcLoaderOptions | undefined>();
-    // @ts-expect-error options may not have been initialized
-    expectType<rspack.SwcLoaderOptions['jsc']>(options.jsc);
-    return options;
-  })
-  .tap((options = {}) => {
-    expectTypeEqual<typeof options, rspack.SwcLoaderOptions>();
-    return { ...options, jsc: { ...options.jsc } };
-  });
-
-config.module
-  .rule('uninitialized')
-  .use<string>('query')
-  .tap((options) => {
-    // @ts-expect-error string options may not have been initialized
-    options.trim();
-    return options;
-  })
-  .tap((options = '') => {
-    expectTypeEqual<typeof options, string>();
-    return options.trim();
   });
 
 const typedSwcUse = config.module

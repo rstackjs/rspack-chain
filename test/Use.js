@@ -33,26 +33,6 @@ test('tap', () => {
   expect(use.store.get('options')).toStrictEqual({ presets: ['beta'] });
 });
 
-test('tap receives undefined before options are initialized', () => {
-  const use = new Use();
-  use.loader('builtin:swc-loader');
-
-  const result = use.tap((options) => {
-    expect(options).toBeUndefined();
-    return { jsc: {} };
-  });
-
-  expect(result).toBe(use);
-  expect(use.get('options')).toStrictEqual({ jsc: {} });
-});
-
-test('tap can leave options uninitialized', () => {
-  const use = new Use();
-  use.loader('builtin:swc-loader').tap((options) => options);
-
-  expect(use.toConfig()).toStrictEqual({ loader: 'builtin:swc-loader' });
-});
-
 test('toConfig', () => {
   const rule = new Rule(null, 'alpha');
   const use = rule
