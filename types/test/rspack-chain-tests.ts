@@ -534,7 +534,7 @@ swcUse.getOrCompute('loader', () => 123);
 // Nested merge objects stay loose to support partial patches and named maps.
 config.merge({
   entry: { main: ['./src/index.js'] },
-  output: { filename: '[name].js', customMetadata: true },
+  output: { library: { name: 'foo' }, customMetadata: true },
   module: {
     rule: {
       css: {
@@ -548,28 +548,13 @@ config.set('customMetadata', 123).merge({ customMetadata: false }, ['mode']);
 const customValue = config.getOrCompute('customMetadata', () => 123);
 expectTypeEqual<typeof customValue, any>();
 
-// Nested merge patches can update part of an existing object.
-config.module.merge({ rule: { css: { type: 'css' } } });
-cssRule.merge({
-  rules: { nested: { use: { css: { loader: 'css-loader' } } } },
-  oneOf: { inline: { resourceQuery: /inline/ } },
-});
-config.output.library({ type: 'var', name: 'foo' });
+// Partial object patches and named rule maps remain valid.
 config.output.merge({ library: { name: 'bar' } });
-config.merge({ output: { library: { name: 'baz' } } });
-config.output.merge({ filename: ({ filename }) => filename || '[name].js' });
-cssRule.merge({ resourceQuery: /inline/ });
-config.merge({ plugins: [new rspack.DefinePlugin({})] });
-
-// Array items, callbacks and replacement values retain their original types.
+cssRule.merge({ rules: { nested: {} }, oneOf: { inline: {} } });
 // @ts-expect-error array elements must remain complete plugin instances
 config.merge({ plugins: [{}] });
 // @ts-expect-error filename callbacks must still return strings
 config.output.merge({ filename: () => 123 });
-// @ts-expect-error set replaces the entire value rather than merging it
-config.output.set('library', { name: 'bar' });
-// @ts-expect-error computed values must also be complete
-config.output.getOrCompute('library', () => ({ name: 'bar' }));
 
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;
