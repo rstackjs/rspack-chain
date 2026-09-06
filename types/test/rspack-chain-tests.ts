@@ -513,7 +513,7 @@ config.merge({
 });
 cssRule.merge({ use: { swc: { loader: 'builtin:swc-loader' } } });
 
-// All write paths must agree with the types returned by get().
+// Direct writes and top-level merge fields validate known key types.
 config.set('mode', 'development').merge({ mode: 'production' });
 swcUse.set('loader', undefined);
 const mode = config.getOrCompute('mode', () => 'development');
@@ -531,7 +531,7 @@ cssRule.merge({ resourceQuery: 123 });
 // @ts-expect-error loader values must be strings
 swcUse.getOrCompute('loader', () => 123);
 
-// Partial nested rules retain the chain merge format and validate known keys.
+// Nested merge objects stay loose to support partial patches and named maps.
 config.merge({
   entry: { main: ['./src/index.js'] },
   output: { filename: '[name].js', customMetadata: true },
@@ -544,13 +544,32 @@ config.merge({
   },
   optimization: { minimizer: { custom: { plugin: rspack.DefinePlugin } } },
 });
-// @ts-expect-error nested loader writes cannot bypass validation
-config.merge({ module: { rule: { css: { use: { css: { loader: 123 } } } } } });
-// @ts-expect-error merging through module must validate child rules too
-config.module.merge({ rule: { css: { type: 123 } } });
 config.set('customMetadata', 123).merge({ customMetadata: false }, ['mode']);
 const customValue = config.getOrCompute('customMetadata', () => 123);
 expectTypeEqual<typeof customValue, any>();
+
+// Nested merge patches can update part of an existing object.
+config.module.merge({ rule: { css: { type: 'css' } } });
+cssRule.merge({
+  rules: { nested: { use: { css: { loader: 'css-loader' } } } },
+  oneOf: { inline: { resourceQuery: /inline/ } },
+});
+config.output.library({ type: 'var', name: 'foo' });
+config.output.merge({ library: { name: 'bar' } });
+config.merge({ output: { library: { name: 'baz' } } });
+config.output.merge({ filename: ({ filename }) => filename || '[name].js' });
+cssRule.merge({ resourceQuery: /inline/ });
+config.merge({ plugins: [new rspack.DefinePlugin({})] });
+
+// Array items, callbacks and replacement values retain their original types.
+// @ts-expect-error array elements must remain complete plugin instances
+config.merge({ plugins: [{}] });
+// @ts-expect-error filename callbacks must still return strings
+config.output.merge({ filename: () => 123 });
+// @ts-expect-error set replaces the entire value rather than merging it
+config.output.set('library', { name: 'bar' });
+// @ts-expect-error computed values must also be complete
+config.output.getOrCompute('library', () => ({ name: 'bar' }));
 
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;
