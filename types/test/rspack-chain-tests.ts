@@ -562,6 +562,20 @@ config.merge({ plugins: [{}] });
 // @ts-expect-error filename callbacks must still return strings
 config.output.merge({ filename: () => 123 });
 
+// Chain merge containers require named maps with valid entry or object values.
+// @ts-expect-error entry shorthands are not supported by merge
+config.merge({ entry: './src/index.js' });
+// @ts-expect-error entry functions are not evaluated by merge
+config.merge({ entry: () => './src/index.js' });
+// @ts-expect-error use shorthands are not supported by merge
+cssRule.merge({ use: 'style-loader' });
+// @ts-expect-error use arrays containing strings are not supported by merge
+cssRule.merge({ use: ['style-loader'] });
+// @ts-expect-error rule patches must be objects
+config.module.merge({ rule: { css: 123 } });
+// @ts-expect-error default rule patches must be objects
+config.module.merge({ defaultRule: { css: 123 } });
+
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;
 

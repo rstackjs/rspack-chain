@@ -20,11 +20,11 @@ declare namespace __Config {
       ? Value | Record<string, unknown>
       : Value;
 
-  type MergeInput<OptionsType, NamedKeys extends keyof OptionsType = never> = {
-    [Key in keyof OptionsType]?: Key extends NamedKeys
-      ? OptionsType[Key] | Record<string, unknown>
-      : MergeValue<OptionsType[Key]>;
+  type MergeInput<OptionsType> = {
+    [Key in keyof OptionsType]?: MergeValue<OptionsType[Key]>;
   } & Record<string, any>;
+
+  type NamedPatches = Record<string, Record<string, any>>;
 
   class Chained<Parent> {
     batch(handler: (chained: this) => void): this;
@@ -50,10 +50,11 @@ declare namespace __Config {
     ): this;
   }
 
-  class ChainedMap<Parent, OptionsType = any> extends TypedChainedMap<
+  class ChainedMap<
     Parent,
-    any
-  > {
+    OptionsType = any,
+    MergeOverrides = unknown,
+  > extends TypedChainedMap<Parent, any> {
     // Known keys share their read/write types; custom keys remain unrestricted.
     get<Key extends PropertyKey>(
       key: Key,
@@ -68,7 +69,11 @@ declare namespace __Config {
         ? () => OptionsType[Key] | undefined
         : () => any,
     ): Key extends keyof OptionsType ? OptionsType[Key] | undefined : any;
-    merge(obj: MergeInput<OptionsType>, omit?: string[]): this;
+    // Apply chain-specific container types without loosening their shape.
+    merge(
+      obj: MergeInput<Omit<OptionsType, keyof MergeOverrides>> & MergeOverrides,
+      omit?: string[],
+    ): this;
   }
   class TypedChainedSet<Parent, Value> extends Chained<Parent> {
     add(value: Value): this;
@@ -91,7 +96,13 @@ declare namespace __Config {
 type RspackConfig = Required<Configuration>;
 export declare class RspackChain extends __Config.ChainedMap<
   void,
-  Configuration
+  Configuration,
+  {
+    entry?: Record<
+      string,
+      RspackChain.RspackEntryObject | RspackChain.RspackEntryObject[]
+    >;
+  }
 > {
   entryPoints: RspackChain.TypedChainedMap<
     RspackChain,
@@ -153,10 +164,11 @@ export declare namespace RspackChain {
     Parent,
     OptionsType
   > {}
-  class ChainedMap<Parent, OptionsType = any> extends __Config.ChainedMap<
+  class ChainedMap<
     Parent,
-    OptionsType
-  > {}
+    OptionsType = any,
+    MergeOverrides = unknown,
+  > extends __Config.ChainedMap<Parent, OptionsType, MergeOverrides> {}
   class TypedChainedSet<Parent, Value> extends __Config.TypedChainedSet<
     Parent,
     Value
@@ -211,7 +223,8 @@ export declare namespace RspackChain {
 
   class Module extends ChainedMap<
     RspackChain,
-    NonNullable<Configuration['module']>
+    NonNullable<Configuration['module']>,
+    { rule?: __Config.NamedPatches; defaultRule?: __Config.NamedPatches }
   > {
     defaultRules: TypedChainedMap<this, { [key: string]: Rule }>;
     rules: TypedChainedMap<this, { [key: string]: Rule }>;
@@ -367,15 +380,17 @@ export declare namespace RspackChain {
   type RspackRuleSet = Required<RuleSetRule>;
 
   class Rule<T = Module>
-    extends ChainedMap<T, RuleSetRule>
+    extends ChainedMap<
+      T,
+      RuleSetRule,
+      {
+        use?: __Config.NamedPatches;
+        rules?: __Config.NamedPatches;
+        oneOf?: __Config.NamedPatches;
+      }
+    >
     implements Orderable
   {
-    // These child collections also accept named maps instead of arrays.
-    merge(
-      obj: __Config.MergeInput<RuleSetRule, 'use' | 'rules' | 'oneOf'>,
-      omit?: string[],
-    ): this;
-
     uses: TypedChainedMap<this, { [key: string]: Use }>;
     include: TypedChainedSet<this, RspackRuleSet['include']>;
     exclude: TypedChainedSet<this, RspackRuleSet['exclude']>;
