@@ -7,6 +7,16 @@ import { RspackChain } from 'rspack-chain';
 
 function expectType<T>(value: T) {}
 
+// Unlike assignability checks, this also rejects an unexpected `any`.
+type Equal<A, B> =
+  (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+    ? true
+    : false;
+
+function expectTypeEqual<A, B>(
+  ..._args: Equal<A, B> extends true ? [] : [never]
+) {}
+
 const config = new RspackChain();
 
 config.module
@@ -27,6 +37,38 @@ config.module
     expectType<string>(options);
     return options;
   });
+
+const typedSwcUse = config.module
+  .rule('javascript')
+  .use<rspack.SwcLoaderOptions>('swc');
+const typedSwcOptions = typedSwcUse.get('options');
+expectTypeEqual<typeof typedSwcOptions, rspack.SwcLoaderOptions | undefined>();
+typedSwcUse.set('options', { detectSyntax: 'auto' });
+typedSwcUse.merge({ options: { detectSyntax: 'auto' } });
+const computedSwcOptions = typedSwcUse.getOrCompute('options', () => ({
+  detectSyntax: 'auto',
+}));
+expectTypeEqual<
+  typeof computedSwcOptions,
+  rspack.SwcLoaderOptions | undefined
+>();
+// @ts-expect-error typed loader options cannot be strings
+typedSwcUse.options('invalid');
+// @ts-expect-error typed option writes must preserve the concrete options type
+typedSwcUse.set('options', 'invalid');
+// @ts-expect-error merging cannot bypass the concrete options type
+typedSwcUse.merge({ options: 'invalid' });
+// @ts-expect-error computed options must preserve the concrete options type
+typedSwcUse.getOrCompute('options', () => 'invalid');
+// @ts-expect-error tap callbacks must return the concrete options type
+typedSwcUse.tap(() => 'invalid');
+
+const typedQueryUse = config.module.rule('query').use<string>('query');
+const typedQueryOptions = typedQueryUse.get('options');
+expectTypeEqual<typeof typedQueryOptions, string | undefined>();
+typedQueryUse.set('options', 'cacheDirectory=true');
+// @ts-expect-error string loader options cannot be objects
+typedQueryUse.set('options', { cacheDirectory: true });
 
 config
   // entry
@@ -438,6 +480,77 @@ config
 
 // @ts-expect-error plugin paths are not supported
 config.plugin('asString').use('package-name-or-path');
+
+// Known keys return precise types, including undefined for unset values.
+const experiments = config.get('experiments');
+expectTypeEqual<typeof experiments, rspack.Configuration['experiments']>();
+
+const library = config.output.get('library');
+expectTypeEqual<
+  typeof library,
+  NonNullable<rspack.Configuration['output']>['library']
+>();
+
+const cssRule = config.module.rule('css');
+const resourceQuery = cssRule.get('resourceQuery');
+expectTypeEqual<typeof resourceQuery, rspack.RuleSetRule['resourceQuery']>();
+
+const swcUse = cssRule.use('swc');
+const loader = swcUse.get('loader');
+expectTypeEqual<typeof loader, string | undefined>();
+
+const loaderOptions = swcUse.get('options');
+expectTypeEqual<
+  typeof loaderOptions,
+  rspack.RuleSetLoaderWithOptions['options']
+>();
+
+// Custom keys and chain-specific merge structures remain compatible.
+const metadata = config.set('customMetadata', true).get('customMetadata');
+expectTypeEqual<typeof metadata, any>();
+config.merge({
+  plugin: { example: { plugin: rspack.DefinePlugin, args: [{}] } },
+});
+cssRule.merge({ use: { swc: { loader: 'builtin:swc-loader' } } });
+
+// All write paths must agree with the types returned by get().
+config.set('mode', 'development').merge({ mode: 'production' });
+swcUse.set('loader', undefined);
+const mode = config.getOrCompute('mode', () => 'development');
+expectTypeEqual<typeof mode, rspack.Configuration['mode']>();
+// @ts-expect-error mode cannot contain a number
+config.set('mode', 123);
+// @ts-expect-error merging cannot bypass the known key type
+config.merge({ mode: 123 });
+// @ts-expect-error computed values must match the known key type
+config.getOrCompute('mode', () => 123);
+// @ts-expect-error output keys are checked too
+config.output.set('filename', 123);
+// @ts-expect-error rule keys are checked too
+cssRule.merge({ resourceQuery: 123 });
+// @ts-expect-error loader values must be strings
+swcUse.getOrCompute('loader', () => 123);
+
+// Partial nested rules retain the chain merge format and validate known keys.
+config.merge({
+  entry: { main: ['./src/index.js'] },
+  output: { filename: '[name].js', customMetadata: true },
+  module: {
+    rule: {
+      css: {
+        oneOf: { inline: { use: { css: { options: { modules: true } } } } },
+      },
+    },
+  },
+  optimization: { minimizer: { custom: { plugin: rspack.DefinePlugin } } },
+});
+// @ts-expect-error nested loader writes cannot bypass validation
+config.merge({ module: { rule: { css: { use: { css: { loader: 123 } } } } } });
+// @ts-expect-error merging through module must validate child rules too
+config.module.merge({ rule: { css: { type: 123 } } });
+config.set('customMetadata', 123).merge({ customMetadata: false }, ['mode']);
+const customValue = config.getOrCompute('customMetadata', () => 123);
+expectTypeEqual<typeof customValue, any>();
 
 // Test TypedChainedMap
 const entryPoints = config.entryPoints;

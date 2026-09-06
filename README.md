@@ -1051,6 +1051,7 @@ config.module
   .rule('javascript')
   .use<SwcLoaderOptions>('swc')
   .loader('builtin:swc-loader')
+  .options({})
   .tap((options) => ({
     ...options,
     jsc: {
