@@ -19,6 +19,57 @@ function expectTypeEqual<A, B>(
 
 const config = new RspackChain();
 
+config.module
+  .rule('javascript')
+  .use<rspack.SwcLoaderOptions>('swc')
+  .loader('builtin:swc-loader')
+  .options({ detectSyntax: 'auto' })
+  .tap((options) => {
+    expectType<rspack.SwcLoaderOptions>(options);
+    return options;
+  });
+
+config.module
+  .rule('query')
+  .use<string>('query')
+  .options('cacheDirectory=true')
+  .tap((options) => {
+    expectType<string>(options);
+    return options;
+  });
+
+const typedSwcUse = config.module
+  .rule('javascript')
+  .use<rspack.SwcLoaderOptions>('swc');
+const typedSwcOptions = typedSwcUse.get('options');
+expectTypeEqual<typeof typedSwcOptions, rspack.SwcLoaderOptions | undefined>();
+typedSwcUse.set('options', { detectSyntax: 'auto' });
+typedSwcUse.merge({ options: { detectSyntax: 'auto' } });
+const computedSwcOptions = typedSwcUse.getOrCompute('options', () => ({
+  detectSyntax: 'auto',
+}));
+expectTypeEqual<
+  typeof computedSwcOptions,
+  rspack.SwcLoaderOptions | undefined
+>();
+// @ts-expect-error typed loader options cannot be strings
+typedSwcUse.options('invalid');
+// @ts-expect-error typed option writes must preserve the concrete options type
+typedSwcUse.set('options', 'invalid');
+// @ts-expect-error merging cannot bypass the concrete options type
+typedSwcUse.merge({ options: 'invalid' });
+// @ts-expect-error computed options must preserve the concrete options type
+typedSwcUse.getOrCompute('options', () => 'invalid');
+// @ts-expect-error tap callbacks must return the concrete options type
+typedSwcUse.tap(() => 'invalid');
+
+const typedQueryUse = config.module.rule('query').use<string>('query');
+const typedQueryOptions = typedQueryUse.get('options');
+expectTypeEqual<typeof typedQueryOptions, string | undefined>();
+typedQueryUse.set('options', 'cacheDirectory=true');
+// @ts-expect-error string loader options cannot be objects
+typedQueryUse.set('options', { cacheDirectory: true });
+
 config
   // entry
   .entry('main')
