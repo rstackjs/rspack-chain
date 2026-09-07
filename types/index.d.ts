@@ -531,7 +531,7 @@ export declare namespace RspackChain {
     ident(
       value: NonNullable<RuleSetLoaderWithOptions['ident']> | undefined,
     ): this;
-    loader(value: string | undefined): this;
+    loader(value: string): this;
     options(value: Options | undefined): this;
     parallel(value: LoaderParallelOptions | undefined): this;
 
