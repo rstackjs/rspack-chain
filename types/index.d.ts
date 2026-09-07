@@ -119,28 +119,30 @@ export declare class RspackChain extends __Config.ChainedMap<
   resolveLoader: RspackChain.ResolveLoader;
   devServer: RspackChain.DevServer & ((value: false) => this);
 
-  context(value: RspackConfig['context']): this;
-  mode(value: RspackConfig['mode']): this;
-  devtool(value: RspackChain.DevTool): this;
-  target(value: RspackConfig['target']): this;
-  watch(value: RspackConfig['watch']): this;
-  watchOptions(value: RspackConfig['watchOptions']): this;
-  externals(value: RspackConfig['externals']): this;
-  externalsType(value: RspackConfig['externalsType']): this;
-  externalsPresets(value: RspackConfig['externalsPresets']): this;
-  stats(value: RspackConfig['stats']): this;
-  experiments(value: RspackConfig['experiments']): this;
-  amd(value: RspackConfig['amd']): this;
-  bail(value: RspackConfig['bail']): this;
-  cache(value: RspackConfig['cache']): this;
-  dependencies(value: RspackConfig['dependencies']): this;
-  extends(value: RspackConfig['extends']): this;
-  ignoreWarnings(value: RspackConfig['ignoreWarnings']): this;
-  loader(value: RspackConfig['loader']): this;
-  name(value: RspackConfig['name']): this;
-  infrastructureLogging(value: RspackConfig['infrastructureLogging']): this;
-  lazyCompilation(value: RspackConfig['lazyCompilation']): this;
-  incremental(value: RspackConfig['incremental']): this;
+  context(value: RspackConfig['context'] | undefined): this;
+  mode(value: RspackConfig['mode'] | undefined): this;
+  devtool(value: RspackChain.DevTool | undefined): this;
+  target(value: RspackConfig['target'] | undefined): this;
+  watch(value: RspackConfig['watch'] | undefined): this;
+  watchOptions(value: RspackConfig['watchOptions'] | undefined): this;
+  externals(value: RspackConfig['externals'] | undefined): this;
+  externalsType(value: RspackConfig['externalsType'] | undefined): this;
+  externalsPresets(value: RspackConfig['externalsPresets'] | undefined): this;
+  stats(value: RspackConfig['stats'] | undefined): this;
+  experiments(value: RspackConfig['experiments'] | undefined): this;
+  amd(value: RspackConfig['amd'] | undefined): this;
+  bail(value: RspackConfig['bail'] | undefined): this;
+  cache(value: RspackConfig['cache'] | undefined): this;
+  dependencies(value: RspackConfig['dependencies'] | undefined): this;
+  extends(value: RspackConfig['extends'] | undefined): this;
+  ignoreWarnings(value: RspackConfig['ignoreWarnings'] | undefined): this;
+  loader(value: RspackConfig['loader'] | undefined): this;
+  name(value: RspackConfig['name'] | undefined): this;
+  infrastructureLogging(
+    value: RspackConfig['infrastructureLogging'] | undefined,
+  ): this;
+  lazyCompilation(value: RspackConfig['lazyCompilation'] | undefined): this;
+  incremental(value: RspackConfig['incremental'] | undefined): this;
 
   entry(name: string): RspackChain.EntryPoint;
   plugin(name: string): RspackChain.Plugin<this, PluginInstance>;
@@ -233,7 +235,7 @@ export declare namespace RspackChain {
     parser: ChainedMap<this>;
     defaultRule(name: string): Rule;
     rule(name: string): Rule;
-    noParse(value: RspackModule['noParse']): this;
+    noParse(value: RspackModule['noParse'] | undefined): this;
   }
 
   type RspackOutput = Required<NonNullable<Configuration['output']>>;
@@ -242,68 +244,90 @@ export declare namespace RspackChain {
     RspackChain,
     NonNullable<Configuration['output']>
   > {
-    assetModuleFilename(value: RspackOutput['assetModuleFilename']): this;
-    asyncChunks(value: RspackOutput['asyncChunks']): this;
-    bundlerInfo(value: RspackOutput['bundlerInfo']): this;
-    chunkFilename(value: RspackOutput['chunkFilename']): this;
-    chunkLoadTimeout(value: RspackOutput['chunkLoadTimeout']): this;
-    chunkLoadingGlobal(value: RspackOutput['chunkLoadingGlobal']): this;
-    chunkLoading(value: RspackOutput['chunkLoading']): this;
-    chunkFormat(value: RspackOutput['chunkFormat']): this;
-    crossOriginLoading(value: RspackOutput['crossOriginLoading']): this;
-    cssChunkFilename(value: RspackOutput['cssChunkFilename']): this;
-    cssFilename(value: RspackOutput['cssFilename']): this;
+    assetModuleFilename(
+      value: RspackOutput['assetModuleFilename'] | undefined,
+    ): this;
+    asyncChunks(value: RspackOutput['asyncChunks'] | undefined): this;
+    bundlerInfo(value: RspackOutput['bundlerInfo'] | undefined): this;
+    chunkFilename(value: RspackOutput['chunkFilename'] | undefined): this;
+    chunkLoadTimeout(value: RspackOutput['chunkLoadTimeout'] | undefined): this;
+    chunkLoadingGlobal(
+      value: RspackOutput['chunkLoadingGlobal'] | undefined,
+    ): this;
+    chunkLoading(value: RspackOutput['chunkLoading'] | undefined): this;
+    chunkFormat(value: RspackOutput['chunkFormat'] | undefined): this;
+    crossOriginLoading(
+      value: RspackOutput['crossOriginLoading'] | undefined,
+    ): this;
+    cssChunkFilename(value: RspackOutput['cssChunkFilename'] | undefined): this;
+    cssFilename(value: RspackOutput['cssFilename'] | undefined): this;
     devtoolFallbackModuleFilenameTemplate(
-      value: RspackOutput['devtoolFallbackModuleFilenameTemplate'],
+      value: RspackOutput['devtoolFallbackModuleFilenameTemplate'] | undefined,
     ): this;
     devtoolModuleFilenameTemplate(
-      value: RspackOutput['devtoolModuleFilenameTemplate'],
+      value: RspackOutput['devtoolModuleFilenameTemplate'] | undefined,
     ): this;
-    devtoolNamespace(value: RspackOutput['devtoolNamespace']): this;
+    devtoolNamespace(value: RspackOutput['devtoolNamespace'] | undefined): this;
     enabledChunkLoadingTypes(
-      value: RspackOutput['enabledChunkLoadingTypes'],
+      value: RspackOutput['enabledChunkLoadingTypes'] | undefined,
     ): this;
-    filename(value: RspackOutput['filename']): this;
-    globalObject(value: RspackOutput['globalObject']): this;
-    uniqueName(value: RspackOutput['uniqueName']): this;
-    hashDigest(value: RspackOutput['hashDigest']): this;
-    hashDigestLength(value: RspackOutput['hashDigestLength']): this;
-    hashFunction(value: RspackOutput['hashFunction']): this;
-    hashSalt(value: RspackOutput['hashSalt']): this;
-    hotUpdateChunkFilename(value: RspackOutput['hotUpdateChunkFilename']): this;
-    hotUpdateGlobal(value: RspackOutput['hotUpdateGlobal']): this;
-    hotUpdateMainFilename(value: RspackOutput['hotUpdateMainFilename']): this;
-    library(value: RspackOutput['library']): this;
-    importFunctionName(value: RspackOutput['importFunctionName']): this;
-    importMetaName(value: RspackOutput['importMetaName']): this;
-    path(value: RspackOutput['path']): this;
-    pathinfo(value: RspackOutput['pathinfo']): this;
-    publicPath(value: RspackOutput['publicPath']): this;
-    scriptType(value: RspackOutput['scriptType']): this;
-    sourceMapFilename(value: RspackOutput['sourceMapFilename']): this;
+    filename(value: RspackOutput['filename'] | undefined): this;
+    globalObject(value: RspackOutput['globalObject'] | undefined): this;
+    uniqueName(value: RspackOutput['uniqueName'] | undefined): this;
+    hashDigest(value: RspackOutput['hashDigest'] | undefined): this;
+    hashDigestLength(value: RspackOutput['hashDigestLength'] | undefined): this;
+    hashFunction(value: RspackOutput['hashFunction'] | undefined): this;
+    hashSalt(value: RspackOutput['hashSalt'] | undefined): this;
+    hotUpdateChunkFilename(
+      value: RspackOutput['hotUpdateChunkFilename'] | undefined,
+    ): this;
+    hotUpdateGlobal(value: RspackOutput['hotUpdateGlobal'] | undefined): this;
+    hotUpdateMainFilename(
+      value: RspackOutput['hotUpdateMainFilename'] | undefined,
+    ): this;
+    library(value: RspackOutput['library'] | undefined): this;
+    importFunctionName(
+      value: RspackOutput['importFunctionName'] | undefined,
+    ): this;
+    importMetaName(value: RspackOutput['importMetaName'] | undefined): this;
+    path(value: RspackOutput['path'] | undefined): this;
+    pathinfo(value: RspackOutput['pathinfo'] | undefined): this;
+    publicPath(value: RspackOutput['publicPath'] | undefined): this;
+    scriptType(value: RspackOutput['scriptType'] | undefined): this;
+    sourceMapFilename(
+      value: RspackOutput['sourceMapFilename'] | undefined,
+    ): this;
     strictModuleErrorHandling(
-      value: RspackOutput['strictModuleErrorHandling'],
+      value: RspackOutput['strictModuleErrorHandling'] | undefined,
     ): this;
     strictModuleExceptionHandling(
-      value: RspackOutput['strictModuleExceptionHandling'],
+      value: RspackOutput['strictModuleExceptionHandling'] | undefined,
     ): this;
-    trustedTypes(value: RspackOutput['trustedTypes']): this;
-    workerChunkLoading(value: RspackOutput['workerChunkLoading']): this;
-    workerPublicPath(value: RspackOutput['workerPublicPath']): this;
-    workerWasmLoading(value: RspackOutput['workerWasmLoading']): this;
-    enabledLibraryTypes(value: RspackOutput['enabledLibraryTypes']): this;
-    environment(value: RspackOutput['environment']): this;
-    compareBeforeEmit(value: RspackOutput['compareBeforeEmit']): this;
-    wasmLoading(value: RspackOutput['wasmLoading']): this;
+    trustedTypes(value: RspackOutput['trustedTypes'] | undefined): this;
+    workerChunkLoading(
+      value: RspackOutput['workerChunkLoading'] | undefined,
+    ): this;
+    workerPublicPath(value: RspackOutput['workerPublicPath'] | undefined): this;
+    workerWasmLoading(
+      value: RspackOutput['workerWasmLoading'] | undefined,
+    ): this;
+    enabledLibraryTypes(
+      value: RspackOutput['enabledLibraryTypes'] | undefined,
+    ): this;
+    environment(value: RspackOutput['environment'] | undefined): this;
+    compareBeforeEmit(
+      value: RspackOutput['compareBeforeEmit'] | undefined,
+    ): this;
+    wasmLoading(value: RspackOutput['wasmLoading'] | undefined): this;
     webassemblyModuleFilename(
-      value: RspackOutput['webassemblyModuleFilename'],
+      value: RspackOutput['webassemblyModuleFilename'] | undefined,
     ): this;
     enabledWasmLoadingTypes(
-      value: RspackOutput['enabledWasmLoadingTypes'],
+      value: RspackOutput['enabledWasmLoadingTypes'] | undefined,
     ): this;
-    iife(value: RspackOutput['iife']): this;
-    module(value: RspackOutput['module']): this;
-    clean(value: RspackOutput['clean']): this;
+    iife(value: RspackOutput['iife'] | undefined): this;
+    module(value: RspackOutput['module'] | undefined): this;
+    clean(value: RspackOutput['clean'] | undefined): this;
   }
 
   type RspackDevServer = Required<
@@ -311,7 +335,9 @@ export declare namespace RspackChain {
   >;
 
   type DevServerShorthandMethods<T> = {
-    [K in keyof RspackDevServer]-?: (value: RspackDevServer[K]) => T;
+    [K in keyof RspackDevServer]-?: (
+      value: RspackDevServer[K] | undefined,
+    ) => T;
   };
 
   // rslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -325,10 +351,12 @@ export declare namespace RspackChain {
     false
   >;
   class Performance extends ChainedMap<RspackChain> {
-    hints(value: RspackPerformance['hints']): this;
-    maxEntrypointSize(value: RspackPerformance['maxEntrypointSize']): this;
-    maxAssetSize(value: RspackPerformance['maxAssetSize']): this;
-    assetFilter(value: RspackPerformance['assetFilter']): this;
+    hints(value: RspackPerformance['hints'] | undefined): this;
+    maxEntrypointSize(
+      value: RspackPerformance['maxEntrypointSize'] | undefined,
+    ): this;
+    maxAssetSize(value: RspackPerformance['maxAssetSize'] | undefined): this;
+    assetFilter(value: RspackPerformance['assetFilter'] | undefined): this;
   }
 
   type RspackResolve = Required<NonNullable<Configuration['resolve']>>;
@@ -361,14 +389,16 @@ export declare namespace RspackChain {
     modules: TypedChainedSet<this, RspackResolve['modules'][number]>;
     fallback: TypedChainedMap<this, RspackResolveAlias>;
     byDependency: TypedChainedMap<this, RspackResolve['byDependency']>;
-    enforceExtension(value: RspackResolve['enforceExtension']): this;
-    fullySpecified(value: RspackResolve['fullySpecified']): this;
-    pnp(value: RspackResolve['pnp']): this;
-    symlinks(value: RspackResolve['symlinks']): this;
-    preferRelative(value: RspackResolve['preferRelative']): this;
-    preferAbsolute(value: RspackResolve['preferAbsolute']): this;
+    enforceExtension(
+      value: RspackResolve['enforceExtension'] | undefined,
+    ): this;
+    fullySpecified(value: RspackResolve['fullySpecified'] | undefined): this;
+    pnp(value: RspackResolve['pnp'] | undefined): this;
+    symlinks(value: RspackResolve['symlinks'] | undefined): this;
+    preferRelative(value: RspackResolve['preferRelative'] | undefined): this;
+    preferAbsolute(value: RspackResolve['preferAbsolute'] | undefined): this;
 
-    tsConfig(value: RspackResolve['tsConfig']): this;
+    tsConfig(value: RspackResolve['tsConfig'] | undefined): this;
   }
   class RuleResolve<T = RspackChain> extends Resolve<T> {}
 
@@ -399,25 +429,29 @@ export declare namespace RspackChain {
     oneOfs: TypedChainedMap<this, { [key: string]: Rule<Rule> }>;
     resolve: RuleResolve<Rule<T>>;
 
-    dependency(value: RspackRuleSet['dependency']): this;
-    descriptionData(value: RspackRuleSet['descriptionData']): this;
-    enforce(value: RspackRuleSet['enforce']): this;
-    extractSourceMap(value: RspackRuleSet['extractSourceMap']): this;
-    issuer(value: RspackRuleSet['issuer']): this;
-    issuerLayer(value: RspackRuleSet['issuerLayer']): this;
-    layer(value: RspackRuleSet['layer']): this;
-    mimetype(value: RspackRuleSet['mimetype']): this;
-    phase(value: RspackRuleSet['phase']): this;
-    parser(value: RspackRuleSet['parser']): this;
-    generator(value: RspackRuleSet['generator']): this;
-    resource(value: RspackRuleSet['resource']): this;
-    resourceFragment(value: RspackRuleSet['resourceFragment']): this;
-    resourceQuery(value: RspackRuleSet['resourceQuery']): this;
-    scheme(value: RspackRuleSet['scheme']): this;
-    sideEffects(value: RspackRuleSet['sideEffects']): this;
-    with(value: RspackRuleSet['with']): this;
-    test(value: RspackRuleSet['test']): this;
-    type(value: RspackRuleSet['type']): this;
+    dependency(value: RspackRuleSet['dependency'] | undefined): this;
+    descriptionData(value: RspackRuleSet['descriptionData'] | undefined): this;
+    enforce(value: RspackRuleSet['enforce'] | undefined): this;
+    extractSourceMap(
+      value: RspackRuleSet['extractSourceMap'] | undefined,
+    ): this;
+    issuer(value: RspackRuleSet['issuer'] | undefined): this;
+    issuerLayer(value: RspackRuleSet['issuerLayer'] | undefined): this;
+    layer(value: RspackRuleSet['layer'] | undefined): this;
+    mimetype(value: RspackRuleSet['mimetype'] | undefined): this;
+    phase(value: RspackRuleSet['phase'] | undefined): this;
+    parser(value: RspackRuleSet['parser'] | undefined): this;
+    generator(value: RspackRuleSet['generator'] | undefined): this;
+    resource(value: RspackRuleSet['resource'] | undefined): this;
+    resourceFragment(
+      value: RspackRuleSet['resourceFragment'] | undefined,
+    ): this;
+    resourceQuery(value: RspackRuleSet['resourceQuery'] | undefined): this;
+    scheme(value: RspackRuleSet['scheme'] | undefined): this;
+    sideEffects(value: RspackRuleSet['sideEffects'] | undefined): this;
+    with(value: RspackRuleSet['with'] | undefined): this;
+    test(value: RspackRuleSet['test'] | undefined): this;
+    type(value: RspackRuleSet['type'] | undefined): this;
 
     use<Options extends LoaderOptions = LoaderOptions>(
       name: string,
@@ -440,25 +474,35 @@ export declare namespace RspackChain {
     splitChunks: TypedChainedMap<this, SplitChunksObject> &
       ((value: SplitChunksObject | false) => this);
 
-    minimize(value: RspackOptimization['minimize']): this;
-    runtimeChunk(value: RspackOptimization['runtimeChunk']): this;
-    emitOnErrors(value: RspackOptimization['emitOnErrors']): this;
-    moduleIds(value: RspackOptimization['moduleIds']): this;
-    chunkIds(value: RspackOptimization['chunkIds']): this;
-    nodeEnv(value: RspackOptimization['nodeEnv']): this;
-    removeEmptyChunks(value: RspackOptimization['removeEmptyChunks']): this;
-    mergeDuplicateChunks(
-      value: RspackOptimization['mergeDuplicateChunks'],
+    minimize(value: RspackOptimization['minimize'] | undefined): this;
+    runtimeChunk(value: RspackOptimization['runtimeChunk'] | undefined): this;
+    emitOnErrors(value: RspackOptimization['emitOnErrors'] | undefined): this;
+    moduleIds(value: RspackOptimization['moduleIds'] | undefined): this;
+    chunkIds(value: RspackOptimization['chunkIds'] | undefined): this;
+    nodeEnv(value: RspackOptimization['nodeEnv'] | undefined): this;
+    removeEmptyChunks(
+      value: RspackOptimization['removeEmptyChunks'] | undefined,
     ): this;
-    providedExports(value: RspackOptimization['providedExports']): this;
-    usedExports(value: RspackOptimization['usedExports']): this;
-    concatenateModules(value: RspackOptimization['concatenateModules']): this;
-    sideEffects(value: RspackOptimization['sideEffects']): this;
-    mangleExports(value: RspackOptimization['mangleExports']): this;
-    innerGraph(value: RspackOptimization['innerGraph']): this;
-    realContentHash(value: RspackOptimization['realContentHash']): this;
-    avoidEntryIife(value: RspackOptimization['avoidEntryIife']): this;
-    inlineExports(value: RspackOptimization['inlineExports']): this;
+    mergeDuplicateChunks(
+      value: RspackOptimization['mergeDuplicateChunks'] | undefined,
+    ): this;
+    providedExports(
+      value: RspackOptimization['providedExports'] | undefined,
+    ): this;
+    usedExports(value: RspackOptimization['usedExports'] | undefined): this;
+    concatenateModules(
+      value: RspackOptimization['concatenateModules'] | undefined,
+    ): this;
+    sideEffects(value: RspackOptimization['sideEffects'] | undefined): this;
+    mangleExports(value: RspackOptimization['mangleExports'] | undefined): this;
+    innerGraph(value: RspackOptimization['innerGraph'] | undefined): this;
+    realContentHash(
+      value: RspackOptimization['realContentHash'] | undefined,
+    ): this;
+    avoidEntryIife(
+      value: RspackOptimization['avoidEntryIife'] | undefined,
+    ): this;
+    inlineExports(value: RspackOptimization['inlineExports'] | undefined): this;
   }
 
   interface RuntimeChunk {
@@ -484,10 +528,12 @@ export declare namespace RspackChain {
     >
     implements Orderable
   {
-    ident(value: NonNullable<RuleSetLoaderWithOptions['ident']>): this;
-    loader(value: string): this;
-    options(value: Options): this;
-    parallel(value: LoaderParallelOptions): this;
+    ident(
+      value: NonNullable<RuleSetLoaderWithOptions['ident']> | undefined,
+    ): this;
+    loader(value: string | undefined): this;
+    options(value: Options | undefined): this;
+    parallel(value: LoaderParallelOptions | undefined): this;
 
     tap(f: (options: Options) => Options): this;
 

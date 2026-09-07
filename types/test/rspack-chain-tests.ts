@@ -513,6 +513,25 @@ config.merge({
 });
 cssRule.merge({ use: { swc: { loader: 'builtin:swc-loader' } } });
 
+// Shorthand setters accept unset values returned by get().
+config.mode(config.get('mode'));
+config.output.filename(config.output.get('filename'));
+config.module.noParse(config.module.get('noParse'));
+cssRule.with(cssRule.get('with')).resourceQuery(cssRule.get('resourceQuery'));
+swcUse.loader(swcUse.get('loader')).options(swcUse.get('options'));
+typedSwcUse.options(typedSwcUse.get('options'));
+swcUse.ident(undefined).parallel(undefined);
+config.resolve.fullySpecified(undefined);
+config.optimization.minimize(undefined);
+config.performance.hints(undefined);
+config.devServer.host(undefined);
+// @ts-expect-error shorthand setters still reject invalid values
+cssRule.with(123);
+// @ts-expect-error loader values must still be strings
+swcUse.loader(123);
+// @ts-expect-error pass undefined explicitly to clear a value
+swcUse.loader();
+
 // Direct writes and top-level merge fields validate known key types.
 config.set('mode', 'development').merge({ mode: 'production' });
 swcUse.set('loader', undefined);
