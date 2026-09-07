@@ -518,6 +518,10 @@ config.mode(config.get('mode'));
 config.output.filename(config.output.get('filename'));
 config.module.noParse(config.module.get('noParse'));
 cssRule.with(cssRule.get('with')).resourceQuery(cssRule.get('resourceQuery'));
+swcUse.loader(swcUse.get('loader'));
+cssRule.use('swc-copy').loader(swcUse.get('loader'));
+typedSwcUse.loader(typedSwcUse.get('loader'));
+swcUse.loader(undefined);
 swcUse.options(swcUse.get('options'));
 typedSwcUse.options(typedSwcUse.get('options'));
 swcUse.ident(undefined).parallel(undefined);
@@ -529,8 +533,6 @@ config.devServer.host(undefined);
 cssRule.with(123);
 // @ts-expect-error loader values must still be strings
 swcUse.loader(123);
-// @ts-expect-error Rspack requires a loader in each use item
-swcUse.loader(undefined);
 // @ts-expect-error a loader argument is required
 swcUse.loader();
 

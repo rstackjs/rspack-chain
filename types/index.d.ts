@@ -490,7 +490,7 @@ export declare namespace RspackChain {
     implements Orderable
   {
     ident(value: RuleSetLoaderWithOptions['ident']): this;
-    loader(value: string): this;
+    loader(value: string | undefined): this;
     options(value: Options | undefined): this;
     parallel(value: LoaderParallelOptions | undefined): this;
 
