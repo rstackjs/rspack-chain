@@ -94,7 +94,7 @@ declare namespace __Config {
   class ChainedSet<Parent> extends TypedChainedSet<Parent, any> {}
 }
 
-type RspackConfig = Required<Configuration>;
+type RspackConfig = Configuration;
 export declare class RspackChain extends __Config.ChainedMap<
   void,
   Configuration,
@@ -121,7 +121,7 @@ export declare class RspackChain extends __Config.ChainedMap<
 
   context(value: RspackConfig['context']): this;
   mode(value: RspackConfig['mode']): this;
-  devtool(value: RspackChain.DevTool): this;
+  devtool(value: RspackChain.DevTool | undefined): this;
   target(value: RspackConfig['target']): this;
   watch(value: RspackConfig['watch']): this;
   watchOptions(value: RspackConfig['watchOptions']): this;
@@ -220,7 +220,7 @@ export declare namespace RspackChain {
 
   class EntryPoint extends TypedChainedSet<RspackChain, RspackEntryObject> {}
 
-  type RspackModule = Required<NonNullable<Configuration['module']>>;
+  type RspackModule = NonNullable<Configuration['module']>;
 
   class Module extends ChainedMap<
     RspackChain,
@@ -236,7 +236,7 @@ export declare namespace RspackChain {
     noParse(value: RspackModule['noParse']): this;
   }
 
-  type RspackOutput = Required<NonNullable<Configuration['output']>>;
+  type RspackOutput = NonNullable<Configuration['output']>;
 
   class Output extends ChainedMap<
     RspackChain,
@@ -311,7 +311,9 @@ export declare namespace RspackChain {
   >;
 
   type DevServerShorthandMethods<T> = {
-    [K in keyof RspackDevServer]-?: (value: RspackDevServer[K]) => T;
+    [K in keyof RspackDevServer]-?: (
+      value: RspackDevServer[K] | undefined,
+    ) => T;
   };
 
   // rslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
@@ -321,7 +323,7 @@ export declare namespace RspackChain {
   interface DevServer extends DevServerShorthandMethods<DevServer> {}
 
   type RspackPerformance = Exclude<
-    Required<NonNullable<Configuration['performance']>>,
+    NonNullable<Configuration['performance']>,
     false
   >;
   class Performance extends ChainedMap<RspackChain> {
@@ -361,14 +363,16 @@ export declare namespace RspackChain {
     modules: TypedChainedSet<this, RspackResolve['modules'][number]>;
     fallback: TypedChainedMap<this, RspackResolveAlias>;
     byDependency: TypedChainedMap<this, RspackResolve['byDependency']>;
-    enforceExtension(value: RspackResolve['enforceExtension']): this;
-    fullySpecified(value: RspackResolve['fullySpecified']): this;
-    pnp(value: RspackResolve['pnp']): this;
-    symlinks(value: RspackResolve['symlinks']): this;
-    preferRelative(value: RspackResolve['preferRelative']): this;
-    preferAbsolute(value: RspackResolve['preferAbsolute']): this;
+    enforceExtension(
+      value: RspackResolve['enforceExtension'] | undefined,
+    ): this;
+    fullySpecified(value: RspackResolve['fullySpecified'] | undefined): this;
+    pnp(value: RspackResolve['pnp'] | undefined): this;
+    symlinks(value: RspackResolve['symlinks'] | undefined): this;
+    preferRelative(value: RspackResolve['preferRelative'] | undefined): this;
+    preferAbsolute(value: RspackResolve['preferAbsolute'] | undefined): this;
 
-    tsConfig(value: RspackResolve['tsConfig']): this;
+    tsConfig(value: RspackResolve['tsConfig'] | undefined): this;
   }
   class RuleResolve<T = RspackChain> extends Resolve<T> {}
 
@@ -378,7 +382,7 @@ export declare namespace RspackChain {
     packageMains: ChainedSet<this>;
   }
 
-  type RspackRuleSet = Required<RuleSetRule>;
+  type RspackRuleSet = RuleSetRule;
 
   class Rule<T = Module>
     extends ChainedMap<
@@ -393,8 +397,8 @@ export declare namespace RspackChain {
     implements Orderable
   {
     uses: TypedChainedMap<this, { [key: string]: Use }>;
-    include: TypedChainedSet<this, RspackRuleSet['include']>;
-    exclude: TypedChainedSet<this, RspackRuleSet['exclude']>;
+    include: TypedChainedSet<this, NonNullable<RspackRuleSet['include']>>;
+    exclude: TypedChainedSet<this, NonNullable<RspackRuleSet['exclude']>>;
     rules: TypedChainedMap<this, { [key: string]: Rule<Rule> }>;
     oneOfs: TypedChainedMap<this, { [key: string]: Rule<Rule> }>;
     resolve: RuleResolve<Rule<T>>;
@@ -430,10 +434,11 @@ export declare namespace RspackChain {
     after(name: string): this;
   }
 
-  type RspackOptimization = Required<
-    NonNullable<Configuration['optimization']>
+  type RspackOptimization = NonNullable<Configuration['optimization']>;
+  type SplitChunksObject = Exclude<
+    RspackOptimization['splitChunks'],
+    false | undefined
   >;
-  type SplitChunksObject = Exclude<RspackOptimization['splitChunks'], false>;
   class Optimization extends ChainedMap<RspackChain> {
     minimizer(name: string): RspackChain.Plugin<this, PluginInstance>;
     minimizers: TypedChainedMap<this, RspackChain.Plugin<this, PluginInstance>>;
@@ -484,10 +489,10 @@ export declare namespace RspackChain {
     >
     implements Orderable
   {
-    ident(value: NonNullable<RuleSetLoaderWithOptions['ident']>): this;
+    ident(value: RuleSetLoaderWithOptions['ident']): this;
     loader(value: string): this;
-    options(value: Options): this;
-    parallel(value: LoaderParallelOptions): this;
+    options(value: Options | undefined): this;
+    parallel(value: LoaderParallelOptions | undefined): this;
 
     tap(f: (options: Options) => Options): this;
 
@@ -497,7 +502,7 @@ export declare namespace RspackChain {
   }
 
   // [inline-|hidden-|eval-][nosources-][cheap-[module-]]source-map[-debugids].
-  export type DevTool = RspackConfig['devtool'];
+  export type DevTool = NonNullable<RspackConfig['devtool']>;
 
   interface PluginClass<PluginType extends PluginInstance> {
     new (...opts: any[]): PluginType;
