@@ -19,6 +19,18 @@ function expectTypeEqual<A, B>(
 
 const config = new RspackChain();
 
+const orderedRules = config.module.rules.order();
+expectTypeEqual<typeof orderedRules.order, string[]>();
+expectTypeEqual<
+  typeof orderedRules.entries,
+  Record<string, RspackChain.Rule>
+>();
+const [firstRuleName] = orderedRules.order;
+if (firstRuleName) {
+  config.module.rule('custom').before(firstRuleName);
+  expectType<RspackChain.Rule>(orderedRules.entries[firstRuleName]);
+}
+
 config.module
   .rule('javascript')
   .use<rspack.SwcLoaderOptions>('swc')
