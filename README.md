@@ -200,10 +200,27 @@ values();
 // where the key is the object property, and the value
 // corresponding to the key. Will return `undefined` if the backing
 // Map is empty.
-// This will order properties by their name if the value is
-// a ChainedMap that used .before() or .after().
+// Ordering hints do not affect the returned object's property order.
 // returns: Object, undefined if empty
 entries();
+```
+
+```js
+// Returns the entries and their key order after applying .before() and .after().
+// Does not modify the backing Map.
+// returns: { entries: Object, order: Array<string> }
+order();
+```
+
+For example, read the current rule order:
+
+```js
+const config = new RspackChain();
+config.module.rule('js');
+config.module.rule('css');
+config.module.rule('custom').before('js');
+
+config.module.rules.order().order; // ['custom', 'js', 'css']
 ```
 
 ```js
