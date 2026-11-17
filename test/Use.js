@@ -143,3 +143,15 @@ test('cloneFrom handles string options and cloning from itself', () => {
     options: 'key=value',
   });
 });
+
+test('cloneFrom copies an own __proto__ property without changing the prototype', () => {
+  const options = JSON.parse('{"__proto__":{"enabled":true}}');
+  const source = new Use().options(options);
+  const cloned = new Use().cloneFrom(source).get('options');
+
+  expect(Object.getPrototypeOf(cloned)).toBe(Object.prototype);
+  expect(Object.hasOwn(cloned, '__proto__')).toBe(true);
+  expect(cloned).toStrictEqual(options);
+  cloned.__proto__.enabled = false;
+  expect(options.__proto__.enabled).toBe(true);
+});

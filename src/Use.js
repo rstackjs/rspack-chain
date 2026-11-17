@@ -27,12 +27,17 @@ function cloneValue(value, seen = new WeakMap()) {
     : Object.create(prototype);
   seen.set(value, cloned);
   for (const key of Object.keys(value)) {
-    Object.defineProperty(cloned, key, {
-      value: cloneValue(value[key], seen),
-      enumerable: true,
-      configurable: true,
-      writable: true,
-    });
+    const clonedValue = cloneValue(value[key], seen);
+    if (key === '__proto__') {
+      Object.defineProperty(cloned, key, {
+        value: clonedValue,
+        enumerable: true,
+        configurable: true,
+        writable: true,
+      });
+    } else {
+      cloned[key] = clonedValue;
+    }
   }
   return cloned;
 }
@@ -54,12 +59,11 @@ export default Orderable(
       if (source === this) return this;
 
       const seen = new WeakMap();
-      this.store = new Map(
-        Array.from(source.store, ([key, value]) => [
-          key,
-          cloneValue(value, seen),
-        ]),
-      );
+      const store = new Map();
+      for (const [key, value] of source.store) {
+        store.set(key, cloneValue(value, seen));
+      }
+      this.store = store;
       if (preserveOrder) {
         this.__before = source.__before;
         this.__after = source.__after;
