@@ -1077,6 +1077,34 @@ config.module
   }));
 ```
 
+#### module rules uses (loaders): cloning
+
+Use `cloneFrom(source)` to replace a use's configuration with an independent copy
+of another use's configuration, then customize it with the usual chain methods:
+
+```js
+const swcUse = config.module.rule('javascript').use('swc');
+
+config.module
+  .rule('svg')
+  .use('swc')
+  .cloneFrom(swcUse)
+  .before('svgr')
+  .tap((options) => {
+    options.jsc.transform.react.refresh = false;
+    return options;
+  });
+```
+
+The target keeps its name, parent, and existing `before`/`after` ordering.
+Pass `{ preserveOrder: true }` to replace the target's ordering with the source's
+ordering, for example when copying a group of loaders with the same names.
+
+Plain objects, arrays, and regular expressions are cloned. Functions and other
+class instances retain their references. Later configuration changes to the
+source are not synchronized to the target. Explicit `ident` values are copied;
+override or delete the copied `ident` if the loaders need different options.
+
 #### module rules nested rules
 
 ```js
