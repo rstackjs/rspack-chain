@@ -522,3 +522,103 @@ test('ordered oneOfs', () => {
     /\.third$/,
   ]);
 });
+
+test('cloneFrom replaces the full rule tree with independent chain nodes', () => {
+  const shared = { enabled: true };
+  const source = new Rule(null, 'source')
+    .test(/\.js$/)
+    .parser({ javascript: shared })
+    .after('other');
+  source.include.add({ and: [/src/] });
+  source.exclude.add(/vendor/);
+  source.use('swc').loader('builtin:swc-loader').options({ nested: shared });
+  source.rule('nested').use('custom').loader('custom-loader').options(shared);
+  source.oneOf('raw').resourceQuery(/raw/).type('asset/source');
+  source.resolve.fullySpecified(false);
+  source.resolve.alias.set('lib', ['/src/lib']);
+  source.resolve.extensions.add('.js');
+  source.resolve.byDependency.set('esm', { mainFields: ['module'] });
+
+  const parent = new Rule(null, 'parent');
+  parent.oneOf('last').type('asset');
+  const target = parent.oneOf('copy').before('last').sideEffects(false);
+  target.include.add('stale');
+  target.exclude.add('stale');
+  target.use('stale').loader('stale-loader');
+  target.rule('stale').test(/stale/);
+  target.oneOf('stale').test(/stale/);
+  target.resolve.alias.set('stale', 'stale');
+  const original = structuredClone(source.toConfig());
+
+  expect(target.cloneFrom(source)).toBe(target);
+  expect(target.toConfig()).toStrictEqual(original);
+  expect(target.end()).toBe(parent);
+  expect(target.include.end()).toBe(target);
+  expect(target.use('swc').end()).toBe(target);
+  expect(target.rule('nested').use('custom').end().end()).toBe(target);
+  expect(target.oneOf('raw').end()).toBe(target);
+  expect(target.resolve.alias.end().end()).toBe(target);
+  expect(
+    parent.toConfig().oneOf.map((rule) => rule.__ruleNames.at(-1)),
+  ).toStrictEqual(['copy', 'last']);
+  expect(target.oneOf('raw').toConfig().__ruleTypes).toStrictEqual([
+    'rule',
+    'oneOf',
+    'oneOf',
+  ]);
+
+  target.use('swc').tap((options) => {
+    options.nested.enabled = false;
+    return options;
+  });
+  expect(target.rule('nested').use('custom').get('options')).toBe(
+    target.get('parser').javascript,
+  );
+  expect(target.get('parser').javascript.enabled).toBe(false);
+  target.include.values()[0].and.push(/extra/);
+  target.resolve.alias.get('lib').push('/extra/lib');
+  target.resolve.extensions.add('.jsx');
+  target.resolve.byDependency.get('esm').mainFields.push('main');
+  target.oneOf('raw').type('asset/resource');
+  expect(source.toConfig()).toStrictEqual(original);
+});
+
+test.each(['use', 'rule', 'oneOf'])(
+  'cloneFrom retains %s ordering for later edits',
+  (method) => {
+    const configure = (rule, name) =>
+      method === 'use'
+        ? rule.use(name).loader(name)
+        : rule[method](name).test(new RegExp(name));
+    const source = new Rule(null, 'source');
+    configure(source, 'last');
+    configure(source, 'first').before('last');
+    const target = new Rule(null, 'target').cloneFrom(source);
+    configure(target, 'middle').after('first');
+
+    const key = method === 'rule' ? 'rules' : method;
+    const order = (rule) => {
+      const config = rule.toConfig();
+      return config[key].map((item) =>
+        method === 'use' ? item.loader : item.test.source,
+      );
+    };
+    expect(order(target)).toStrictEqual(['first', 'middle', 'last']);
+    expect(order(source)).toStrictEqual(['first', 'last']);
+  },
+);
+
+test('cloneFrom supports empty and related rules', () => {
+  const source = new Rule(null, 'source').test(/source/);
+  const child = source.oneOf('child').type('asset');
+  const original = source.toConfig();
+  expect(source.cloneFrom(source)).toBe(source);
+  expect(source.toConfig()).toStrictEqual(original);
+  child.cloneFrom(source);
+  expect(child.toConfig()).toStrictEqual(original);
+
+  source.resolve.extensions.add('.js');
+  source.cloneFrom(new Rule());
+  expect(source.toConfig()).toStrictEqual({});
+  expect(source.resolve.end()).toBe(source);
+});

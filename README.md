@@ -1013,6 +1013,29 @@ config.module
     .post()
 ```
 
+#### module rules: cloning
+
+Use `cloneFrom(source)` to replace a rule's configuration with an independent
+copy of another rule, including its conditions, resolve configuration, uses,
+nested rules, and oneOf branches:
+
+```js
+const jsRule = config.module.rule('javascript');
+
+config.module
+  .rule('jsx')
+  .cloneFrom(jsRule)
+  .test(/\.jsx$/)
+  .use('swc')
+  .tap((options) => ({ ...options, sourceMaps: false }));
+```
+
+The target keeps its name, parent, rule type, and existing `before`/`after`
+ordering. Its children retain their names and ordering constraints, so they can
+still be modified with `use(name)`, `rule(name)`, and `oneOf(name)`. Existing
+target children are replaced. Values follow the same cloning behavior as
+`Use.cloneFrom`; later changes to the source are not synchronized.
+
 #### module rules uses (loaders): creating
 
 ```js

@@ -429,6 +429,7 @@ export declare namespace RspackChain {
     ): Use<this, Options>;
     rule(name: string): Rule<Rule>;
     oneOf(name: string): Rule<Rule>;
+    cloneFrom<SourceParent>(source: Rule<SourceParent>): this;
     pre(): this;
     post(): this;
     before(name: string): this;
