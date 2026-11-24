@@ -1090,10 +1090,7 @@ config.module
   .use('swc')
   .cloneFrom(swcUse)
   .before('svgr')
-  .tap((options) => {
-    options.jsc.transform.react.refresh = false;
-    return options;
-  });
+  .tap((options) => ({ ...options, sourceMaps: false }));
 ```
 
 The target keeps its name, parent, and existing `before`/`after` ordering.

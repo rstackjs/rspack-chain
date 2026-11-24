@@ -2,7 +2,7 @@ import merge from 'deepmerge';
 import ChainedMap from './ChainedMap.js';
 import Orderable from './Orderable.js';
 
-function cloneValue(value, seen = new WeakMap()) {
+function cloneValue(value, seen) {
   if (value === null || typeof value !== 'object') return value;
   if (seen.has(value)) return seen.get(value);
 
