@@ -76,14 +76,14 @@ export default class Resolve extends ChainedMap {
 }
 
 // Copy rule-level resolution without serializing its chain nodes.
-export function cloneResolve(source, parent, seen) {
+export function cloneResolve(source, parent, context) {
   const cloned = new Resolve(parent);
-  cloned.store = cloneMap(source.store, seen);
+  cloneMap(source.store, context, cloned.store);
   for (const key of childMaps) {
-    cloned[key].store = cloneMap(source[key].store, seen);
+    cloneMap(source[key].store, context, cloned[key].store);
   }
   for (const key of childSets) {
-    cloned[key].store = cloneSet(source[key].store, seen);
+    cloneSet(source[key].store, context, cloned[key].store);
   }
   return cloned;
 }

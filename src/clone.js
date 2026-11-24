@@ -1,5 +1,6 @@
-function cloneValue(value, seen) {
+function cloneValue(value, context) {
   if (value === null || typeof value !== 'object') return value;
+  const seen = (context.seen ??= new WeakMap());
   if (seen.has(value)) return seen.get(value);
 
   if (value instanceof RegExp) {
@@ -23,7 +24,7 @@ function cloneValue(value, seen) {
     : Object.create(prototype);
   seen.set(value, cloned);
   for (const key of Object.keys(value)) {
-    const clonedValue = cloneValue(value[key], seen);
+    const clonedValue = cloneValue(value[key], context);
     if (key === '__proto__') {
       Object.defineProperty(cloned, key, {
         value: clonedValue,
@@ -38,18 +39,23 @@ function cloneValue(value, seen) {
   return cloned;
 }
 
-export function cloneMap(source, seen) {
-  const cloned = new Map();
+export function cloneMap(source, context, cloned = new Map()) {
+  if (cloned.size) cloned.clear();
   for (const [key, value] of source) {
-    cloned.set(key, cloneValue(value, seen));
+    cloned.set(
+      key,
+      value !== null && typeof value === 'object'
+        ? cloneValue(value, context)
+        : value,
+    );
   }
   return cloned;
 }
 
-export function cloneSet(source, seen) {
-  const cloned = new Set();
+export function cloneSet(source, context, cloned = new Set()) {
+  if (cloned.size) cloned.clear();
   for (const value of source) {
-    cloned.add(cloneValue(value, seen));
+    cloned.add(cloneValue(value, context));
   }
   return cloned;
 }

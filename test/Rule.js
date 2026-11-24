@@ -614,3 +614,20 @@ test('cloneFrom supports empty and related rules', () => {
   expect(source.toConfig()).toStrictEqual({});
   expect(source.resolve.end()).toBe(source);
 });
+
+test('cloneFrom clears target collections missing from a simple source', () => {
+  const source = new Rule().type('javascript/auto');
+  source.oneOf('raw').type('asset/source');
+  const target = new Rule().sideEffects(false);
+  target.include.add('stale');
+  target.exclude.add('stale');
+  target.use('stale').loader('stale-loader');
+  target.rule('stale').test(/stale/);
+  target.resolve.extensions.add('.js');
+
+  target.cloneFrom(source);
+  expect(target.toConfig()).toStrictEqual(source.toConfig());
+  source.oneOfs.clear();
+  target.cloneFrom(source);
+  expect(target.toConfig()).toStrictEqual({ type: 'javascript/auto' });
+});

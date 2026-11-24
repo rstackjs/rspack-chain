@@ -19,7 +19,7 @@ export default Orderable(
     cloneFrom(source) {
       if (source === this) return this;
 
-      this.store = cloneMap(source.store, new WeakMap());
+      this.store = cloneMap(source.store, {});
       return this;
     }
 

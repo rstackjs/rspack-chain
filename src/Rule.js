@@ -92,42 +92,58 @@ const Rule = Orderable(
 
     cloneFrom(source) {
       if (source === this) return this;
-      return this.#cloneFrom(source, new WeakMap());
+      return this.#cloneFrom(source, {});
     }
 
-    #cloneFrom(source, seen) {
-      const store = cloneMap(source.store, seen);
-      const include = cloneSet(source.include.store, seen);
-      const exclude = cloneSet(source.exclude.store, seen);
-      const children = {};
-      for (const key of ['uses', 'rules', 'oneOfs']) {
-        const entries = new Map();
-        for (const [name, child] of source[key].store) {
-          let cloned;
-          if (key === 'uses') {
-            cloned = new Use(this, name);
-            cloned.store = cloneMap(child.store, seen);
-          } else {
-            cloned = new Rule(this, name, key === 'rules' ? 'rule' : 'oneOf');
-            cloned.#cloneFrom(child, seen);
+    #cloneFrom(source, context) {
+      let children;
+      if (
+        source.uses.store.size ||
+        source.rules.store.size ||
+        source.oneOfs.store.size
+      ) {
+        children = {};
+        for (const key of ['uses', 'rules', 'oneOfs']) {
+          if (!source[key].store.size) continue;
+          const entries = new Map();
+          for (const [name, child] of source[key].store) {
+            let cloned;
+            if (key === 'uses') {
+              cloned = new Use(this, name);
+              cloneMap(child.store, context, cloned.store);
+            } else {
+              cloned = new Rule(this, name, key === 'rules' ? 'rule' : 'oneOf');
+              cloned.#cloneFrom(child, context);
+            }
+            if (child.__before) cloned.__before = child.__before;
+            if (child.__after) cloned.__after = child.__after;
+            entries.set(name, cloned);
           }
-          cloned.__before = child.__before;
-          cloned.__after = child.__after;
-          entries.set(name, cloned);
+          children[key] = entries;
         }
-        children[key] = entries;
       }
       const resolve = source.#resolve
-        ? cloneResolve(source.#resolve, this, seen)
+        ? cloneResolve(source.#resolve, this, context)
         : undefined;
 
-      // Finish reading the source before replacing potentially related rules.
-      this.store = store;
-      this.include.store = include;
-      this.exclude.store = exclude;
-      this.uses.store = children.uses;
-      this.rules.store = children.rules;
-      this.oneOfs.store = children.oneOfs;
+      // Clone descendants before updating a target that may be inside the source.
+      cloneMap(source.store, context, this.store);
+      if (source.include.store.size || this.include.store.size) {
+        cloneSet(source.include.store, context, this.include.store);
+      }
+      if (source.exclude.store.size || this.exclude.store.size) {
+        cloneSet(source.exclude.store, context, this.exclude.store);
+      }
+      if (children) {
+        for (const key of ['uses', 'rules', 'oneOfs']) {
+          if (children[key]) this[key].store = children[key];
+          else if (this[key].store.size) this[key].clear();
+        }
+      } else {
+        if (this.uses.store.size) this.uses.clear();
+        if (this.rules.store.size) this.rules.clear();
+        if (this.oneOfs.store.size) this.oneOfs.clear();
+      }
       this.#resolve = resolve;
       return this;
     }
