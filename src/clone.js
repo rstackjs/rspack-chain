@@ -40,20 +40,15 @@ function cloneValue(value, context) {
 }
 
 export function cloneMap(source, context, cloned = new Map()) {
-  if (cloned.size) cloned.clear();
+  cloned.clear();
   for (const [key, value] of source) {
-    cloned.set(
-      key,
-      value !== null && typeof value === 'object'
-        ? cloneValue(value, context)
-        : value,
-    );
+    cloned.set(key, cloneValue(value, context));
   }
   return cloned;
 }
 
 export function cloneSet(source, context, cloned = new Set()) {
-  if (cloned.size) cloned.clear();
+  cloned.clear();
   for (const value of source) {
     cloned.add(cloneValue(value, context));
   }
