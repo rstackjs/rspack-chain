@@ -1,5 +1,6 @@
 import ChainedMap from './ChainedMap.js';
 import ChainedSet from './ChainedSet.js';
+import { cloneMap, cloneSet } from './clone.js';
 
 const childMaps = ['alias', 'fallback', 'byDependency', 'extensionAlias'];
 const childSets = [
@@ -16,7 +17,7 @@ const childSets = [
   'modules',
 ];
 
-export default class extends ChainedMap {
+export default class Resolve extends ChainedMap {
   constructor(parent) {
     super(parent);
 
@@ -72,4 +73,17 @@ export default class extends ChainedMap {
 
     return super.merge(obj, [...omit, ...omissions]);
   }
+}
+
+// Copy rule-level resolution without serializing its chain nodes.
+export function cloneResolve(source, parent, context) {
+  const cloned = new Resolve(parent);
+  cloneMap(source.store, context, cloned.store);
+  for (const key of childMaps) {
+    cloneMap(source[key].store, context, cloned[key].store);
+  }
+  for (const key of childSets) {
+    cloneSet(source[key].store, context, cloned[key].store);
+  }
+  return cloned;
 }

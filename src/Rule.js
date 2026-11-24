@@ -2,7 +2,8 @@ import ChainedMap from './ChainedMap.js';
 import ChainedSet from './ChainedSet.js';
 import Orderable from './Orderable.js';
 import Use from './Use.js';
-import Resolve from './Resolve.js';
+import Resolve, { cloneResolve } from './Resolve.js';
+import { cloneMap, cloneSet } from './clone.js';
 
 function toArray(arr) {
   return Array.isArray(arr) ? arr : [arr];
@@ -87,6 +88,45 @@ const Rule = Orderable(
 
     post() {
       return this.enforce('post');
+    }
+
+    cloneFrom(source) {
+      if (source === this) return this;
+      return this.#cloneFrom(source, {});
+    }
+
+    #cloneFrom(source, context) {
+      const children = {};
+      for (const key of ['uses', 'rules', 'oneOfs']) {
+        const entries = new Map();
+        for (const [name, child] of source[key].store) {
+          let cloned;
+          if (key === 'uses') {
+            cloned = new Use(this, name);
+            cloneMap(child.store, context, cloned.store);
+          } else {
+            cloned = new Rule(this, name, key === 'rules' ? 'rule' : 'oneOf');
+            cloned.#cloneFrom(child, context);
+          }
+          cloned.__before = child.__before;
+          cloned.__after = child.__after;
+          entries.set(name, cloned);
+        }
+        children[key] = entries;
+      }
+      const resolve = source.#resolve
+        ? cloneResolve(source.#resolve, this, context)
+        : undefined;
+
+      // Clone descendants before updating a target that may be inside the source.
+      cloneMap(source.store, context, this.store);
+      cloneSet(source.include.store, context, this.include.store);
+      cloneSet(source.exclude.store, context, this.exclude.store);
+      this.uses.store = children.uses;
+      this.rules.store = children.rules;
+      this.oneOfs.store = children.oneOfs;
+      this.#resolve = resolve;
+      return this;
     }
 
     toConfig() {
