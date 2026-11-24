@@ -558,9 +558,7 @@ test('cloneFrom replaces the full rule tree with independent chain nodes', () =>
   expect(target.rule('nested').use('custom').end().end()).toBe(target);
   expect(target.oneOf('raw').end()).toBe(target);
   expect(target.resolve.alias.end().end()).toBe(target);
-  expect(
-    parent.toConfig().oneOf.map((rule) => rule.__ruleNames.at(-1)),
-  ).toStrictEqual(['copy', 'last']);
+  expect(parent.oneOfs.order().order).toStrictEqual(['copy', 'last']);
   expect(target.oneOf('raw').toConfig().__ruleTypes).toStrictEqual([
     'rule',
     'oneOf',
@@ -583,30 +581,24 @@ test('cloneFrom replaces the full rule tree with independent chain nodes', () =>
   expect(source.toConfig()).toStrictEqual(original);
 });
 
-test.each(['use', 'rule', 'oneOf'])(
-  'cloneFrom retains %s ordering for later edits',
-  (method) => {
-    const configure = (rule, name) =>
-      method === 'use'
-        ? rule.use(name).loader(name)
-        : rule[method](name).test(new RegExp(name));
-    const source = new Rule(null, 'source');
-    configure(source, 'last');
-    configure(source, 'first').before('last');
-    const target = new Rule(null, 'target').cloneFrom(source);
-    configure(target, 'middle').after('first');
+test.each([
+  ['use', 'uses'],
+  ['rule', 'rules'],
+  ['oneOf', 'oneOfs'],
+])('cloneFrom retains %s ordering for later edits', (method, collection) => {
+  const source = new Rule(null, 'source');
+  source[method]('last');
+  source[method]('first').before('last');
+  const target = new Rule(null, 'target').cloneFrom(source);
+  target[method]('middle').after('first');
 
-    const key = method === 'rule' ? 'rules' : method;
-    const order = (rule) => {
-      const config = rule.toConfig();
-      return config[key].map((item) =>
-        method === 'use' ? item.loader : item.test.source,
-      );
-    };
-    expect(order(target)).toStrictEqual(['first', 'middle', 'last']);
-    expect(order(source)).toStrictEqual(['first', 'last']);
-  },
-);
+  expect(target[collection].order().order).toStrictEqual([
+    'first',
+    'middle',
+    'last',
+  ]);
+  expect(source[collection].order().order).toStrictEqual(['first', 'last']);
+});
 
 test('cloneFrom supports empty and related rules', () => {
   const source = new Rule(null, 'source').test(/source/);

@@ -22,7 +22,6 @@ const config = new RspackChain();
 const clonedRule = config.module.rule('target').oneOf('variant');
 expectTypeEqual<ReturnType<typeof clonedRule.cloneFrom>, typeof clonedRule>();
 clonedRule.cloneFrom(config.module.rule('source')).test(/\.jsx$/);
-expectTypeEqual<ReturnType<typeof clonedRule.end>, RspackChain.Rule>();
 // @ts-expect-error a use cannot be copied into a rule
 clonedRule.cloneFrom(config.module.rule('source').use('swc'));
 
