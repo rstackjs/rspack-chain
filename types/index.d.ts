@@ -497,6 +497,8 @@ export declare namespace RspackChain {
 
     tap(f: (options: Options) => Options): this;
 
+    cloneFrom<SourceParent>(source: Use<SourceParent, Options>): this;
+
     // Orderable
     before(name: string): this;
     after(name: string): this;

@@ -54,6 +54,20 @@ const typedSwcUse = config.module
   .rule('javascript')
   .use<rspack.SwcLoaderOptions>('swc');
 const typedSwcOptions = typedSwcUse.get('options');
+const clonedSwcUse = config.module
+  .rule('svg')
+  .oneOf('component')
+  .use<rspack.SwcLoaderOptions>('swc');
+expectTypeEqual<
+  ReturnType<typeof clonedSwcUse.cloneFrom>,
+  typeof clonedSwcUse
+>();
+clonedSwcUse.cloneFrom(typedSwcUse).tap((options) => {
+  expectTypeEqual<typeof options, rspack.SwcLoaderOptions>();
+  return options;
+});
+// @ts-expect-error copying string options into an object-options use is invalid
+clonedSwcUse.cloneFrom(config.module.rule('query').use<string>('query'));
 expectTypeEqual<typeof typedSwcOptions, rspack.SwcLoaderOptions | undefined>();
 typedSwcUse.set('options', { detectSyntax: 'auto' });
 typedSwcUse.merge({ options: { detectSyntax: 'auto' } });
