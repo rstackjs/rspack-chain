@@ -62,7 +62,7 @@ expectTypeEqual<
   ReturnType<typeof clonedSwcUse.cloneFrom>,
   typeof clonedSwcUse
 >();
-clonedSwcUse.cloneFrom(typedSwcUse, { preserveOrder: true }).tap((options) => {
+clonedSwcUse.cloneFrom(typedSwcUse).tap((options) => {
   expectTypeEqual<typeof options, rspack.SwcLoaderOptions>();
   return options;
 });

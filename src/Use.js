@@ -55,7 +55,7 @@ export default Orderable(
       return this;
     }
 
-    cloneFrom(source, { preserveOrder = false } = {}) {
+    cloneFrom(source) {
       if (source === this) return this;
 
       const seen = new WeakMap();
@@ -64,10 +64,6 @@ export default Orderable(
         store.set(key, cloneValue(value, seen));
       }
       this.store = store;
-      if (preserveOrder) {
-        this.__before = source.__before;
-        this.__after = source.__after;
-      }
       return this;
     }
 

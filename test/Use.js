@@ -91,6 +91,7 @@ test('cloneFrom replaces configuration and keeps the target chain', () => {
     })
     .after('other');
   const rule = new Rule(null, 'target');
+  rule.use('last').loader('last-loader');
   const target = rule.use('custom').options({ stale: true }).before('last');
 
   expect(target.cloneFrom(source)).toBe(target);
@@ -98,7 +99,6 @@ test('cloneFrom replaces configuration and keeps the target chain', () => {
   expect(target.end()).toBe(rule);
   expect(target.toConfig().__useName).toBe('custom');
   expect(target.toConfig().__ruleNames).toStrictEqual(['target']);
-  rule.use('last').loader('last-loader');
   expect(rule.toConfig().use.map((use) => use.loader)).toStrictEqual([
     'builtin:swc-loader',
     'last-loader',
@@ -115,23 +115,6 @@ test('cloneFrom replaces configuration and keeps the target chain', () => {
   expect(source.get('options').nested.values).toStrictEqual(['a']);
   expect(source.get('options').nested.pattern.lastIndex).toBe(0);
   expect(source.get('parallel')).toStrictEqual({ maxWorkers: 2 });
-});
-
-test('cloneFrom can preserve ordering constraints for later chain changes', () => {
-  const source = new Rule(null, 'source').use('first').before('last');
-  const rule = new Rule(null, 'target');
-  rule.use('last').loader('last-loader');
-  const target = rule.use('first').loader('stale-loader').after('last');
-  target.cloneFrom(source, { preserveOrder: true }).loader('first-loader');
-  rule.use('middle').loader('middle-loader').after('first');
-  expect(rule.toConfig().use.map((use) => use.loader)).toStrictEqual([
-    'first-loader',
-    'middle-loader',
-    'last-loader',
-  ]);
-
-  target.cloneFrom(new Use(), { preserveOrder: true }).after('last');
-  expect(target.toConfig()).toStrictEqual({});
 });
 
 test('cloneFrom handles string options and cloning from itself', () => {

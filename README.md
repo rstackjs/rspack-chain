@@ -1097,8 +1097,6 @@ config.module
 ```
 
 The target keeps its name, parent, and existing `before`/`after` ordering.
-Pass `{ preserveOrder: true }` to replace the target's ordering with the source's
-ordering, for example when copying a group of loaders with the same names.
 
 Plain objects, arrays, and regular expressions are cloned. Functions and other
 class instances retain their references. Later configuration changes to the
